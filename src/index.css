@@ -1,0 +1,189 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "./styles/rtl.css";
+
+/* Smooth scrolling behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Enhanced sticky header transitions */
+.header-transition {
+  transition: transform 0.3s ease-in-out, background-color 0.3s ease-in-out,
+    backdrop-filter 0.3s ease-in-out;
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0 0);
+  /* Dental clinic theme colors */
+  --primary: oklch(0.67 0.09 192); /* soft teal - #5F9EA0 */
+  --primary-foreground: oklch(0.98 0.02 0); /* white text */
+  --secondary: oklch(0.91 0.05 45); /* light peach - #FBE4CC */
+  --secondary-foreground: oklch(0.2 0.02 270); /* dark charcoal - #1B262C */
+  --muted: oklch(0.96 0.02 45); /* very light peach */
+  --muted-foreground: oklch(0.45 0.02 270); /* muted charcoal */
+  --accent: oklch(0.73 0.08 200); /* muted blue accent */
+  --accent-foreground: oklch(0.98 0.02 0); /* white text */
+  
+  /* Custom dental clinic colors */
+  --dental-peach: oklch(0.91 0.05 45); /* #FBE4CC */
+  --dental-charcoal: oklch(0.2 0.02 270); /* #1B262C */
+  --dental-teal: oklch(0.67 0.09 192); /* soft teal */
+  --dental-blue: oklch(0.73 0.08 200); /* muted blue */
+  --destructive: oklch(0.6 0.24 27.3);
+  --border: oklch(0.92 0.01 95);
+  --input: oklch(0.92 0.01 95);
+  --ring: var(--primary);
+  --chart-1: oklch(0.88 0.17 95);
+  --chart-2: oklch(0.82 0.1 184.7);
+  --chart-3: oklch(0.7 0.07 227.4);
+  --chart-4: oklch(0.94 0.18 84.4);
+  --chart-5: oklch(0.9 0.18 70.08);
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: oklch(0.2 0.05 95);
+  --sidebar-accent: oklch(0.97 0.02 95);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: var(--primary);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  /* Dental clinic theme in dark */
+  --primary: oklch(0.73 0.08 192); /* brighter teal in dark */
+  --primary-foreground: oklch(0.2 0.02 270); /* dark charcoal text */
+  --secondary: oklch(0.3 0.02 270); /* darker charcoal */
+  --secondary-foreground: oklch(0.985 0 0); /* white text */
+  --muted: oklch(0.25 0.02 270);
+  --muted-foreground: oklch(0.75 0.02 192); /* light teal */
+  --accent: oklch(0.8 0.06 200); /* brighter blue accent */
+  --accent-foreground: oklch(0.2 0.02 270); /* dark charcoal text */
+  
+  /* Custom dental clinic colors in dark */
+  --dental-peach: oklch(0.4 0.04 45); /* darker peach */
+  --dental-charcoal: oklch(0.15 0.02 270); /* deeper charcoal */
+  --dental-teal: oklch(0.73 0.08 192); /* brighter teal */
+  --dental-blue: oklch(0.8 0.06 200); /* brighter blue */
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--primary);
+  --chart-1: oklch(0.86 0.16 95);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.9 0.18 70.08);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: oklch(0.205 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: var(--primary);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar styles for sidebar */
+@layer utilities {
+  .scrollbar-thin {
+    scrollbar-width: thin;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  .scrollbar-track-transparent::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollbar-thumb-blue-200\/50::-webkit-scrollbar-thumb {
+    background-color: rgba(191, 219, 254, 0.5);
+    border-radius: 2px;
+  }
+
+  .scrollbar-thumb-blue-200\/50:hover::-webkit-scrollbar-thumb {
+    background-color: rgba(147, 197, 253, 0.7);
+  }
+
+  /* Mobile touch improvements */
+  .touch-scrolling {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+
+  /* Smooth scrolling for better UX */
+  .scroll-smooth {
+    scroll-behavior: smooth;
+  }
+
+  /* Better mobile scrolling */
+  @supports (overflow: overlay) {
+    .supports-overlay-scroll {
+      overflow: overlay;
+    }
+  }
+}

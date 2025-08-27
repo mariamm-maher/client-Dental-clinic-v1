@@ -1,0 +1,270 @@
+/* RTL (Right-to-Left) Support for Arabic */
+
+[dir="rtl"] {
+  text-align: right;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right !important;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left !important;
+}
+
+/* Flex direction adjustments */
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .space-x-2 > * + * {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .space-x-3 > * + * {
+  margin-left: 0;
+  margin-right: 0.75rem;
+}
+
+[dir="rtl"] .space-x-4 > * + * {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+/* Margin and padding adjustments */
+[dir="rtl"] .ml-2 {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+[dir="rtl"] .mr-2 {
+  margin-right: 0;
+  margin-left: 0.5rem;
+}
+
+[dir="rtl"] .ml-3 {
+  margin-left: 0;
+  margin-right: 0.75rem;
+}
+
+[dir="rtl"] .mr-3 {
+  margin-right: 0;
+  margin-left: 0.75rem;
+}
+
+[dir="rtl"] .ml-4 {
+  margin-left: 0;
+  margin-right: 1rem;
+}
+
+[dir="rtl"] .mr-4 {
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+[dir="rtl"] .ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir="rtl"] .mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/* Padding adjustments */
+[dir="rtl"] .pl-2 {
+  padding-left: 0;
+  padding-right: 0.5rem;
+}
+
+[dir="rtl"] .pr-2 {
+  padding-right: 0;
+  padding-left: 0.5rem;
+}
+
+[dir="rtl"] .pl-4 {
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+[dir="rtl"] .pr-4 {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+[dir="rtl"] .pl-8 {
+  padding-left: 0;
+  padding-right: 2rem;
+}
+
+[dir="rtl"] .pr-8 {
+  padding-right: 0;
+  padding-left: 2rem;
+}
+
+/* Border radius adjustments */
+[dir="rtl"] .rounded-l {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+[dir="rtl"] .rounded-r {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-top-left-radius: 0.25rem;
+  border-bottom-left-radius: 0.25rem;
+}
+
+/* Position adjustments */
+[dir="rtl"] .left-0 {
+  left: auto;
+  right: 0;
+}
+
+[dir="rtl"] .right-0 {
+  right: auto;
+  left: 0;
+}
+
+[dir="rtl"] .left-2 {
+  left: auto;
+  right: 0.5rem;
+}
+
+[dir="rtl"] .right-2 {
+  right: auto;
+  left: 0.5rem;
+}
+
+/* Transform adjustments */
+[dir="rtl"] .translate-x-2 {
+  --tw-translate-x: -0.5rem;
+}
+
+[dir="rtl"] .-translate-x-2 {
+  --tw-translate-x: 0.5rem;
+}
+
+[dir="rtl"] .translate-x-4 {
+  --tw-translate-x: -1rem;
+}
+
+[dir="rtl"] .-translate-x-4 {
+  --tw-translate-x: 1rem;
+}
+
+/* Chevron rotation for RTL */
+[dir="rtl"] .chevron-right {
+  transform: scaleX(-1);
+}
+
+/* Form adjustments */
+[dir="rtl"] .justify-start {
+  justify-content: flex-end;
+}
+
+[dir="rtl"] .justify-end {
+  justify-content: flex-start;
+}
+
+/* Grid and flex adjustments */
+[dir="rtl"] .items-start {
+  align-items: flex-end;
+}
+
+[dir="rtl"] .items-end {
+  align-items: flex-start;
+}
+
+/* Dropdown menu alignments */
+[dir="rtl"] .dropdown-content-end {
+  left: 0;
+  right: auto;
+}
+
+[dir="rtl"] .dropdown-content-start {
+  left: auto;
+  right: 0;
+}
+
+/* Custom RTL-specific styles */
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .rtl-text-right {
+  text-align: right;
+}
+
+[dir="rtl"] .rtl-text-left {
+  text-align: left;
+}
+
+/* Font family for Arabic */
+[dir="rtl"] {
+  font-family: "Segoe UI", "Tahoma", "Arial", sans-serif;
+}
+
+/* Button and input alignment in RTL */
+[dir="rtl"] .btn-with-icon {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .input-with-icon {
+  padding-left: 2.5rem;
+  padding-right: 0.75rem;
+}
+
+[dir="rtl"] .input-icon {
+  left: auto;
+  right: 0.75rem;
+}
+
+/* Header navigation adjustments */
+[dir="rtl"] .header-nav {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .mobile-menu {
+  text-align: right;
+}
+
+/* Card and content alignment */
+[dir="rtl"] .card-header {
+  text-align: right;
+}
+
+[dir="rtl"] .card-content {
+  text-align: right;
+}
+
+/* Animation adjustments for RTL */
+[dir="rtl"] .slide-in-from-left {
+  animation: slide-in-from-right 0.3s ease-out;
+}
+
+[dir="rtl"] .slide-in-from-right {
+  animation: slide-in-from-left 0.3s ease-out;
+}
+
+@keyframes slide-in-from-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-in-from-left {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}

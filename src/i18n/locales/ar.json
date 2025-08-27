@@ -1,0 +1,520 @@
+{
+  "header": {
+    "bookAppointment": "حجز موعد",
+    "call": "اتصال",
+    "sendEmail": "إرسال بريد إلكتروني",
+    "emergencyHours": "ساعات الطوارئ",
+    "availableToday": "متاح اليوم"
+  },
+  "logo": {
+    "tagline": "طب الأسنان",
+    "clinicName": "مركز الندي"
+  },
+  "appointment": {
+    "title": "احجز موعد أسنانك",
+    "subtitle": "احجز زيارتك مع أطباء الأسنان في مركز الندي للحصول على رعاية شاملة للفم والأسنان.",
+    "alertMessage": "سنتواصل معك خلال 24 ساعة لتأكيد موعدك والإجابة على أي أسئلة.",
+    "personalInfo": "المعلومات الشخصية",
+    "firstName": "الاسم الأول",
+    "lastName": "اسم العائلة",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "dateOfBirth": "تاريخ الميلاد",
+    "gender": "الجنس",
+    "male": "ذكر",
+    "female": "أنثى",
+    "other": "آخر",
+    "appointmentDetails": "تفاصيل الموعد",
+    "preferredDate": "التاريخ المفضل",
+    "selectDay": "اختر يوماً",
+    "preferredTime": "الوقت المفضل",
+    "visitType": "نوع الزيارة",
+    "newPatient": "استشارة مريض جديد",
+    "followUp": "زيارة متابعة",
+    "routine": "فحص روتيني",
+    "urgent": "رعاية عاجلة",
+    "reasonForVisit": "سبب الزيارة",
+    "reasonPlaceholder": "يرجى وصف الأعراض أو سبب الزيارة...",
+    "medicalHistory": "التاريخ الطبي",
+    "currentMedications": "الأدوية الحالية",
+    "medicationsPlaceholder": "اذكر أي أدوية تتناولها حالياً...",
+    "allergies": "الحساسيات المعروفة",
+    "allergiesPlaceholder": "اذكر أي حساسيات معروفة...",
+    "insurance": "معلومات التأمين",
+    "insuranceProvider": "مقدم التأمين",
+    "insurancePlaceholder": "أدخل اسم مقدم التأمين",
+    "policyNumber": "رقم البوليصة",
+    "policyPlaceholder": "أدخل رقم البوليصة",
+    "consent": "الموافقة والاتفاقية",
+    "consentText": "أوافق على تلقي تذكيرات المواعيد والمعلومات الصحية عبر البريد الإلكتروني والرسائل النصية.",
+    "privacyText": "لقد قرأت ووافقت على سياسة الخصوصية وشروط الخدمة.",
+    "submitButton": "حجز الموعد",
+    "submitting": "جاري الحجز...",
+    "successTitle": "تم حجز الموعد بنجاح!",
+    "successMessage": "شكراً لك على حجز موعد في عيادة الدكتور إيهاب. سنتواصل معك خلال 24 ساعة لتأكيد تفاصيل موعدك.",
+    "successNote": "يرجى الحضور قبل 15 دقيقة من موعدك وإحضار هوية صالحة وبطاقة التأمين.",
+    "bookAnother": "حجز موعد آخر",
+    "days": {
+      "sunday": "الأحد",
+      "monday": "الاثنين",
+      "tuesday": "الثلاثاء",
+      "wednesday": "الأربعاء",
+      "thursday": "الخميس",
+      "friday": "الجمعة",
+      "saturday": "السبت"
+    }
+  },
+  "doctorProfile": {
+    "clinic": "مركز الندي",
+    "title": "تعرف على أطبائنا",
+    "subtitle": "أطباء أسنان معتمدون",
+    "bio": "يضم مركز الندي فريقاً من أطباء الأسنان المعتمدين بخبرة طويلة في طب الأسنان التجميلي والعلاجي والوقائي.",
+    "hero": {
+      "excellence": "التميز في",
+      "healthcare": "الرعاية الصحية",
+      "withDoctor": "مع",
+      "subtitle": "اختبر الرعاية الشاملة والرحيمة في الطب الباطني مع طبيب يضع صحتك ورفاهيتك في المقدمة."
+    },
+    "services": {
+      "onlineBooking": {
+        "title": "حجز مواعيد الأسنان",
+        "description": "احجز مواعيدك 24/7 عبر نظام الجدولة الذكي."
+      },
+      "secureRecords": {
+        "title": "سجلات المرضى الآمنة",
+        "description": "سجلاتك الطبية محفوظة بأمان ومشفرة."
+      },
+      "comprehensiveCare": {
+        "title": "رعاية أسنان شاملة",
+        "description": "خدمات علاجية ووقائية وتجميلية للأسنان."
+      },
+      "digitalHealth": {
+        "title": "منصة صحية رقمية",
+        "description": "اطلع على مواعيدك وسجلاتك وتواصل مع فريقنا من أي مكان."
+      }
+    },
+    "credentials": [
+      "مجلس معتمد في الطب الباطني",
+      "دكتوراه طب جامعة القاهرة",
+      "الإقامة مستشفى جونز هوبكنز",
+      "عضو الكلية الأمريكية للأطباء"
+    ],
+    "specialties": "التخصصات",
+    "experience": "خبرة 10+ سنوات",
+    "patients": "خدمنا أكثر من 2000 مراجع",
+    "bookAppointment": "احجز موعد"
+  },
+  "contact": {
+    "location": "الموقع",
+    "getInTouch": "تواصل معنا",
+    "addressLabel": "العنوان",
+    "phoneLabel": "الهاتف",
+    "emailLabel": "البريد الإلكتروني",
+    "clickToCall": "اضغط للاتصال من الجوال",
+    "sendEmail": "أرسل لنا بريد إلكتروني",
+    "quickActions": "إجراءات سريعة",
+    "callNow": "اتصل الآن",
+    "sendEmailButton": "إرسال بريد إلكتروني",
+    "callTooltip": "اتصل بنا مباشرة على",
+    "emailTooltip": "أرسل لنا بريد إلكتروني على",
+    "bookAppointmentOnline": "احجز موعد عبر الإنترنت",
+    "address": "123 شارع الصحة، المدينة، الرمز البريدي",
+    "phone": "(555) 123-4567",
+    "email": "info@drehabclinic.com",
+    "hours": {
+      "title": "ساعات العمل",
+      "monday": "الاثنين - الجمعة: 9:00 ص - 5:00 م",
+      "saturday": "السبت: 9:00 ص - 2:00 م",
+      "sunday": "الأحد: مغلق",
+      "emergency": "خدمات الطوارئ متاحة 24/7"
+    }
+  },
+  "benefits": [
+    "مواعيد في نفس اليوم متاحة",
+    "جميع خطط التأمين الرئيسية مقبولة",
+    "رعاية صحية شخصية للبالغين",
+    "فحوصات صحية شاملة",
+    "إدارة الأمراض المزمنة",
+    "تركيز على الرعاية الوقائية"
+  ],
+  "common": {
+    "loading": "جاري التحميل...",
+    "close": "إغلاق",
+    "cancel": "إلغاء",
+    "save": "حفظ",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "confirm": "تأكيد",
+    "yes": "نعم",
+    "no": "لا",
+    "next": "التالي",
+    "previous": "السابق",
+    "submit": "إرسال",
+    "required": "مطلوب"
+  },
+  "language": {
+    "english": "English",
+    "arabic": "العربية",
+    "switchLanguage": "تغيير اللغة"
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "message": "عذراً! يبدو أنك وصلت إلى صفحة غير متوفرة.",
+    "backTo": "لنعد بك إلى",
+    "backHome": "العودة إلى الصفحة الرئيسية",
+    "goBack": "رجوع",
+    "needHelp": "تحتاج مساعدة؟ تواصل معنا على",
+    "or": "أو"
+  },
+  "leftSide": {
+    "comprehensiveMedicine": "طب داخلي شامل",
+    "sameDayAppointments": "مواعيد في نفس اليوم متاحة",
+    "doctorCertified": "د. إيهاب • معتمد",
+    "internalMedicine": "طبيب طب باطني"
+  },
+  "unauthorized": {
+    "title": "تم رفض الوصول",
+    "needRole": "تحتاج إلى دور \"{{role}}\" للوصول إلى هذا المحتوى.",
+    "needOneOfRoles": "تحتاج إلى أحد هذه الأدوار: {{roles}} للوصول إلى هذا المحتوى.",
+    "noPermission": "ليست لديك صلاحية للوصول إلى هذا المحتوى.",
+    "helpText": "إذا كنت تعتقد أن هذا خطأ، تواصل مع المسؤول أو حاول تسجيل الدخول بحساب آخر.",
+    "goBack": "رجوع",
+    "goHome": "الذهاب للصفحة الرئيسية"
+  },
+  "callback": {
+    "completingSignIn": "جارٍ إكمال عملية تسجيل الدخول...",
+    "pleaseWait": "يرجى الانتظار حتى نتحقق من بياناتك",
+    "welcomeBack": "مرحباً بعودتك!",
+    "redirecting": "تم تسجيل الدخول بنجاح، سيتم تحويلك الآن...",
+    "signInFailed": "فشل تسجيل الدخول",
+    "issueRedirecting": "حدثت مشكلة أثناء إكمال تسجيل الدخول. سيتم تحويلك إلى صفحة الدخول..."
+  },
+  "auth": {
+    "loginSuccess": "تم تسجيل الدخول بنجاح! مرحباً بعودتك.",
+    "invalidCredentials": "بيانات الدخول غير صحيحة. حاول مرة أخرى.",
+    "continueWithGoogle": "المتابعة باستخدام جوجل",
+    "orContinueWith": "أو المتابعة عبر البريد الإلكتروني",
+    "orRegisterWith": "أو التسجيل عبر البريد الإلكتروني",
+    "welcomeBack": "مرحباً بعودتك",
+    "enterCredentials": "أدخل بياناتك للوصول إلى البوابة",
+    "emailAddress": "البريد الإلكتروني",
+    "emailPlaceholder": "example@clinic.com",
+    "password": "كلمة المرور",
+    "passwordPlaceholder": "أدخل كلمة المرور",
+    "rememberMe": "تذكرني",
+    "forgotPassword": "نسيت كلمة المرور؟",
+    "signIn": "تسجيل الدخول",
+    "signingIn": "جاري تسجيل الدخول...",
+    "dontHaveAccount": "لا تملك حساباً؟",
+    "createNewAccount": "إنشاء حساب",
+    "createAccount": "إنشاء حساب",
+    "fillDetailsOrGoogle": "املأ بياناتك أو سجّل عبر جوجل",
+    "fullName": "الاسم الكامل",
+    "fullNamePlaceholder": "أدخل اسمك الكامل",
+    "confirmPassword": "تأكيد كلمة المرور",
+    "confirmPasswordPlaceholder": "أكد كلمة المرور",
+    "passwordsMatch": "كلمات المرور متطابقة",
+    "passwordsDontMatch": "كلمات المرور غير متطابقة",
+    "mustAgreeTerms": "يجب الموافقة على الشروط والأحكام",
+    "registrationSuccessRedirect": "تم التسجيل بنجاح! سيتم تحويلك لتسجيل الدخول...",
+    "unexpectedError": "حدث خطأ غير متوقع. حاول مرة أخرى.",
+    "agreeToTerms": "أوافق على",
+    "termsOfService": "شروط الخدمة",
+    "and": "و",
+    "privacyPolicy": "سياسة الخصوصية",
+    "creatingAccount": "جاري إنشاء الحساب...",
+    "alreadyHaveAccount": "لديك حساب بالفعل؟",
+    "professionalHealthcare": "إدارة رعاية صحية احترافية",
+    "resetEmailSent": "تم إرسال رسالة إعادة تعيين كلمة المرور بنجاح!",
+    "resetEmailFailed": "فشل إرسال رسالة إعادة التعيين. حاول مرة أخرى.",
+    "checkYourEmail": "تحقق من بريدك الإلكتروني",
+    "resetEmailSentInstruction": "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.",
+    "emailSentTo": "تم الإرسال إلى:",
+    "checkSpam": "إذا لم تجد الرسالة في البريد الوارد، تحقق من مجلد الرسائل غير المرغوب فيها.",
+    "backToLogin": "العودة لتسجيل الدخول",
+    "tryDifferentEmail": "تجربة بريد إلكتروني آخر",
+    "resetYourPassword": "إعادة تعيين كلمة المرور",
+    "enterEmailToReset": "أدخل بريدك الإلكتروني وسنرسل لك رابط إعادة التعيين.",
+    "sendingResetLink": "جاري إرسال الرابط...",
+    "sendResetLink": "إرسال رابط إعادة التعيين",
+    "invalidOrMissingToken": "الرمز غير صالح أو مفقود. يرجى طلب إعادة تعيين جديدة.",
+    "passwordResetSuccess": "تم إعادة تعيين كلمة المرور بنجاح!",
+    "passwordResetFailed": "فشل إعادة تعيين كلمة المرور",
+    "passwordResetTryAgain": "فشل إعادة تعيين كلمة المرور. حاول مرة أخرى.",
+    "passwordResetSuccessfully": "تمت إعادة تعيين كلمة المرور بنجاح",
+    "passwordUpdatedInstruction": "تم تحديث كلمة المرور. يمكنك الآن تسجيل الدخول باستخدام كلمة المرور الجديدة.",
+    "invalidResetLink": "رابط إعادة التعيين غير صالح",
+    "invalidResetInstruction": "رابط إعادة تعيين كلمة المرور غير صالح أو منتهي الصلاحية. يرجى طلب رابط جديد.",
+    "setNewPassword": "تعيين كلمة مرور جديدة",
+    "enterNewPasswordInstruction": "أدخل كلمة مرور جديدة. تأكد من أنها قوية وآمنة.",
+    "newPassword": "كلمة مرور جديدة",
+    "enterNewPassword": "أدخل كلمة المرور الجديدة",
+    "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+    "confirmNewPasswordPlaceholder": "أكد كلمة المرور الجديدة",
+    "passwordMeetsAllRequirements": "كلمة المرور مستوفية لجميع المتطلبات",
+    "resettingPassword": "جاري إعادة تعيين كلمة المرور...",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "signOut": "تسجيل الخروج",
+    "signedOut": "تم تسجيل الخروج بنجاح",
+    "signOutFailed": "فشل تسجيل الخروج. حاول مرة أخرى.",
+    "signOutConfirm": "هل أنت متأكد من تسجيل الخروج؟ ستحتاج لتسجيل الدخول مرة أخرى للوصول إلى البوابة.",
+    "signingOut": "جارٍ تسجيل الخروج..."
+  },
+  "staff": {
+    "header": {
+      "staffDashboard": "لوحة تحكم الموظفين",
+      "frontDeskStaff": "موظف استقبال"
+    },
+    "tabs": {
+      "queue": {
+        "label": "إدارة القائمة",
+        "description": "إدارة قائمة انتظار المرضى"
+      },
+      "appointments": {
+        "label": "إدارة المواعيد",
+        "description": "جدولة وإدارة المواعيد"
+      }
+    },
+    "common": {
+      "waiting": "مُنتظرون",
+      "today": "اليوم",
+      "active": "نشط",
+      "clickToActivate": "انقر للتفعيل"
+    },
+    "queue": {
+      "currentQueue": "القائمة الحالية",
+      "patients": "مرضى",
+      "filteredView": "عرض مُرشّح",
+      "header": {
+        "title": "إدارة قائمة المرضى",
+        "currentTime": "الوقت الحالي:",
+        "inQueue": "في القائمة"
+      }
+    },
+    "filters": {
+      "title": "عوامل التصفية",
+      "clearAll": "مسح الكل",
+      "searchPatients": "بحث عن المرضى",
+      "searchPlaceholder": "ابحث بالاسم أو الهاتف أو السبب...",
+      "status": "الحالة",
+      "priority": "الأولوية",
+      "allStatus": "كل الحالات",
+      "waiting": "منتظر",
+      "inProgress": "قيد المعالجة",
+      "onHold": "قيد الانتظار",
+      "allPriorities": "كل الأولويات",
+      "normal": "عادي",
+      "urgent": "عاجل"
+    },
+    "table": {
+      "patient": "المريض",
+      "times": "الأوقات",
+      "status": "الحالة",
+      "priority": "الأولوية",
+      "waitTime": "وقت الانتظار",
+      "room": "الغرفة",
+      "reason": "السبب",
+      "actions": "الإجراءات"
+    },
+    "status": {
+      "waiting": "منتظر",
+      "inprogress": "قيد المعالجة",
+      "onhold": "قيد الانتظار"
+    },
+    "priority": {
+      "normal": "عادي",
+      "urgent": "عاجل"
+    },
+    "actions": {
+      "moveUp": "تحريك للأعلى",
+      "moveDown": "تحريك للأسفل",
+      "callPatient": "نداء المريض",
+      "putOnHold": "وضع في الانتظار",
+      "completeAppointment": "إنهاء الموعد",
+      "resumeAppointment": "استئناف الموعد"
+    },
+    "patient": {
+      "age": "العمر",
+      "appointment": "الموعد:",
+      "checkIn": "تسجيل الوصول:",
+      "preferred": "مُفضل",
+      "wait": "الانتظار",
+      "minutesShort": "د"
+    }
+  },
+  "receptionist": {
+    "header": {
+      "receptionistDashboard": "لوحة تحكم الاستقبال",
+      "dentalClinic": "عيادة الأسنان",
+      "receptionistName": "مايا أحمد",
+      "receptionistRole": "موظف الاستقبال"
+    },
+    "tabs": {
+      "today": {
+        "label": "مواعيد اليوم",
+        "description": "عرض وإدارة مواعيد المرضى لليوم"
+      },
+      "schedule": {
+        "label": "جدولة موعد",
+        "description": "حجز مواعيد جديدة للمرضى"
+      },
+      "register": {
+        "label": "تسجيل سريع",
+        "description": "تسجيل مرضى جدد بسرعة"
+      },
+      "calendar": {
+        "label": "التقويم الأسبوعي",
+        "description": "عرض جدول المواعيد الأسبوعي"
+      },
+      "search": {
+        "label": "البحث عن المرضى",
+        "description": "البحث عن المرضى بالاسم أو الهاتف"
+      }
+    },
+    "today": {
+      "title": "مواعيد اليوم",
+      "totalAppointments": "إجمالي المواعيد",
+      "checkedIn": "تم تسجيل الوصول",
+      "pending": "في الانتظار",
+      "missed": "فاتت",
+      "checkIn": "تسجيل الوصول",
+      "markCheckedIn": "وضع علامة تسجيل الوصول",
+      "markMissed": "وضع علامة فات",
+      "callPatient": "الاتصال بالمريض",
+      "checkedInAt": "تم تسجيل الوصول في",
+      "noAppointments": "لا توجد مواعيد اليوم",
+      "adjustFilters": "جرب تعديل البحث أو المرشحات"
+    },
+    "registration": {
+      "title": "تسجيل مريض سريع",
+      "todaysRegistrations": "تسجيلات اليوم",
+      "thisWeek": "هذا الأسبوع",
+      "averageTime": "متوسط الوقت",
+      "newRegistration": "تسجيل مريض جديد",
+      "basicInfo": "املأ المعلومات الأساسية للمريض",
+      "patientFullName": "الاسم الكامل للمريض",
+      "enterFullName": "أدخل الاسم الكامل للمريض",
+      "phoneNumber": "رقم الهاتف",
+      "registerPatient": "تسجيل المريض",
+      "registering": "جاري التسجيل...",
+      "quickRegistration": "تسجيل سريع",
+      "quickRegNote": "هذا النموذج يسجل المرضى بمعلومات الاتصال الأساسية فقط. يمكن تحديث الملفات الشخصية الكاملة للمرضى أثناء زيارتهم الأولى.",
+      "recentRegistrations": "التسجيلات الحديثة",
+      "noRecentRegistrations": "لا توجد تسجيلات حديثة",
+      "registeredSuccessfully": "تم تسجيل المريض بنجاح!"
+    },
+    "scheduling": {
+      "title": "جدولة موعد",
+      "todaysBookings": "حجوزات اليوم",
+      "availableSlots": "المواعيد المتاحة",
+      "doctorsAvailable": "الأطباء المتاحون",
+      "newAppointment": "موعد جديد",
+      "appointmentDetails": "املأ تفاصيل الموعد",
+      "selectPatient": "اختر المريض",
+      "searchPatients": "البحث عن المرضى بالاسم أو الهاتف...",
+      "selectDate": "اختر التاريخ",
+      "pickDate": "اختر تاريخاً",
+      "selectTime": "اختر الوقت",
+      "chooseTimeSlot": "اختر فترة زمنية",
+      "selectDoctor": "اختر الطبيب",
+      "chooseDoctor": "اختر طبيباً",
+      "treatmentType": "نوع العلاج",
+      "selectTreatmentType": "اختر نوع العلاج",
+      "notesOptional": "ملاحظات (اختياري)",
+      "appointmentNotes": "أضف أي ملاحظات إضافية للموعد...",
+      "scheduleAppointment": "جدولة الموعد",
+      "scheduling": "جاري الجدولة...",
+      "todaysSchedule": "جدول اليوم",
+      "availableDoctors": "الأطباء المتاحون",
+      "available": "متاح",
+      "busy": "مشغول",
+      "noPatientsFound": "لم يتم العثور على مرضى",
+      "lastVisit": "آخر زيارة",
+      "appointmentScheduled": "تم جدولة موعد لـ {{patient}} مع {{doctor}} في {{date}} في {{time}}"
+    },
+    "calendar": {
+      "title": "التقويم الأسبوعي",
+      "viewWeeklySchedule": "عرض مواعيد الأسبوع",
+      "thisWeek": "هذا الأسبوع",
+      "today": "اليوم",
+      "doctors": "الأطباء",
+      "weeklySchedule": "الجدول الأسبوعي",
+      "filterByDoctor": "تصفية حسب الطبيب:",
+      "allDoctors": "جميع الأطباء",
+      "weekOf": "أسبوع {{start}} - {{end}}",
+      "appointments": "مواعيد",
+      "apt": "موعد",
+      "apts": "مواعيد",
+      "add": "إضافة",
+      "confirmed": "مؤكد",
+      "pending": "في الانتظار",
+      "cancelled": "ملغى",
+      "status": "الحالة:",
+      "minutes": "دقيقة"
+    },
+    "search": {
+      "title": "البحث عن المرضى",
+      "findPatients": "البحث عن المرضى بالاسم أو الهاتف أو البريد الإلكتروني",
+      "totalPatients": "إجمالي المرضى",
+      "active": "نشط",
+      "recentVisits": "زيارات حديثة",
+      "searchPatientsTitle": "البحث عن المرضى",
+      "searchPatientsPlaceholder": "البحث عن المرضى...",
+      "allFields": "جميع الحقول",
+      "nameOnly": "الاسم فقط",
+      "phoneOnly": "الهاتف فقط",
+      "emailOnly": "البريد الإلكتروني فقط",
+      "patientDetails": "تفاصيل المريض",
+      "contactInformation": "معلومات الاتصال",
+      "visitHistory": "تاريخ الزيارات",
+      "totalVisits": "إجمالي الزيارات",
+      "previousTreatments": "العلاجات السابقة",
+      "upcomingAppointments": "المواعيد القادمة",
+      "notes": "ملاحظات",
+      "scheduleAppointment": "جدولة موعد",
+      "editPatient": "تعديل المريض",
+      "viewDetails": "عرض التفاصيل",
+      "viewHistory": "عرض التاريخ",
+      "inactive": "غير نشط",
+      "blocked": "محظور",
+      "unknown": "غير معروف",
+      "age": "العمر: {{age}} سنة",
+      "phone": "الهاتف:",
+      "email": "البريد الإلكتروني:",
+      "address": "العنوان:",
+      "lastVisit": "آخر زيارة:",
+      "noPatientsFound": "لم يتم العثور على مرضى",
+      "adjustSearchTerms": "جرب تعديل شروط البحث أو المرشحات",
+      "startTyping": "ابدأ بالكتابة للبحث عن المرضى",
+      "selectPatientToView": "اختر مريضاً لعرض التفاصيل",
+      "years": "سنة"
+    },
+    "common": {
+      "refresh": "تحديث",
+      "filter": "تصفية",
+      "all": "الكل",
+      "search": "بحث",
+      "ready": "جاهز",
+      "appointments": "المواعيد",
+      "patients": "المرضى",
+      "today": "اليوم",
+      "thisWeek": "هذا الأسبوع",
+      "name": "الاسم",
+      "phone": "الهاتف",
+      "time": "الوقت",
+      "doctor": "الطبيب",
+      "treatment": "العلاج",
+      "status": "الحالة",
+      "actions": "الإجراءات",
+      "required": "مطلوب",
+      "optional": "اختياري",
+      "save": "حفظ",
+      "cancel": "إلغاء",
+      "delete": "حذف",
+      "edit": "تعديل",
+      "view": "عرض",
+      "add": "إضافة",
+      "close": "إغلاق"
+    }
+  }
+}
