@@ -19,25 +19,12 @@ export default function Header() {
   const { t, i18n } = useTranslation();
   const [currentTime, setCurrentTime] = useState(new Date());
 
-  // Update current time every minute
-  useEffect(() => {
-    const timer = setInterval(() => setCurrentTime(new Date()), 60000);
-    return () => clearInterval(timer);
-  }, []);
-
   const formatDate = (date) => {
     return date.toLocaleDateString(i18n.language || "ar", {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
-    });
-  };
-
-  const formatTime = (date) => {
-    return date.toLocaleTimeString(i18n.language || "ar", {
-      hour: "2-digit",
-      minute: "2-digit",
     });
   };
 
@@ -70,10 +57,6 @@ export default function Header() {
                 <p className="text-sm font-semibold text-slate-900">
                   {formatDate(currentTime)}
                 </p>
-                <p className="text-xs text-slate-600 flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  {formatTime(currentTime)}
-                </p>
               </div>
             </div>
           </div>
@@ -84,18 +67,6 @@ export default function Header() {
             <LanguageToggle />
 
             <Separator orientation="vertical" className="h-8" />
-
-            {/* Notifications */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="relative hover:bg-secondary/50"
-            >
-              <Bell className="w-5 h-5 text-slate-600" />
-              <Badge className="absolute -top-1 -right-1 w-5 h-5 p-0 bg-red-500 text-white text-xs flex items-center justify-center">
-                2
-              </Badge>
-            </Button>
 
             <Separator orientation="vertical" className="h-8" />
 
@@ -111,7 +82,9 @@ export default function Header() {
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:block text-sm">
-                <p className="font-semibold text-slate-900">{t("receptionist.header.receptionistName", "مايا أحمد")}</p>
+                <p className="font-semibold text-slate-900">
+                  {t("receptionist.header.receptionistName", "مايا أحمد")}
+                </p>
                 <p className="text-slate-600">
                   {t("receptionist.header.receptionistRole", "موظف الاستقبال")}
                 </p>
@@ -127,10 +100,6 @@ export default function Header() {
             <div className="text-center">
               <p className="text-sm font-semibold text-slate-900">
                 {formatDate(currentTime)}
-              </p>
-              <p className="text-xs text-slate-600 flex items-center gap-1 justify-center">
-                <Clock className="w-3 h-3" />
-                {formatTime(currentTime)}
               </p>
             </div>
           </div>
