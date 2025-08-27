@@ -268,3 +268,134 @@
     transform: translateX(0);
   }
 }
+
+/* Additional RTL improvements for better multilingual support */
+
+/* Input search icons positioning for RTL */
+[dir="rtl"] .pl-10 {
+  padding-left: 0;
+  padding-right: 2.5rem;
+}
+
+[dir="rtl"] .left-3 {
+  left: auto;
+  right: 0.75rem;
+}
+
+/* Dropdown menu positioning for RTL */
+[dir="rtl"] .dropdown-menu {
+  left: auto;
+  right: 0;
+}
+
+/* Space adjustments for additional spacing utilities */
+[dir="rtl"] .space-x-1 > :not([hidden]) ~ :not([hidden]) {
+  margin-left: 0;
+  margin-right: 0.25rem;
+}
+
+[dir="rtl"] .space-x-6 > :not([hidden]) ~ :not([hidden]) {
+  margin-left: 0;
+  margin-right: 1.5rem;
+}
+
+/* Font family optimization for Arabic text */
+[dir="rtl"] * {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif,
+    "Arabic UI Display", "Geeza Pro", "Traditional Arabic";
+}
+
+/* Flex reverse for component spacing */
+[dir="rtl"] .flex:not(.flex-col) {
+  flex-direction: row-reverse;
+}
+
+/* Force LTR for specific content (like phone numbers, emails) */
+.force-ltr {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* Language toggle button improvements */
+[dir="rtl"] .language-toggle {
+  margin-left: 0;
+  margin-right: 0.5rem;
+}
+
+/* Improved gap support for RTL */
+[dir="rtl"] .gap-2 {
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
+}
+
+[dir="rtl"] .gap-3 {
+  column-gap: 0.75rem;
+  row-gap: 0.75rem;
+}
+
+[dir="rtl"] .gap-4 {
+  column-gap: 1rem;
+  row-gap: 1rem;
+}
+
+/* Smooth transitions for language switching */
+* {
+  transition: text-align 0.3s ease, direction 0.3s ease;
+}
+
+/* Ensure proper text direction inheritance */
+[dir="rtl"] * {
+  direction: inherit;
+}
+
+[dir="ltr"] * {
+  direction: inherit;
+}
+
+/* Fix flex containers in RTL */
+[dir="rtl"] .container {
+  direction: rtl;
+}
+
+[dir="rtl"] .header {
+  direction: rtl;
+}
+
+/* Ensure dropdowns and modals respect direction */
+[dir="rtl"] .dropdown-menu,
+[dir="rtl"] .modal-content,
+[dir="rtl"] .popover-content {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir="ltr"] .dropdown-menu,
+[dir="ltr"] .modal-content,
+[dir="ltr"] .popover-content {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Language-specific text alignment */
+.rtl-text {
+  direction: rtl;
+  text-align: right;
+}
+
+.ltr-text {
+  direction: ltr;
+  text-align: left;
+}
+
+/* Force immediate direction change for critical elements */
+[dir="rtl"] .language-toggle,
+[dir="rtl"] .navigation,
+[dir="rtl"] .main-content {
+  direction: rtl !important;
+}
+
+[dir="ltr"] .language-toggle,
+[dir="ltr"] .navigation,
+[dir="ltr"] .main-content {
+  direction: ltr !important;
+}

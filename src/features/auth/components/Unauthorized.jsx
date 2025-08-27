@@ -39,28 +39,27 @@ const Unauthorized = ({
 
     return t("unauthorized.noPermission");
   };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-xl border border-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-slate-50 flex items-center justify-center p-4">
+      <Card className="w-full max-w-md shadow-xl border border-slate-200 rounded-2xl">
         <CardHeader className="text-center pb-6">
-          <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 bg-gradient-to-br from-red-400 to-red-500 rounded-full flex items-center justify-center mx-auto mb-4">
             <ShieldX className="w-8 h-8 text-white" />
           </div>
-          <CardTitle className="text-2xl font-bold text-gray-900">
+          <CardTitle className="text-2xl font-bold text-slate-800">
             {t("unauthorized.title")}
           </CardTitle>
         </CardHeader>
 
         <CardContent className="space-y-6">
-          <Alert variant="destructive">
+          <Alert variant="destructive" className="border-red-200 bg-red-50">
             <ShieldX className="h-4 w-4" />
             <AlertDescription className="text-sm">
               {getRoleMessage()}
             </AlertDescription>
           </Alert>
 
-          <div className="text-center text-gray-600">
+          <div className="text-center text-slate-600">
             <p className="text-sm">{t("unauthorized.helpText")}</p>
           </div>
 
@@ -68,7 +67,7 @@ const Unauthorized = ({
             <Button
               onClick={handleGoBack}
               variant="outline"
-              className="w-full h-11 border-2 hover:bg-gray-50 transition-all duration-200"
+              className="w-full h-11 border-slate-300 hover:bg-orange-50 transition-all duration-200 rounded-xl"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               {t("unauthorized.goBack")}
@@ -76,7 +75,7 @@ const Unauthorized = ({
 
             <Button
               onClick={handleGoHome}
-              className="w-full h-11 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 hover:from-blue-700 hover:via-indigo-700 hover:to-purple-700 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-300"
+              className="w-full h-11 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 rounded-xl"
             >
               <Home className="w-4 h-4 mr-2" />
               {t("unauthorized.goHome")}

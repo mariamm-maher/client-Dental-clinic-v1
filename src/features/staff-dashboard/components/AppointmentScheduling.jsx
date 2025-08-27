@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,7 +35,6 @@ import {
 import { format } from "date-fns";
 
 export default function AppointmentScheduling() {
-  const { t } = useTranslation();
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedPatient, setSelectedPatient] = useState("");
@@ -100,18 +98,17 @@ export default function AppointmentScheduling() {
       available: false,
     },
   ];
-
   const treatments = [
-    "Dental Cleaning",
-    "Root Canal",
-    "Teeth Whitening",
-    "Dental Implant",
-    "Cavity Filling",
-    "Orthodontic Consultation",
-    "Wisdom Tooth Extraction",
-    "Crown Placement",
-    "Gum Treatment",
-    "Dental X-Ray",
+    "تنظيف الأسنان",
+    "علاج العصب",
+    "تبييض الأسنان",
+    "زراعة الأسنان",
+    "حشو الأسنان",
+    "استشارة تقويم",
+    "خلع ضرس العقل",
+    "تركيب تاج",
+    "علاج اللثة",
+    "أشعة الأسنان",
   ];
 
   const timeSlots = [
@@ -175,7 +172,7 @@ export default function AppointmentScheduling() {
       setTreatment("");
       setNotes("");
       setPatientSearch("");
-    } catch (error) {
+    } catch {
       toast.error("فشل جدولة الموعد. يرجى المحاولة مرة أخرى.");
     } finally {
       setIsSubmitting(false);

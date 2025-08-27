@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,7 +18,6 @@ import {
 } from "lucide-react";
 
 export default function PatientRegistration() {
-  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
@@ -84,10 +82,9 @@ export default function PatientRegistration() {
 
       setRecentPatients((prev) => [newPatient, ...prev.slice(0, 4)]);
       setFormData({ name: "", phone: "" });
-
-      toast.success(`Patient ${formData.name} registered successfully!`);
-    } catch (error) {
-      toast.error("Failed to register patient. Please try again.");
+      toast.success(`تم تسجيل المريض ${formData.name} بنجاح!`);
+    } catch {
+      toast.error("فشل في تسجيل المريض. حاول مرة أخرى.");
     } finally {
       setIsSubmitting(false);
     }
@@ -258,13 +255,13 @@ export default function PatientRegistration() {
         {/* Recent Registrations */}
         <div>
           <Card className="border-0 shadow-xl bg-white/90 backdrop-blur-sm">
+            {" "}
             <CardHeader>
               <CardTitle className="text-lg text-slate-800 flex items-center gap-2">
                 <Clock className="w-5 h-5 text-primary" />
-                Recent Registrations
+                التسجيلات الأخيرة
               </CardTitle>
             </CardHeader>
-
             <CardContent className="space-y-4">
               {recentPatients.map((patient) => (
                 <div
@@ -283,12 +280,11 @@ export default function PatientRegistration() {
                     </Badge>
                   </div>
                 </div>
-              ))}
-
+              ))}{" "}
               {recentPatients.length === 0 && (
                 <div className="text-center py-8 text-slate-500">
                   <UserPlus className="w-12 h-12 mx-auto mb-3 opacity-50" />
-                  <p>No recent registrations</p>
+                  <p>لا توجد تسجيلات حديثة</p>
                 </div>
               )}
             </CardContent>

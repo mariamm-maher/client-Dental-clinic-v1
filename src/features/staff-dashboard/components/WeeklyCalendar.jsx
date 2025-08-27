@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -25,7 +24,6 @@ import {
 } from "date-fns";
 
 export default function WeeklyCalendar() {
-  const { t } = useTranslation();
   const [currentWeek, setCurrentWeek] = useState(new Date());
   const [selectedFilter, setSelectedFilter] = useState("all");
 
@@ -275,10 +273,9 @@ export default function WeeklyCalendar() {
                   }`}
                 >
                   {format(day, "d")}
-                </div>
+                </div>{" "}
                 <div className="text-xs opacity-75">
-                  {getAppointmentsForDay(day).length} apt
-                  {getAppointmentsForDay(day).length !== 1 ? "s" : ""}
+                  {getAppointmentsForDay(day).length} موعد
                 </div>
               </div>
             ))}
@@ -323,14 +320,21 @@ export default function WeeklyCalendar() {
                             {appointment.treatment}
                           </p>
                           <div className="flex items-center justify-between">
+                            {" "}
                             <span className="text-xs text-slate-500">
-                              {appointment.duration}min
-                            </span>
+                              {appointment.duration} دقيقة
+                            </span>{" "}
                             <Badge
                               variant="secondary"
                               className="text-xs px-1 py-0"
                             >
-                              {appointment.status}
+                              {appointment.status === "confirmed"
+                                ? "مؤكد"
+                                : appointment.status === "pending"
+                                ? "في الانتظار"
+                                : appointment.status === "cancelled"
+                                ? "ملغى"
+                                : appointment.status}
                             </Badge>
                           </div>
                         </div>
@@ -349,7 +353,16 @@ export default function WeeklyCalendar() {
                               الوقت: {appointment.time} ({appointment.duration}{" "}
                               دقيقة)
                             </div>
-                            <div>الحالة: {appointment.status}</div>
+                            <div>
+                              الحالة:{" "}
+                              {appointment.status === "confirmed"
+                                ? "مؤكد"
+                                : appointment.status === "pending"
+                                ? "في الانتظار"
+                                : appointment.status === "cancelled"
+                                ? "ملغى"
+                                : appointment.status}
+                            </div>
                           </div>
                         </div>
                       </div>

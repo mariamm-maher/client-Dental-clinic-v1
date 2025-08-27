@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { useTranslation } from "react-i18next";
+import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +27,6 @@ import {
 } from "lucide-react";
 
 export default function TodaysAppointments() {
-  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
   const [appointments, setAppointments] = useState([
@@ -297,10 +295,9 @@ export default function TodaysAppointments() {
                     : filterStatus.charAt(0).toUpperCase() +
                       filterStatus.slice(1)}
                 </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              </DropdownMenuTrigger>              <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={() => setFilterStatus("all")}>
-                  كل المواعيد
+                  جميع المواعيد
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setFilterStatus("pending")}>
                   في الانتظار
@@ -369,11 +366,9 @@ export default function TodaysAppointments() {
                       <div className="text-slate-500 truncate">
                         {appointment.treatment}
                       </div>
-                    </div>
-
-                    {appointment.checkedInAt && (
+                    </div>                    {appointment.checkedInAt && (
                       <div className="mt-2 text-xs text-green-600">
-                        Checked in at {appointment.checkedInAt}
+                        تم تسجيل الوصول في {appointment.checkedInAt}
                       </div>
                     )}
                   </div>

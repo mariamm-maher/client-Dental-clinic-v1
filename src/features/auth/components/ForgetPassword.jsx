@@ -52,153 +52,141 @@ export default function ForgetPassword() {
   };
   if (isEmailSent) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex">
-        {/* Right Side - Success Message */}
-        <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-          <div className="w-full max-w-md">
-            {/* Mobile Logo */}
-            <div className="lg:hidden text-center mb-8">
-              <div className="w-16 h-16 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-                <Building2 className="w-8 h-8 text-white" />
-              </div>{" "}
-              <h1 className="text-3xl font-bold text-gray-900 mb-2">
-                {t("logo.clinicName")}
-              </h1>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-slate-50 flex items-center justify-center p-8">
+        <div className="w-full max-w-md">
+          {/* Logo */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
+              <Building2 className="w-8 h-8 text-white" />
             </div>
-
-            <Card className="shadow-xl border-0 bg-white">
-              <CardHeader className="text-center pb-6">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <CheckCircle className="w-8 h-8 text-green-600" />
-                </div>
-                <CardTitle className="text-2xl text-gray-900 font-bold">
-                  {t("auth.checkYourEmail")}
-                </CardTitle>
-                <p className="text-gray-600 mt-2">
-                  {t("auth.resetEmailSentInstruction")}
-                </p>
-              </CardHeader>
-
-              <CardContent className="space-y-6">
-                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <p className="text-sm text-blue-800">
-                    <strong>{t("auth.emailSentTo")}</strong> {email}
-                  </p>
-                  <p className="text-sm text-blue-700 mt-2">
-                    {t("auth.checkSpam")}
-                  </p>
-                </div>
-
-                <Button
-                  type="button"
-                  onClick={handleBackToLogin}
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold"
-                >
-                  <ArrowLeft className="w-5 h-5 mr-2" />
-                  {t("auth.backToLogin")}
-                </Button>
-
-                <div className="text-center">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsEmailSent(false);
-                      setEmail("");
-                    }}
-                    className="text-sm text-blue-600 hover:text-blue-700 hover:underline font-medium"
-                  >
-                    {t("auth.tryDifferentEmail")}
-                  </button>
-                </div>
-              </CardContent>
-            </Card>
+            <h1 className="text-3xl font-bold text-slate-800 mb-2">
+              {t("logo.clinicName")}
+            </h1>
           </div>
+
+          <Card className="shadow-xl border-0 bg-white rounded-2xl">
+            <CardHeader className="text-center pb-6">
+              <div className="w-16 h-16 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <CheckCircle className="w-8 h-8 text-teal-600" />
+              </div>
+              <CardTitle className="text-2xl text-slate-800 font-bold">
+                {t("auth.checkYourEmail")}
+              </CardTitle>
+              <p className="text-slate-600 mt-2">
+                {t("auth.resetEmailSentInstruction")}
+              </p>
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
+                <p className="text-sm text-orange-800">
+                  <strong>{t("auth.emailSentTo")}</strong> {email}
+                </p>
+                <p className="text-sm text-orange-700 mt-2">
+                  {t("auth.checkSpam")}
+                </p>
+              </div>
+              <Button
+                type="button"
+                onClick={handleBackToLogin}
+                className="w-full h-12 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-semibold rounded-xl"
+              >
+                <ArrowLeft className="w-5 h-5 mr-2" />
+                {t("auth.backToLogin")}
+              </Button>
+              <div className="text-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEmailSent(false);
+                    setEmail("");
+                  }}
+                  className="text-sm text-teal-600 hover:text-teal-700 hover:underline font-medium"
+                >
+                  {t("auth.tryDifferentEmail")}
+                </button>
+              </div>{" "}
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
   }
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex">
-      <LeftSide />
-
-      {/* Right Side - Reset Form */}
-      <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
-        <div className="w-full max-w-md">
-          {/* Mobile Logo */}
-          <div className="lg:hidden text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
-              <Building2 className="w-8 h-8 text-white" />
-            </div>{" "}
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              {t("logo.clinicName")}
-            </h1>
-            <p className="text-gray-600">{t("auth.professionalHealthcare")}</p>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-slate-50 flex items-center justify-center p-8">
+      <div className="w-full max-w-md">
+        {/* Logo */}
+        <div className="text-center mb-8">
+          <div className="w-16 h-16 bg-gradient-to-br from-orange-400 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl">
+            <Building2 className="w-8 h-8 text-white" />
           </div>
-          <Card className="shadow-xl border-0 bg-white">
-            <CardHeader className="text-center pb-6">
-              <CardTitle className="text-2xl text-gray-900 font-bold">
-                {t("auth.resetYourPassword")}
-              </CardTitle>
-              <p className="text-gray-600 mt-2">
-                {t("auth.enterEmailToReset")}
-              </p>
-            </CardHeader>
-
-            <CardContent className="space-y-6">
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label
-                    htmlFor="email"
-                    className="text-sm font-semibold text-gray-700"
-                  >
-                    {t("auth.emailAddress")}
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder={t("auth.emailPlaceholder")}
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                      className="h-12 pl-12 border-2 focus:border-blue-500 transition-all duration-200"
-                    />
-                    <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  </div>
-                </div>
-
-                <Button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full h-12 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-semibold transition-all duration-300 disabled:opacity-50"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="animate-spin h-5 w-5 mr-3" />
-                      {t("auth.sendingResetLink")}
-                    </>
-                  ) : (
-                    <>
-                      <Send className="w-5 h-5 mr-3" />
-                      {t("auth.sendResetLink")}
-                    </>
-                  )}
-                </Button>
-              </form>
-
-              <div className="flex items-center justify-center">
-                <button
-                  type="button"
-                  onClick={handleBackToLogin}
-                  className="inline-flex items-center text-sm text-gray-600 hover:text-blue-600 transition-colors font-medium"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  {t("auth.backToLogin")}
-                </button>
-              </div>
-            </CardContent>
-          </Card>{" "}
+          <h1 className="text-3xl font-bold text-slate-800 mb-2">
+            {t("logo.clinicName")}
+          </h1>
+          <p className="text-slate-600">{t("auth.professionalHealthcare")}</p>
         </div>
+
+        <Card className="shadow-xl border-0 bg-white rounded-2xl">
+          <CardHeader className="text-center pb-6">
+            <CardTitle className="text-2xl text-slate-800 font-bold">
+              {t("auth.resetYourPassword")}
+            </CardTitle>
+            <p className="text-slate-600 mt-2">{t("auth.enterEmailToReset")}</p>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="email"
+                  className="text-sm font-semibold text-slate-700"
+                >
+                  {t("auth.emailAddress")}
+                </Label>
+                <div className="relative">
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder={t("auth.emailPlaceholder")}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="h-12 pl-12 border-slate-300 focus:border-orange-400 focus:ring-orange-400 transition-all duration-200 rounded-xl"
+                  />
+                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                </div>
+              </div>
+
+              <Button
+                type="submit"
+                disabled={isLoading}
+                className="w-full h-12 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-semibold transition-all duration-200 disabled:opacity-50 rounded-xl"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader2 className="animate-spin h-5 w-5 mr-3" />
+                    {t("auth.sendingResetLink")}
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-5 h-5 mr-3" />
+                    {t("auth.sendResetLink")}
+                  </>
+                )}
+              </Button>
+            </form>
+
+            <div className="flex items-center justify-center">
+              <button
+                type="button"
+                onClick={handleBackToLogin}
+                className="inline-flex items-center text-sm text-slate-600 hover:text-teal-600 transition-colors font-medium"
+              >
+                <ArrowLeft className="w-4 h-4 mr-2" />
+                {t("auth.backToLogin")}
+              </button>
+            </div>
+          </CardContent>{" "}
+        </Card>
       </div>
     </div>
   );

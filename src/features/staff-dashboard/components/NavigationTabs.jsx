@@ -8,40 +8,37 @@ import {
   Calendar,
   Search,
 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 export default function NavigationTabs({ activeTab, onTabChange }) {
-  const { t } = useTranslation();
   const [hoveredTab, setHoveredTab] = useState(null);
-
   const tabs = [
     {
       id: "today",
-      label: t("receptionist.tabs.today.label"),
+      label: "مواعيد اليوم",
       icon: CalendarDays,
       count: 8,
     },
     {
       id: "schedule",
-      label: t("receptionist.tabs.schedule.label"),
+      label: "جدولة موعد",
       icon: CalendarPlus,
       count: 0,
     },
     {
       id: "register",
-      label: t("receptionist.tabs.register.label"),
+      label: "تسجيل مريض",
       icon: UserPlus,
       count: 5,
     },
     {
       id: "calendar",
-      label: t("receptionist.tabs.calendar.label"),
+      label: "التقويم الأسبوعي",
       icon: Calendar,
       count: 45,
     },
     {
       id: "search",
-      label: t("receptionist.tabs.search.label"),
+      label: "البحث عن مريض",
       icon: Search,
       count: 1247,
     },
@@ -82,11 +79,11 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
                   {tab.label}
                 </span>
                 {tab.count > 0 && (
-                  <Badge 
-                    variant={isActive ? "secondary" : "outline"} 
+                  <Badge
+                    variant={isActive ? "secondary" : "outline"}
                     className={`ml-2 text-xs px-2 py-0.5 ${
-                      isActive 
-                        ? "bg-white/20 text-white border-white/30" 
+                      isActive
+                        ? "bg-white/20 text-white border-white/30"
                         : "bg-slate-100 text-slate-600 border-slate-300"
                     }`}
                   >

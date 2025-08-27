@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,7 @@ import {
 
 export default function Header() {
   const { t, i18n } = useTranslation();
-  const [currentTime, setCurrentTime] = useState(new Date());
+  const currentTime = new Date();
 
   const formatDate = (date) => {
     return date.toLocaleDateString(i18n.language || "ar", {
@@ -37,13 +36,17 @@ export default function Header() {
             <div className="flex items-center space-x-3">
               <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg">
                 <Building2 className="w-7 h-7 text-white" />
-              </div>
+              </div>{" "}
               <div>
+                {" "}
                 <h1 className="text-xl font-bold text-slate-800">
-                  {t("logo.clinicName")}
+                  {t("logo.clinicName", "عيادة الأسنان المتقدمة")}
                 </h1>
                 <p className="text-sm text-slate-600 font-medium">
-                  {t("receptionist.header.receptionistDashboard")}
+                  {t(
+                    "receptionist.header.receptionistDashboard",
+                    "لوحة تحكم موظف الاستقبال"
+                  )}
                 </p>
               </div>
             </div>
@@ -82,11 +85,12 @@ export default function Header() {
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:block text-sm">
+                {" "}
                 <p className="font-semibold text-slate-900">
-                  {t("receptionist.header.receptionistName", "مايا أحمد")}
+                  {i18n.language === "ar" ? "مايا أحمد" : "Maya Ahmed"}
                 </p>
                 <p className="text-slate-600">
-                  {t("receptionist.header.receptionistRole", "موظف الاستقبال")}
+                  {i18n.language === "ar" ? "موظف الاستقبال" : "Receptionist"}
                 </p>
               </div>
             </div>

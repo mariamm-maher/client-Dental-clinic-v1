@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useTranslation } from "react-i18next";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -30,7 +29,6 @@ import {
 } from "lucide-react";
 
 export default function PatientSearch() {
-  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchType, setSearchType] = useState("all");
   const [selectedPatient, setSelectedPatient] = useState(null);
@@ -179,22 +177,21 @@ export default function PatientSearch() {
 
     return age;
   };
-
   const stats = [
     {
-      label: "Total Patients",
+      label: "إجمالي المرضى",
       value: patients.length,
       icon: Users,
       color: "text-blue-600",
     },
     {
-      label: "Active",
+      label: "نشط",
       value: patients.filter((p) => p.status === "active").length,
       icon: User,
       color: "text-green-600",
     },
     {
-      label: "Recent Visits",
+      label: "زيارات حديثة",
       value: patients.filter(
         (p) =>
           new Date(p.lastVisit) >
@@ -212,13 +209,13 @@ export default function PatientSearch() {
         <div className="flex items-center space-x-3">
           <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
             <Search className="w-6 h-6 text-white" />
-          </div>
+          </div>{" "}
           <div>
             <h1 className="text-2xl font-bold text-slate-800">
-              Patient Search
+              البحث عن المرضى
             </h1>
             <p className="text-slate-600">
-              Find patients by name, phone, or email
+              البحث عن المرضى بالاسم أو الهاتف أو البريد الإلكتروني
             </p>
           </div>
         </div>
@@ -346,14 +343,14 @@ export default function PatientSearch() {
                             <div className="flex items-center gap-1">
                               <Mail className="w-3 h-3" />
                               {patient.email}
-                            </div>
+                            </div>{" "}
                             <div className="flex items-center gap-1">
                               <Calendar className="w-3 h-3" />
-                              Last visit: {patient.lastVisit}
+                              آخر زيارة: {patient.lastVisit}
                             </div>
                             <div className="flex items-center gap-1">
                               <History className="w-3 h-3" />
-                              {patient.totalVisits} visits
+                              {patient.totalVisits} زيارة
                             </div>
                           </div>
                         </div>
@@ -367,18 +364,18 @@ export default function PatientSearch() {
                           <Button variant="ghost" size="sm" className="p-2">
                             <MoreVertical className="w-4 h-4" />
                           </Button>
-                        </DropdownMenuTrigger>
+                        </DropdownMenuTrigger>{" "}
                         <DropdownMenuContent align="end">
                           <DropdownMenuItem>
                             <Eye className="w-4 h-4 mr-2" />
-                            View Details
+                            عرض التفاصيل
                           </DropdownMenuItem>
                           <DropdownMenuItem>
                             <Edit className="w-4 h-4 mr-2" />
-                            Edit Patient
+                            تعديل المريض
                           </DropdownMenuItem>
                           <DropdownMenuItem>
-                            <CalendarPlus className="w-4 ه-4 mr-2" />
+                            <CalendarPlus className="w-4 h-4 mr-2" />
                             جدولة موعد
                           </DropdownMenuItem>
                           <DropdownMenuItem>
@@ -530,9 +527,10 @@ export default function PatientSearch() {
                     <>
                       <Separator />
                       <div>
+                        {" "}
                         <h4 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
                           <Calendar className="w-4 h-4" />
-                          Upcoming Appointments
+                          المواعيد القادمة
                         </h4>
                         <div className="space-y-2">
                           {selectedPatient.upcomingAppointments.map(
@@ -544,12 +542,12 @@ export default function PatientSearch() {
                                 <div className="text-sm">
                                   <div className="font-semibold text-blue-800">
                                     {apt.treatment}
-                                  </div>
+                                  </div>{" "}
                                   <div className="text-blue-600">
-                                    {apt.date} at {apt.time}
+                                    {apt.date} في {apt.time}
                                   </div>
                                   <div className="text-blue-500">
-                                    with {apt.doctor}
+                                    مع {apt.doctor}
                                   </div>
                                 </div>
                               </div>
@@ -590,7 +588,7 @@ export default function PatientSearch() {
               ) : (
                 <div className="text-center py-12 text-slate-500">
                   <User className="w-16 h-16 mx-auto mb-4 text-slate-300" />
-                  <p>Select a patient to view details</p>
+                  <p>اختر مريضاً لعرض التفاصيل</p>
                 </div>
               )}
             </CardContent>
