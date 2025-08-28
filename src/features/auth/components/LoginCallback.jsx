@@ -4,10 +4,8 @@ import { useAuthStore } from "@/stores";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CheckCircle, AlertCircle, Loader2 } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 const LoginCallback = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const { signInWithGoogle } = useAuthStore();
@@ -98,9 +96,9 @@ const LoginCallback = () => {
             <Loader2 className="w-12 h-12 text-blue-600 mx-auto animate-spin" />
             <div className="space-y-2">
               <h3 className="text-lg font-semibold text-gray-900">
-                {t("callback.completingSignIn")}
+                جاري إكمال تسجيل الدخول
               </h3>
-              <p className="text-gray-600">{t("callback.pleaseWait")}</p>
+              <p className="text-gray-600">يرجى الانتظار لحظات...</p>
             </div>
             <div className="space-y-2">
               <Skeleton className="h-4 w-3/4 mx-auto" />
@@ -115,9 +113,9 @@ const LoginCallback = () => {
             <CheckCircle className="w-12 h-12 text-green-600 mx-auto" />
             <div className="space-y-2">
               <h3 className="text-lg font-semibold text-gray-900">
-                {t("callback.welcomeBack")}
+                مرحباً بعودتك
               </h3>
-              <p className="text-gray-600">{t("callback.redirecting")}</p>
+              <p className="text-gray-600">سيتم تحويلك تلقائيًا خلال لحظات</p>
             </div>
           </div>
         );
@@ -128,9 +126,9 @@ const LoginCallback = () => {
             <AlertCircle className="w-12 h-12 text-red-600 mx-auto" />
             <div className="space-y-2">
               <h3 className="text-lg font-semibold text-gray-900">
-                {t("callback.signInFailed")}
+                فشل تسجيل الدخول
               </h3>
-              <p className="text-gray-600">{t("callback.issueRedirecting")}</p>
+              <p className="text-gray-600">حدثت مشكلة. سيتم تحويلك إلى صفحة تسجيل الدخول</p>
             </div>
           </div>
         );
@@ -145,7 +143,7 @@ const LoginCallback = () => {
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader className="text-center">
           <CardTitle className="text-xl font-bold text-gray-900">
-            {t("logo.clinicName")}
+            عيادة الشفاء
           </CardTitle>
         </CardHeader>
         <CardContent className="py-8">{renderContent()}</CardContent>

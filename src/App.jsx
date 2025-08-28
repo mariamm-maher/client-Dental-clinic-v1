@@ -5,7 +5,6 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useEffect } from "react";
-import { useLanguageInitialization } from "./hooks/useLanguageInitialization";
 import { useAuthStore } from "@/stores";
 import NotFound from "./components/common/NotFound.jsx";
 import ReceptionistDashboard from "./features/staff-dashboard/index.jsx";
@@ -22,8 +21,6 @@ import {
 } from "./features/auth";
 
 function App() {
-  // Initialize language and RTL support
-  useLanguageInitialization();
 
   // Initialize authentication state from localStorage
   const initializeAuth = useAuthStore((state) => state.initializeAuth);

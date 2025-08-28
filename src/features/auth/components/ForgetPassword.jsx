@@ -1,13 +1,10 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores";
-import { useTranslation } from "react-i18next";
 import {
   Building2,
   Mail,
@@ -18,7 +15,6 @@ import {
 } from "lucide-react";
 
 export default function ForgetPassword() {
-  const { t } = useTranslation();
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isEmailSent, setIsEmailSent] = useState(false);
@@ -32,14 +28,14 @@ export default function ForgetPassword() {
 
       if (result.success) {
         setIsEmailSent(true);
-        toast.success(t("auth.resetEmailSent"));
+        toast.success("تم إرسال رابط إعادة تعيين كلمة المرور بنجاح");
         console.log("Password reset email sent to:", email);
       } else {
-        toast.error(result.error || t("auth.resetEmailFailed"));
+        toast.error(result.error || "فشل إرسال رابط إعادة التعيين");
       }
     } catch (err) {
       console.error("Forget password error:", err);
-      const errorMessage = err.error || t("auth.resetEmailFailed");
+      const errorMessage = err.error || "فشل إرسال رابط إعادة التعيين";
 
       toast.error(errorMessage);
     } finally {
@@ -60,7 +56,7 @@ export default function ForgetPassword() {
               <Building2 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-slate-800 mb-2">
-              {t("logo.clinicName")}
+              عيادة الشفاء
             </h1>
           </div>
 
@@ -70,20 +66,20 @@ export default function ForgetPassword() {
                 <CheckCircle className="w-8 h-8 text-teal-600" />
               </div>
               <CardTitle className="text-2xl text-slate-800 font-bold">
-                {t("auth.checkYourEmail")}
+                تحقق من بريدك الإلكتروني
               </CardTitle>
               <p className="text-slate-600 mt-2">
-                {t("auth.resetEmailSentInstruction")}
+                لقد أرسلنا رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.
               </p>
             </CardHeader>
 
             <CardContent className="space-y-6">
               <div className="bg-orange-50 border border-orange-200 rounded-lg p-4">
                 <p className="text-sm text-orange-800">
-                  <strong>{t("auth.emailSentTo")}</strong> {email}
+                  <strong>تم إرسال البريد إلى:</strong> {email}
                 </p>
                 <p className="text-sm text-orange-700 mt-2">
-                  {t("auth.checkSpam")}
+                  إذا لم تجد الرسالة، يرجى التحقق من صندوق الرسائل غير المرغوب فيها.
                 </p>
               </div>
               <Button
@@ -92,7 +88,7 @@ export default function ForgetPassword() {
                 className="w-full h-12 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-semibold rounded-xl"
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
-                {t("auth.backToLogin")}
+                العودة لتسجيل الدخول
               </Button>
               <div className="text-center">
                 <button
@@ -103,7 +99,7 @@ export default function ForgetPassword() {
                   }}
                   className="text-sm text-teal-600 hover:text-teal-700 hover:underline font-medium"
                 >
-                  {t("auth.tryDifferentEmail")}
+                  محاولة بريد إلكتروني آخر
                 </button>
               </div>{" "}
             </CardContent>
@@ -121,17 +117,17 @@ export default function ForgetPassword() {
             <Building2 className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-slate-800 mb-2">
-            {t("logo.clinicName")}
+            عيادة الشفاء
           </h1>
-          <p className="text-slate-600">{t("auth.professionalHealthcare")}</p>
+          <p className="text-slate-600">رعاية صحية احترافية بخبرات موثوقة</p>
         </div>
 
         <Card className="shadow-xl border-0 bg-white rounded-2xl">
           <CardHeader className="text-center pb-6">
             <CardTitle className="text-2xl text-slate-800 font-bold">
-              {t("auth.resetYourPassword")}
+              إعادة تعيين كلمة المرور
             </CardTitle>
-            <p className="text-slate-600 mt-2">{t("auth.enterEmailToReset")}</p>
+            <p className="text-slate-600 mt-2">أدخل بريدك الإلكتروني لإرسال رابط إعادة التعيين</p>
           </CardHeader>
           <CardContent className="space-y-6">
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -140,13 +136,13 @@ export default function ForgetPassword() {
                   htmlFor="email"
                   className="text-sm font-semibold text-slate-700"
                 >
-                  {t("auth.emailAddress")}
+                  البريد الإلكتروني
                 </Label>
                 <div className="relative">
                   <Input
                     id="email"
                     type="email"
-                    placeholder={t("auth.emailPlaceholder")}
+                    placeholder="example@domain.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
@@ -164,12 +160,12 @@ export default function ForgetPassword() {
                 {isLoading ? (
                   <>
                     <Loader2 className="animate-spin h-5 w-5 mr-3" />
-                    {t("auth.sendingResetLink")}
+                    جاري إرسال الرابط...
                   </>
                 ) : (
                   <>
                     <Send className="w-5 h-5 mr-3" />
-                    {t("auth.sendResetLink")}
+                    إرسال رابط إعادة التعيين
                   </>
                 )}
               </Button>
@@ -182,7 +178,7 @@ export default function ForgetPassword() {
                 className="inline-flex items-center text-sm text-slate-600 hover:text-teal-600 transition-colors font-medium"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                {t("auth.backToLogin")}
+                العودة لتسجيل الدخول
               </button>
             </div>
           </CardContent>{" "}

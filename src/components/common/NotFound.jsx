@@ -1,10 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Home, ArrowLeft, Stethoscope, AlertTriangle } from "lucide-react";
-import { clinicConfig } from "@/lib/config";
-import { useTranslation } from "react-i18next";
 
 export default function NotFound() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
@@ -43,16 +40,10 @@ export default function NotFound() {
             404
           </h1>
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            {t("notFound.title")}
+            الصفحة غير موجودة
           </h2>
           <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-            {t("notFound.message")}
-            <br />
-            {t("notFound.backTo")}{" "}
-            <span className="font-semibold text-blue-600">
-              {clinicConfig.name}
-            </span>
-            .
+            عذراً، الصفحة التي تبحث عنها غير متاحة. يمكنك العودة إلى الصفحة الرئيسية أو الرجوع للخلف.
           </p>
         </div>
 
@@ -63,34 +54,21 @@ export default function NotFound() {
             className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 hover:from-blue-700 hover:to-indigo-700"
           >
             <Home className="w-5 h-5 mr-3" />
-            {t("notFound.backHome")}
+            العودة إلى الرئيسية
           </Link>{" "}
           <button
             onClick={() => navigate(-1)}
             className="inline-flex items-center px-8 py-4 bg-white text-gray-700 font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 border border-gray-200 hover:border-gray-300"
           >
             <ArrowLeft className="w-5 h-5 mr-3" />
-            {t("notFound.goBack")}
+            رجوع
           </button>
         </div>
 
         {/* Contact Information */}
         <div className="mt-12 text-center">
           <p className="text-gray-500 text-sm">
-            {t("notFound.needHelp")}{" "}
-            <a
-              href={`tel:${clinicConfig.contact.phone}`}
-              className="text-blue-600 hover:text-blue-700 font-medium"
-            >
-              {clinicConfig.contact.phone}
-            </a>{" "}
-            {t("notFound.or")}{" "}
-            <a
-              href={`mailto:${clinicConfig.contact.email}`}
-              className="text-blue-600 hover:text-blue-700 font-medium"
-            >
-              {clinicConfig.contact.email}
-            </a>
+            إذا كنت بحاجة إلى مساعدة، يرجى التواصل مع فريق الدعم.
           </p>
         </div>
       </div>

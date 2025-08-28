@@ -1,111 +1,80 @@
-import { useTranslation } from "react-i18next";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import LanguageToggle from "@/components/common/LanguageToggle";
 import { LogoutButton } from "@/features/auth";
-import {
-  Building2,
-  Bell,
-  Settings,
-  Calendar,
-  Users,
-  Clock,
-} from "lucide-react";
+import { Building2, Calendar, Clock, Bell, User } from "lucide-react";
 
 export default function Header() {
-  const { t, i18n } = useTranslation();
   const currentTime = new Date();
 
   const formatDate = (date) => {
-    return date.toLocaleDateString(i18n.language || "ar", {
+    return date.toLocaleDateString("ar", {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
     });
   };
-
   return (
-    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200 shadow-lg">
-      <div className="container mx-auto px-4 py-4">
+    <header className="bg-gradient-to-l from-white via-sky-50 to-blue-50 border-b border-sky-200/50 shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Left Section - Logo & Title */}
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Building2 className="w-7 h-7 text-white" />
-              </div>{" "}
-              <div>
-                {" "}
-                <h1 className="text-xl font-bold text-slate-800">
-                  {t("logo.clinicName", "عيادة الأسنان المتقدمة")}
-                </h1>
-                <p className="text-sm text-slate-600 font-medium">
-                  {t(
-                    "receptionist.header.receptionistDashboard",
-                    "لوحة تحكم موظف الاستقبال"
-                  )}
-                </p>
-              </div>
+          {/* Logo & Title - Right side (primary position for Arabic) */}
+          <div className="flex items-center gap-4">
+            <div className="p-3 bg-gradient-to-br from-sky-500 to-blue-600 rounded-xl shadow-lg">
+              <Building2 className="w-8 h-8 text-white" />
+            </div>
+            <div className="text-right">
+              <h1 className="text-2xl font-bold text-gray-900 mb-1">
+                مركز الندى
+              </h1>
+              <p className="text-sm text-gray-600 flex items-center gap-2">
+                <User className="w-4 h-4 text-emerald-600" />
+                لوحة تحكم موظف الاستقبال
+              </p>
             </div>
           </div>
 
-          {/* Center Section - Date & Time */}
-          <div className="hidden md:flex items-center space-x-6">
-            <div className="flex items-center space-x-3 bg-gradient-to-r from-orange-50 to-stone-100 px-4 py-2 rounded-xl border border-orange-200/50">
-              <Calendar className="w-5 h-5 text-slate-600" />
+          {/* Date & Time - Center */}
+          <div className="hidden lg:flex items-center gap-6">
+            <div className="flex items-center gap-3 px-4 py-3 bg-white/90 backdrop-blur-sm rounded-xl border border-sky-200 shadow-sm">
+              <Calendar className="w-5 h-5 text-sky-600" />
               <div className="text-center">
-                <p className="text-sm font-semibold text-slate-900">
+                <p className="text-sm font-semibold text-gray-900">
                   {formatDate(currentTime)}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Right Section - Actions & Profile */}
-          <div className="flex items-center space-x-4">
-            {/* Language Toggle */}
-            <LanguageToggle />
-
-            <Separator orientation="vertical" className="h-8" />
-
-            <Separator orientation="vertical" className="h-8" />
-
-            {/* Logout Button */}
-            <LogoutButton variant="ghost" size="sm" />
-
-            {/* Profile */}
-            <div className="flex items-center space-x-3">
-              <Avatar className="w-10 h-10 ring-2 ring-primary/20">
-                <AvatarImage src="/placeholder-avatar.jpg" />
-                <AvatarFallback className="bg-gradient-to-br from-teal-500 to-cyan-600 text-white font-semibold">
-                  RC
-                </AvatarFallback>
-              </Avatar>
-              <div className="hidden md:block text-sm">
-                {" "}
-                <p className="font-semibold text-slate-900">
-                  {i18n.language === "ar" ? "مايا أحمد" : "Maya Ahmed"}
-                </p>
-                <p className="text-slate-600">
-                  {i18n.language === "ar" ? "موظف الاستقبال" : "Receptionist"}
-                </p>
+          {/* Staff Profile & Actions - Left side */}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-3 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-lg border border-emerald-200 shadow-sm">
+              <div className="w-10 h-10 bg-gradient-to-br from-emerald-500 to-green-600 rounded-full flex items-center justify-center">
+                <User className="w-5 h-5 text-white" />
+              </div>
+              <div className="hidden md:block text-right">
+                <p className="text-sm font-semibold text-gray-900">أحمد محمد</p>
+                <p className="text-xs text-gray-600">موظف استقبال</p>
               </div>
             </div>
+            <LogoutButton variant="outline" size="sm" />
           </div>
         </div>
 
         {/* Mobile Date/Time - Show on smaller screens */}
-        <div className="md:hidden mt-4 flex justify-center">
-          <div className="flex items-center space-x-3 bg-gradient-to-r from-orange-50 to-stone-100 px-4 py-2 rounded-xl border border-orange-200/50">
-            <Calendar className="w-4 h-4 text-slate-600" />
+        <div className="lg:hidden mt-4 flex justify-center">
+          <div className="flex items-center gap-3 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-lg border border-sky-200 shadow-sm">
+            <Calendar className="w-4 h-4 text-sky-600" />
             <div className="text-center">
-              <p className="text-sm font-semibold text-slate-900">
+              <p className="text-sm font-semibold text-gray-900">
                 {formatDate(currentTime)}
               </p>
+              <p className="text-xs text-gray-500 mt-1">
+                {currentTime.toLocaleTimeString("ar", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </p>
             </div>
+            <Clock className="w-4 h-4 text-sky-500" />
           </div>
         </div>
       </div>

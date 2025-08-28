@@ -7,7 +7,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import useAuthStore from "@/stores/authStore";
-import { useTranslation } from "react-i18next";
 import {
   Building2,
   Lock,
@@ -20,7 +19,6 @@ import {
 } from "lucide-react";
 
 export default function ResetPassword() {
-  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const confirmPasswordReset = useAuthStore(
@@ -39,32 +37,32 @@ export default function ResetPassword() {
 
   useEffect(() => {
     if (!token) {
-      setError(t("auth.invalidOrMissingToken"));
+      setError("رمز التحقق غير صالح أو مفقود");
     }
-  }, [token, t]);
+  }, [token]);
 
   const validatePassword = (password) => {
     const errors = {};
 
     if (password.length < 8) {
-      errors.length = "Password must be at least 8 characters long";
+      errors.length = "يجب أن تكون كلمة المرور 8 أحرف على الأقل";
     }
 
     if (!/(?=.*[a-z])/.test(password)) {
-      errors.lowercase = "Password must contain at least one lowercase letter";
+      errors.lowercase = "يجب أن تحتوي كلمة المرور على حرف صغير واحد على الأقل";
     }
 
     if (!/(?=.*[A-Z])/.test(password)) {
-      errors.uppercase = "Password must contain at least one uppercase letter";
+      errors.uppercase = "يجب أن تحتوي كلمة المرور على حرف كبير واحد على الأقل";
     }
 
     if (!/(?=.*\d)/.test(password)) {
-      errors.number = "Password must contain at least one number";
+      errors.number = "يجب أن تحتوي كلمة المرور على رقم واحد على الأقل";
     }
 
     if (!/(?=.*[@$!%*?&])/.test(password)) {
       errors.special =
-        "Password must contain at least one special character (@$!%*?&)";
+        "يجب أن تحتوي كلمة المرور على رمز خاص واحد على الأقل (@$!%*?&)";
     }
 
     return errors;
@@ -89,14 +87,14 @@ export default function ResetPassword() {
 
     // Validate passwords
     if (password !== confirmPassword) {
-      setError(t("auth.passwordsDontMatch"));
+      setError("كلمات المرور غير متطابقة");
       setIsLoading(false);
       return;
     }
 
     const passwordErrors = validatePassword(password);
     if (Object.keys(passwordErrors).length > 0) {
-      setError(t("auth.fixPasswordRequirements"));
+      setError("يرجى استيفاء متطلبات كلمة المرور");
       setValidationErrors(passwordErrors);
       setIsLoading(false);
       return;
@@ -107,14 +105,14 @@ export default function ResetPassword() {
 
       if (result.success) {
         setIsSuccess(true);
-        toast.success(result.message || t("auth.passwordResetSuccess"));
+        toast.success(result.message || "تم إعادة تعيين كلمة المرور بنجاح");
       } else {
-        setError(result.error || t("auth.passwordResetFailed"));
-        toast.error(result.error || t("auth.passwordResetFailed"));
+        setError(result.error || "فشل إعادة تعيين كلمة المرور");
+        toast.error(result.error || "فشل إعادة تعيين كلمة المرور");
       }
     } catch (err) {
       console.error("Reset password error:", err);
-      const errorMessage = err.error || t("auth.passwordResetTryAgain");
+      const errorMessage = err.error || "حدث خطأ. يرجى المحاولة مرة أخرى";
       setError(errorMessage);
       toast.error(errorMessage);
     } finally {
@@ -137,9 +135,9 @@ export default function ResetPassword() {
               <Building2 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-slate-800 mb-2">
-              {t("logo.clinicName")}
+              عيادة الشفاء
             </h1>
-            <p className="text-slate-600">{t("auth.professionalHealthcare")}</p>
+            <p className="text-slate-600">رعاية صحية احترافية</p>
           </div>
 
           <Card className="shadow-xl border-0 bg-white rounded-2xl">
@@ -148,11 +146,9 @@ export default function ResetPassword() {
                 <CheckCircle className="w-8 h-8 text-teal-600" />
               </div>
               <CardTitle className="text-2xl text-slate-800 font-bold">
-                {t("auth.passwordResetSuccessfully")}
+                تم إعادة تعيين كلمة المرور بنجاح
               </CardTitle>
-              <p className="text-slate-600 mt-2">
-                {t("auth.passwordUpdatedInstruction")}
-              </p>
+              <p className="text-slate-600 mt-2">تم تحديث كلمة المرور الخاصة بك. يمكنك الآن تسجيل الدخول.</p>
             </CardHeader>
 
             <CardContent className="space-y-6">
@@ -162,7 +158,7 @@ export default function ResetPassword() {
                 className="w-full h-12 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-semibold rounded-xl"
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
-                {t("auth.backToLogin")}
+                العودة إلى تسجيل الدخول
               </Button>
             </CardContent>
           </Card>
@@ -182,9 +178,9 @@ export default function ResetPassword() {
               <Building2 className="w-8 h-8 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-slate-800 mb-2">
-              {t("logo.clinicName")}
+              عيادة الشفاء
             </h1>
-            <p className="text-slate-600">{t("auth.professionalHealthcare")}</p>
+            <p className="text-slate-600">رعاية صحية احترافية</p>
           </div>
 
           <Card className="shadow-xl border-0 bg-white rounded-2xl">
@@ -193,11 +189,9 @@ export default function ResetPassword() {
                 <AlertCircle className="w-8 h-8 text-red-500" />
               </div>
               <CardTitle className="text-2xl text-slate-800 font-bold">
-                {t("auth.invalidResetLink")}
+                رابط إعادة التعيين غير صالح
               </CardTitle>
-              <p className="text-slate-600 mt-2">
-                {t("auth.invalidResetInstruction")}
-              </p>
+              <p className="text-slate-600 mt-2">قد تكون صلاحية الرابط انتهت أو تم استخدامه من قبل. يرجى طلب رابط جديد.</p>
             </CardHeader>
 
             <CardContent className="space-y-6">
@@ -206,7 +200,7 @@ export default function ResetPassword() {
                   type="button"
                   className="w-full h-12 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-semibold rounded-xl"
                 >
-                  {t("auth.requestNewResetLink")}
+                  طلب رابط إعادة تعيين جديد
                 </Button>
               </Link>
 
@@ -217,7 +211,7 @@ export default function ResetPassword() {
                 className="w-full h-12 border-slate-300 hover:bg-orange-50 rounded-xl"
               >
                 <ArrowLeft className="w-5 h-5 mr-2" />
-                {t("auth.backToLogin")}
+                العودة إلى تسجيل الدخول
               </Button>
             </CardContent>
           </Card>
@@ -236,19 +230,17 @@ export default function ResetPassword() {
             <Building2 className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-slate-800 mb-2">
-            {t("logo.clinicName")}
+            عيادة الشفاء
           </h1>
-          <p className="text-slate-600">{t("auth.professionalHealthcare")}</p>
+          <p className="text-slate-600">رعاية صحية احترافية</p>
         </div>
 
         <Card className="shadow-xl border-0 bg-white rounded-2xl">
           <CardHeader className="text-center pb-6">
             <CardTitle className="text-2xl text-slate-800 font-bold">
-              {t("auth.setNewPassword")}
+              تعيين كلمة مرور جديدة
             </CardTitle>
-            <p className="text-slate-600 mt-2">
-              {t("auth.enterNewPasswordInstruction")}
-            </p>
+            <p className="text-slate-600 mt-2">يرجى إدخال كلمة مرور قوية واستيفاء المتطلبات التالية.</p>
           </CardHeader>
 
           <CardContent className="space-y-6">
@@ -267,13 +259,13 @@ export default function ResetPassword() {
                   htmlFor="password"
                   className="text-sm font-semibold text-slate-700"
                 >
-                  {t("auth.newPassword")}
+                  كلمة المرور الجديدة
                 </Label>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder={t("auth.enterNewPassword")}
+                    placeholder="أدخل كلمة المرور الجديدة"
                     value={password}
                     onChange={handlePasswordChange}
                     required
@@ -305,7 +297,7 @@ export default function ResetPassword() {
                     {Object.keys(validationErrors).length === 0 && (
                       <p className="text-teal-600 flex items-center">
                         <CheckCircle className="w-3 h-3 mr-1" />
-                        {t("auth.passwordMeetsAllRequirements")}
+                        كلمة المرور تستوفي جميع المتطلبات
                       </p>
                     )}
                   </div>
@@ -318,13 +310,13 @@ export default function ResetPassword() {
                   htmlFor="confirmPassword"
                   className="text-sm font-semibold text-slate-700"
                 >
-                  {t("auth.confirmNewPassword")}
+                  تأكيد كلمة المرور الجديدة
                 </Label>
                 <div className="relative">
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder={t("auth.confirmNewPasswordPlaceholder")}
+                    placeholder="أعد إدخال كلمة المرور الجديدة"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     required
@@ -347,14 +339,14 @@ export default function ResetPassword() {
                 {confirmPassword && password !== confirmPassword && (
                   <p className="text-red-500 text-xs flex items-center">
                     <AlertCircle className="w-3 h-3 mr-1" />
-                    {t("auth.passwordsDontMatch")}
+                    كلمات المرور غير متطابقة
                   </p>
                 )}
 
                 {confirmPassword && password === confirmPassword && (
                   <p className="text-teal-600 text-xs flex items-center">
                     <CheckCircle className="w-3 h-3 mr-1" />
-                    {t("auth.passwordsMatch")}
+                    كلمات المرور متطابقة
                   </p>
                 )}
               </div>
@@ -371,12 +363,12 @@ export default function ResetPassword() {
                 {isLoading ? (
                   <>
                     <Loader2 className="animate-spin h-5 w-5 mr-3" />
-                    {t("auth.resettingPassword")}
+                    جاري إعادة تعيين كلمة المرور...
                   </>
                 ) : (
                   <>
                     <Lock className="w-5 h-5 mr-3" />
-                    {t("auth.resetPassword")}
+                    إعادة تعيين كلمة المرور
                   </>
                 )}
               </Button>
@@ -389,7 +381,7 @@ export default function ResetPassword() {
                 className="inline-flex items-center text-sm text-slate-600 hover:text-teal-600 transition-colors font-medium"
               >
                 <ArrowLeft className="w-4 h-4 mr-2" />
-                {t("auth.backToLogin")}
+                العودة إلى تسجيل الدخول
               </button>
             </div>
           </CardContent>

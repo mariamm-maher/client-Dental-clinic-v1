@@ -9,7 +9,6 @@ import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores";
 import { navigateByRole } from "@/lib/utils";
-import { useTranslation } from "react-i18next";
 import {
   Building2,
   Mail,
@@ -35,7 +34,6 @@ const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=
 )}&access_type=offline&prompt=consent`;
 
 export default function Login() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const signIn = useAuthStore((state) => state.signIn);
 
@@ -57,7 +55,7 @@ export default function Login() {
         password: formData.password,
       });
       if (result?.success) {
-        toast.success(t("auth.loginSuccess"));
+        toast.success("تم تسجيل الدخول بنجاح");
 
         // Role-based navigation using utility function
         const { role } = result.data;
@@ -84,7 +82,7 @@ export default function Login() {
       } else if (error?.message) {
         toast.error(error.message);
       } else {
-        toast.error(t("auth.invalidCredentials"));
+        toast.error("بيانات اعتماد غير صحيحة");
       }
     } finally {
       setIsLoading(false);
@@ -107,7 +105,7 @@ export default function Login() {
             <Building2 className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-slate-800 mb-2">
-            {t("logo.clinicName")}
+            عيادة الشفاء
           </h1>
         </div>
 
@@ -115,9 +113,9 @@ export default function Login() {
           {" "}
           <CardHeader className="space-y-1 pb-6">
             <CardTitle className="text-2xl font-bold text-slate-800">
-              {t("auth.welcomeBack")}
+              أهلاً بعودتك
             </CardTitle>
-            <p className="text-slate-600">{t("auth.enterCredentials")}</p>
+            <p className="text-slate-600">يرجى إدخال بيانات الدخول</p>
           </CardHeader>{" "}
           <CardContent className="space-y-6">
             {/* Google Login Button */}
@@ -145,15 +143,13 @@ export default function Login() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              {t("auth.continueWithGoogle")}
+              المتابعة عبر Google
             </Button>{" "}
             {/* Divider */}
             <div className="relative">
               <Separator className="bg-slate-200" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-white px-3 text-sm text-slate-500">
-                  {t("auth.orContinueWith")}
-                </span>
+                <span className="bg-white px-3 text-sm text-slate-500">أو المتابعة عبر</span>
               </div>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -164,13 +160,13 @@ export default function Login() {
                   htmlFor="email"
                   className="text-sm font-medium text-slate-700"
                 >
-                  {t("auth.emailAddress")}
+                  البريد الإلكتروني
                 </Label>
                 <div className="relative">
                   <Input
                     id="email"
                     type="email"
-                    placeholder={t("auth.emailPlaceholder")}
+                    placeholder="example@domain.com"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
                     required
@@ -186,13 +182,13 @@ export default function Login() {
                   htmlFor="password"
                   className="text-sm font-medium text-slate-700"
                 >
-                  {t("auth.password")}
+                  كلمة المرور
                 </Label>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder={t("auth.passwordPlaceholder")}
+                    placeholder="أدخل كلمة المرور"
                     value={formData.password}
                     onChange={(e) =>
                       handleInputChange("password", e.target.value)
@@ -228,14 +224,14 @@ export default function Login() {
                     htmlFor="remember-me"
                     className="text-sm text-slate-700"
                   >
-                    {t("auth.rememberMe")}
+                    تذكرني
                   </Label>{" "}
                 </div>{" "}
                 <Link
                   to="/forget-password"
                   className="text-sm text-teal-600 hover:text-teal-700 hover:underline transition-colors"
                 >
-                  {t("auth.forgotPassword")}
+                  نسيت كلمة المرور؟
                 </Link>
               </div>
               {/* Submit Button */}{" "}
@@ -247,28 +243,25 @@ export default function Login() {
                 {isLoading ? (
                   <>
                     <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                    {t("auth.signingIn")}
+                    جاري تسجيل الدخول...
                   </>
                 ) : (
                   <>
                     <LogIn className="w-4 h-4 mr-2" />
-                    {t("auth.signIn")}
+                    تسجيل الدخول
                   </>
                 )}
               </Button>
             </form>{" "}
             {/* Navigation Links */}
             <div className="space-y-4 pt-4 border-t border-slate-200">
-              {" "}
               <div className="text-center text-sm">
-                <span className="text-slate-600">
-                  {t("auth.dontHaveAccount")}{" "}
-                </span>
+                <span className="text-slate-600">ليس لديك حساب؟ </span>
                 <Link
                   to="/register"
                   className="text-teal-600 hover:text-teal-700 font-medium hover:underline transition-colors"
                 >
-                  {t("auth.createNewAccount")}
+                  أنشئ حسابًا جديدًا
                 </Link>
               </div>
             </div>{" "}

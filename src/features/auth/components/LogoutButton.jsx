@@ -12,14 +12,12 @@ import { useState } from "react";
 import { useAuthStore } from "@/stores";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useTranslation } from "react-i18next";
 
 export default function LogoutButton({
   variant = "outline",
   size = "sm",
   className = "",
 }) {
-  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const signOut = useAuthStore((state) => state.signOut);
@@ -29,11 +27,11 @@ export default function LogoutButton({
     try {
       await signOut();
       setIsOpen(false);
-      toast.success(t("auth.signedOut"));
+      toast.success("تم تسجيل الخروج بنجاح");
       navigate("/login");
     } catch (error) {
       console.error("Logout error:", error);
-      toast.error(t("auth.signOutFailed"));
+      toast.error("فشل تسجيل الخروج");
     } finally {
       setIsLoading(false);
     }
@@ -53,17 +51,19 @@ export default function LogoutButton({
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              d="M7 16l-4-4m0 0l4-4m-4 4h10m-6 4v1a3 3 0 003 3h4a3 3 0 003-3V7a3 3 0 00-3-3h-4a3 3 0 00-3 3v1"
             />
           </svg>
-          {t("auth.signOut")}
+          تسجيل الخروج
         </Button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>{t("auth.signOut")}</DialogTitle>
-          <DialogDescription>{t("auth.signOutConfirm")}</DialogDescription>
+          <DialogTitle>تسجيل الخروج</DialogTitle>
+          <DialogDescription>
+            هل أنت متأكد أنك تريد تسجيل الخروج؟
+          </DialogDescription>
         </DialogHeader>
 
         <DialogFooter className="gap-2">
@@ -72,7 +72,7 @@ export default function LogoutButton({
             onClick={() => setIsOpen(false)}
             disabled={isLoading}
           >
-            {t("common.cancel", { defaultValue: "إلغاء" })}
+            إلغاء
           </Button>
           <Button
             variant="destructive"
@@ -100,10 +100,10 @@ export default function LogoutButton({
                     d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   />
                 </svg>
-                {t("auth.signingOut")}
+                جاري تسجيل الخروج...
               </>
             ) : (
-              t("auth.signOut")
+              "تسجيل الخروج"
             )}
           </Button>
         </DialogFooter>

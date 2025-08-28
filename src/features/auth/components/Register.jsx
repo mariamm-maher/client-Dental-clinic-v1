@@ -3,13 +3,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useAuthStore } from "@/stores";
-import { useTranslation } from "react-i18next";
 import {
   Building2,
   User,
@@ -17,7 +14,6 @@ import {
   Lock,
   Eye,
   EyeOff,
-  ArrowLeft,
   Loader2,
   UserPlus,
 } from "lucide-react";
@@ -36,7 +32,6 @@ const GOOGLE_AUTH_URL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=
 )}&access_type=offline&prompt=consent`;
 
 export default function Register() {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const signUp = useAuthStore((state) => state.signUp);
 
@@ -55,13 +50,13 @@ export default function Register() {
 
     // Validate password match
     if (formData.password !== formData.confirmPassword) {
-      toast.error(t("auth.passwordsDontMatch"));
+      toast.error("كلمات المرور غير متطابقة");
       return;
     }
 
     // Validate terms agreement
     if (!formData.agreeToTerms) {
-      toast.error(t("auth.mustAgreeTerms"));
+      toast.error("يجب الموافقة على الشروط والأحكام");
       return;
     }
 
@@ -72,11 +67,11 @@ export default function Register() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        role: "patient", // Default role for registration
+        role: "staff", // Default role for registration
       });
 
       if (result?.success) {
-        toast.success(t("auth.registrationSuccessRedirect"));
+        toast.success("تم إنشاء الحساب بنجاح، سيتم تحويلك إلى صفحة تسجيل الدخول");
         setTimeout(() => {
           navigate("/login");
         }, 2000); // Redirect after 2 seconds
@@ -103,7 +98,7 @@ export default function Register() {
         // Display general error message from server
         toast.error(error?.message);
       } else {
-        toast.error(t("auth.unexpectedError"));
+        toast.error("حدث خطأ غير متوقع");
       }
     } finally {
       setIsLoading(false);
@@ -127,16 +122,16 @@ export default function Register() {
             <Building2 className="w-8 h-8 text-white" />
           </div>
           <h1 className="text-3xl font-bold text-slate-800 mb-2">
-            {t("logo.clinicName")}
+            عيادة الشفاء
           </h1>
         </div>
 
         <Card className="shadow-xl border border-slate-200 bg-white rounded-2xl text-center">
           <CardHeader className="space-y-1 pb-6">
             <CardTitle className="text-2xl font-bold text-slate-800">
-              {t("auth.createAccount")}
+              إنشاء حساب
             </CardTitle>
-            <p className="text-slate-600">{t("auth.fillDetailsOrGoogle")}</p>
+            <p className="text-slate-600">املأ البيانات أو سجّل عبر جوجل</p>
           </CardHeader>
 
           <CardContent className="space-y-6">
@@ -165,15 +160,13 @@ export default function Register() {
                   d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                 />
               </svg>
-              {t("auth.continueWithGoogle")}
+              المتابعة باستخدام جوجل
             </Button>{" "}
             {/* Divider */}
             <div className="relative">
               <Separator className="bg-slate-200" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-white px-3 text-sm text-slate-500">
-                  {t("auth.orRegisterWith")}
-                </span>
+                <span className="bg-white px-3 text-sm text-slate-500">أو قم بالتسجيل عبر البريد</span>
               </div>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -184,14 +177,14 @@ export default function Register() {
                   htmlFor="name"
                   className="text-sm font-medium text-slate-700"
                 >
-                  {t("auth.fullName")}
+                  الاسم الكامل
                 </Label>
                 <div className="relative">
                   {" "}
                   <Input
                     id="name"
                     type="text"
-                    placeholder={t("auth.fullNamePlaceholder")}
+                    placeholder="أدخل اسمك الكامل"
                     value={formData.name}
                     onChange={(e) => handleInputChange("name", e.target.value)}
                     required
@@ -207,14 +200,14 @@ export default function Register() {
                   htmlFor="email"
                   className="text-sm font-medium text-slate-700"
                 >
-                  {t("auth.emailAddress")}
+                  البريد الإلكتروني
                 </Label>
                 <div className="relative">
                   {" "}
                   <Input
                     id="email"
                     type="email"
-                    placeholder={t("auth.emailPlaceholder")}
+                    placeholder="أدخل البريد الإلكتروني"
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
                     required
@@ -230,14 +223,14 @@ export default function Register() {
                   htmlFor="password"
                   className="text-sm font-medium text-slate-700"
                 >
-                  {t("auth.password")}
+                  كلمة المرور
                 </Label>
                 <div className="relative">
                   {" "}
                   <Input
                     id="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder={t("auth.passwordPlaceholder")}
+                    placeholder="أدخل كلمة المرور"
                     value={formData.password}
                     onChange={(e) =>
                       handleInputChange("password", e.target.value)
@@ -266,14 +259,14 @@ export default function Register() {
                   htmlFor="confirmPassword"
                   className="text-sm font-medium text-slate-700"
                 >
-                  {t("auth.confirmPassword")}
+                  تأكيد كلمة المرور
                 </Label>
                 <div className="relative">
                   {" "}
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? "text" : "password"}
-                    placeholder={t("auth.confirmPasswordPlaceholder")}
+                    placeholder="أعد إدخال كلمة المرور"
                     value={formData.confirmPassword}
                     onChange={(e) =>
                       handleInputChange("confirmPassword", e.target.value)
@@ -299,13 +292,9 @@ export default function Register() {
               {formData.password && formData.confirmPassword && (
                 <div className="text-sm">
                   {formData.password === formData.confirmPassword ? (
-                    <p className="text-teal-600 font-medium">
-                      ✓ {t("auth.passwordsMatch")}
-                    </p>
+                    <p className="text-teal-600 font-medium">✓ كلمات المرور متطابقة</p>
                   ) : (
-                    <p className="text-red-500 font-medium">
-                      ✗ {t("auth.passwordsDontMatch")}
-                    </p>
+                    <p className="text-red-500 font-medium">✗ كلمات المرور غير متطابقة</p>
                   )}
                 </div>
               )}
@@ -322,12 +311,12 @@ export default function Register() {
                 {isLoading ? (
                   <>
                     <Loader2 className="animate-spin h-4 w-4 mr-2" />
-                    {t("auth.creatingAccount")}
+                    جاري إنشاء الحساب...
                   </>
                 ) : (
                   <>
                     <UserPlus className="w-4 h-4 mr-2" />
-                    {t("auth.createAccount")}
+                    إنشاء حساب
                   </>
                 )}
               </Button>
@@ -336,14 +325,12 @@ export default function Register() {
             <div className="space-y-4 pt-4">
               {" "}
               <div className="text-center">
-                <span className="text-sm text-slate-500">
-                  {t("auth.alreadyHaveAccount")}{" "}
-                </span>
+                <span className="text-sm text-slate-500">لديك حساب بالفعل؟ </span>
                 <Link
                   to="/login"
                   className="text-sm text-teal-600 hover:text-teal-700 font-medium hover:underline"
                 >
-                  {t("auth.signIn")}
+                  تسجيل الدخول
                 </Link>
               </div>
             </div>{" "}

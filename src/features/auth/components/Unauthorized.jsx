@@ -3,14 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ShieldX, ArrowLeft, Home } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
 const Unauthorized = ({
   requiredRole = null,
   requiredRoles = null,
   message = null,
 }) => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const handleGoBack = () => {
@@ -25,19 +23,17 @@ const Unauthorized = ({
     if (message) return message;
 
     if (requiredRole) {
-      return t("unauthorized.needRole", { role: requiredRole });
+      return `هذه الصفحة تتطلب دور: ${requiredRole}`;
     }
 
     if (requiredRoles && requiredRoles.length > 0) {
       if (requiredRoles.length === 1) {
-        return t("unauthorized.needRole", { role: requiredRoles[0] });
+        return `هذه الصفحة تتطلب دور: ${requiredRoles[0]}`;
       }
-      return t("unauthorized.needOneOfRoles", {
-        roles: requiredRoles.join(", "),
-      });
+      return `هذه الصفحة تتطلب أحد الأدوار التالية: ${requiredRoles.join("، ")}`;
     }
 
-    return t("unauthorized.noPermission");
+    return "لا تملك صلاحية الوصول إلى هذه الصفحة";
   };
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-50 to-slate-50 flex items-center justify-center p-4">
@@ -47,7 +43,7 @@ const Unauthorized = ({
             <ShieldX className="w-8 h-8 text-white" />
           </div>
           <CardTitle className="text-2xl font-bold text-slate-800">
-            {t("unauthorized.title")}
+            غير مصرح بالدخول
           </CardTitle>
         </CardHeader>
 
@@ -60,7 +56,7 @@ const Unauthorized = ({
           </Alert>
 
           <div className="text-center text-slate-600">
-            <p className="text-sm">{t("unauthorized.helpText")}</p>
+            <p className="text-sm">ليس لديك الصلاحيات الكافية للوصول إلى هذه الصفحة.</p>
           </div>
 
           <div className="flex flex-col space-y-3">
@@ -70,7 +66,7 @@ const Unauthorized = ({
               className="w-full h-11 border-slate-300 hover:bg-orange-50 transition-all duration-200 rounded-xl"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              {t("unauthorized.goBack")}
+              العودة
             </Button>
 
             <Button
@@ -78,7 +74,7 @@ const Unauthorized = ({
               className="w-full h-11 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 rounded-xl"
             >
               <Home className="w-4 h-4 mr-2" />
-              {t("unauthorized.goHome")}
+              الذهاب إلى الصفحة الرئيسية
             </Button>
           </div>
         </CardContent>

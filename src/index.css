@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "tw-animate-css";
-@import "./styles/rtl.css";
 
 /* Smooth scrolling behavior */
 html {
@@ -70,7 +69,7 @@ html {
   --muted-foreground: oklch(0.45 0.02 270); /* muted charcoal */
   --accent: oklch(0.73 0.08 200); /* muted blue accent */
   --accent-foreground: oklch(0.98 0.02 0); /* white text */
-  
+
   /* Custom dental clinic colors */
   --dental-peach: oklch(0.91 0.05 45); /* #FBE4CC */
   --dental-charcoal: oklch(0.2 0.02 270); /* #1B262C */
@@ -111,7 +110,7 @@ html {
   --muted-foreground: oklch(0.75 0.02 192); /* light teal */
   --accent: oklch(0.8 0.06 200); /* brighter blue accent */
   --accent-foreground: oklch(0.2 0.02 270); /* dark charcoal text */
-  
+
   /* Custom dental clinic colors in dark */
   --dental-peach: oklch(0.4 0.04 45); /* darker peach */
   --dental-charcoal: oklch(0.15 0.02 270); /* deeper charcoal */
@@ -142,6 +141,26 @@ html {
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* RTL support for Arabic */
+  [dir="rtl"] {
+    direction: rtl;
+    text-align: right;
+  }
+
+  [dir="rtl"] body {
+    direction: rtl;
+    text-align: right;
+  }
+
+  /* Arabic language specific styling */
+  [lang="ar"],
+  [lang="ar-SA"],
+  [lang="ar-EG"] {
+    direction: rtl;
+    text-align: right;
+    font-family: "Segoe UI", "Tahoma", "Arial", sans-serif;
   }
 }
 
@@ -185,5 +204,68 @@ html {
     .supports-overlay-scroll {
       overflow: overlay;
     }
+  }
+
+  /* RTL utilities */
+  .rtl-support {
+    direction: rtl;
+  }
+
+  .ltr-support {
+    direction: ltr;
+  }
+
+  /* RTL-specific margin and padding utilities */
+  [dir="rtl"] .ml-auto {
+    margin-left: auto;
+    margin-right: 0;
+  }
+
+  [dir="rtl"] .mr-auto {
+    margin-right: auto;
+    margin-left: 0;
+  }
+
+  [dir="rtl"] .pl-4 {
+    padding-left: 0;
+    padding-right: 1rem;
+  }
+
+  [dir="rtl"] .pr-4 {
+    padding-right: 0;
+    padding-left: 1rem;
+  }
+
+  /* RTL text alignment */
+  [dir="rtl"] .text-left {
+    text-align: right;
+  }
+
+  [dir="rtl"] .text-right {
+    text-align: left;
+  }
+
+  /* RTL flex adjustments */
+  [dir="rtl"] .justify-start {
+    justify-content: flex-end;
+  }
+
+  [dir="rtl"] .justify-end {
+    justify-content: flex-start;
+  }
+
+  /* RTL border radius adjustments */
+  [dir="rtl"] .rounded-l-lg {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+  }
+
+  [dir="rtl"] .rounded-r-lg {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-left-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
   }
 }
