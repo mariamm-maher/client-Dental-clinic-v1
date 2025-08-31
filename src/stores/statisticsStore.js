@@ -2,141 +2,384 @@ import { create } from "zustand";
 
 const useStatisticsStore = create((set, get) => ({
   // State
-  timeRange: "weekly",
+  timeRange: "monthly",
+  selectedMetrics: "appointments",
 
-  // Mock data for statistics
+  // Enhanced comprehensive statistics data
   stats: {
-    overview: [
-      {
-        title: "إجمالي المرضى",
-        value: "1,247",
-        change: "+12.5%",
-        trend: "up",
-        icon: "Users",
-        color: "sky",
-        description: "هذا الشهر",
-      },
-      {
-        title: "المواعيد اليوم",
-        value: "28",
-        change: "+5.2%",
-        trend: "up",
-        icon: "Calendar",
-        color: "emerald",
-        description: "من 32 موعد مجدول",
-      },
-      {
-        title: "الإيرادات",
-        value: "125,400 ر.س",
-        change: "+8.1%",
-        trend: "up",
-        icon: "DollarSign",
-        color: "violet",
-        description: "هذا الشهر",
-      },
-      {
-        title: "معدل الرضا",
-        value: "4.8/5",
-        change: "+0.3",
-        trend: "up",
-        icon: "Star",
-        color: "amber",
-        description: "تقييم المرضى",
-      },
-    ],
-    appointments: [
-      {
-        title: "المواعيد المكتملة",
-        value: "156",
-        total: "180",
-        percentage: 87,
-        icon: "CheckCircle",
-        color: "emerald",
-      },
-      {
-        title: "المواعيد الملغاة",
-        value: "8",
-        total: "180",
-        percentage: 4,
-        icon: "XCircle",
-        color: "red",
-      },
-      {
-        title: "في الانتظار",
-        value: "16",
-        total: "180",
-        percentage: 9,
-        icon: "Timer",
-        color: "amber",
-      },
-    ],
-    doctors: [
-      {
-        name: "د. أحمد محمد",
-        specialty: "طب الأسنان العام",
-        appointments: 45,
-        rating: 4.9,
-        revenue: "32,500 ر.س",
-        color: "sky",
-      },
-      {
-        name: "د. فاطمة علي",
-        specialty: "تقويم الأسنان",
-        appointments: 38,
-        rating: 4.8,
-        revenue: "28,900 ر.س",
-        color: "emerald",
-      },
-      {
-        name: "د. محمد سالم",
-        specialty: "جراحة الفم",
-        appointments: 32,
-        rating: 4.7,
-        revenue: "25,800 ر.س",
-        color: "violet",
-      },
-    ],
-    services: [
-      {
-        name: "تنظيف الأسنان",
-        count: 89,
-        revenue: "26,700 ر.س",
-        percentage: 35,
-        color: "sky",
-      },
-      {
-        name: "حشو الأسنان",
-        count: 67,
-        revenue: "33,500 ر.س",
-        percentage: 27,
-        color: "emerald",
-      },
-      {
-        name: "تقويم الأسنان",
-        count: 45,
-        revenue: "45,000 ر.س",
-        percentage: 18,
-        color: "violet",
-      },
-      {
-        name: "قلع الأسنان",
-        count: 32,
-        revenue: "12,800 ر.س",
-        percentage: 13,
-        color: "amber",
-      },
-      {
-        name: "أخرى",
-        count: 18,
-        revenue: "7,400 ر.س",
-        percentage: 7,
-        color: "gray",
-      },
-    ],
+    // 1. Appointments Statistics
+    appointments: {
+      overview: [
+        {
+          title: "إجمالي المواعيد",
+          value: "2,847",
+          change: "+18.5%",
+          trend: "up",
+          icon: "Calendar",
+          color: "sky",
+          description: "جميع الأوقات",
+        },
+        {
+          title: "مواعيد هذا الشهر",
+          value: "340",
+          change: "+12.3%",
+          trend: "up",
+          icon: "CalendarDays",
+          color: "emerald",
+          description: "آخر 30 يوم",
+        },
+        {
+          title: "المواعيد القادمة",
+          value: "87",
+          change: "+5.2%",
+          trend: "up",
+          icon: "CalendarPlus",
+          color: "violet",
+          description: "الأسبوع القادم",
+        },
+      ],
+      status: [
+        {
+          title: "المواعيد المكتملة",
+          value: 256,
+          total: 340,
+          percentage: 75.3,
+          icon: "CheckCircle",
+          color: "emerald",
+        },
+        {
+          title: "المواعيد الملغاة",
+          value: 42,
+          total: 340,
+          percentage: 12.4,
+          icon: "XCircle",
+          color: "red",
+        },
+        {
+          title: "المواعيد الفائتة",
+          value: 28,
+          total: 340,
+          percentage: 8.2,
+          icon: "Clock",
+          color: "amber",
+        },
+        {
+          title: "في الانتظار",
+          value: 14,
+          total: 340,
+          percentage: 4.1,
+          icon: "Timer",
+          color: "gray",
+        },
+      ],
+      services: [
+        {
+          service: "كشف عام",
+          count: 145,
+          percentage: 42.6,
+          color: "sky",
+        },
+        {
+          service: "استشارة متخصصة",
+          count: 98,
+          percentage: 28.8,
+          color: "emerald",
+        },
+        {
+          service: "متابعة",
+          count: 67,
+          percentage: 19.7,
+          color: "violet",
+        },
+        {
+          service: "فحص دوري",
+          count: 30,
+          percentage: 8.8,
+          color: "amber",
+        },
+      ],
+    },
+
+    // 2. Patients Statistics
+    patients: {
+      overview: [
+        {
+          title: "إجمالي المرضى",
+          value: "1,847",
+          change: "+15.2%",
+          trend: "up",
+          icon: "Users",
+          color: "sky",
+          description: "جميع المرضى",
+        },
+        {
+          title: "مرضى جدد",
+          value: "127",
+          change: "+22.1%",
+          trend: "up",
+          icon: "UserPlus",
+          color: "emerald",
+          description: "هذا الشهر",
+        },
+        {
+          title: "مرضى نشطون",
+          value: "1,234",
+          change: "+8.4%",
+          trend: "up",
+          icon: "UserCheck",
+          color: "violet",
+          description: "آخر 90 يوم",
+        },
+      ],
+      ageGroups: [
+        {
+          group: "الأطفال (0-18)",
+          count: 423,
+          percentage: 22.9,
+          icon: "Baby",
+          color: "sky",
+        },
+        {
+          group: "البالغون (19-59)",
+          count: 1198,
+          percentage: 64.9,
+          icon: "User",
+          color: "emerald",
+        },
+        {
+          group: "كبار السن (60+)",
+          count: 226,
+          percentage: 12.2,
+          icon: "UserCheck",
+          color: "violet",
+        },
+      ],
+      returning: [
+        {
+          name: "أحمد محمد العلي",
+          visits: 24,
+          lastVisit: "2025-08-29",
+          phone: "966501234567",
+        },
+        {
+          name: "فاطمة عبدالله",
+          visits: 18,
+          lastVisit: "2025-08-30",
+          phone: "966501234568",
+        },
+        {
+          name: "محمد صالح",
+          visits: 16,
+          lastVisit: "2025-08-28",
+          phone: "966501234569",
+        },
+        {
+          name: "نورا أحمد",
+          visits: 14,
+          lastVisit: "2025-08-31",
+          phone: "966501234570",
+        },
+        {
+          name: "خالد السعود",
+          visits: 12,
+          lastVisit: "2025-08-27",
+          phone: "966501234571",
+        },
+      ],
+    },
+
+    // 3. Archive & Backup Statistics
+    archive: {
+      overview: [
+        {
+          title: "السجلات المؤرشفة",
+          value: "15,420",
+          change: "+3.2%",
+          trend: "up",
+          icon: "Archive",
+          color: "sky",
+          description: "جميع السجلات",
+        },
+        {
+          title: "حجم الأرشيف",
+          value: "2.8 GB",
+          change: "+0.5 GB",
+          trend: "up",
+          icon: "HardDrive",
+          color: "emerald",
+          description: "المساحة المستخدمة",
+        },
+        {
+          title: "النسخ الاحتياطية",
+          value: "156",
+          change: "+12",
+          trend: "up",
+          icon: "Shield",
+          color: "violet",
+          description: "هذا الشهر",
+        },
+      ],
+      backups: [
+        {
+          type: "النسخة الاحتياطية اليومية",
+          lastDate: "2025-08-31 02:00",
+          size: "145 MB",
+          status: "مكتملة",
+          color: "emerald",
+        },
+        {
+          type: "النسخة الاحتياطية الأسبوعية",
+          lastDate: "2025-08-25 03:00",
+          size: "892 MB",
+          status: "مكتملة",
+          color: "emerald",
+        },
+        {
+          type: "النسخة الاحتياطية الشهرية",
+          lastDate: "2025-08-01 04:00",
+          size: "2.1 GB",
+          status: "مكتملة",
+          color: "emerald",
+        },
+      ],
+      archivedData: [
+        {
+          type: "سجلات المرضى",
+          count: 8420,
+          size: "1.2 GB",
+          color: "sky",
+        },
+        {
+          type: "سجلات المواعيد",
+          count: 7000,
+          size: "1.4 GB",
+          color: "emerald",
+        },
+        {
+          type: "التقارير المالية",
+          count: 1500,
+          size: "0.2 GB",
+          color: "violet",
+        },
+      ],
+    },
+
+    // 4. Export & Reports Statistics
+    exports: {
+      overview: [
+        {
+          title: "التصديرات الشهرية",
+          value: "89",
+          change: "+15.2%",
+          trend: "up",
+          icon: "Download",
+          color: "sky",
+          description: "هذا الشهر",
+        },
+        {
+          title: "آخر تصدير",
+          value: "اليوم",
+          change: "10:30 ص",
+          trend: "neutral",
+          icon: "FileText",
+          color: "emerald",
+          description: "تقرير المواعيد",
+        },
+      ],
+      types: [
+        {
+          type: "تقارير المواعيد",
+          count: 34,
+          percentage: 38.2,
+          lastExport: "2025-08-31",
+          color: "sky",
+        },
+        {
+          type: "قوائم المرضى",
+          count: 28,
+          percentage: 31.5,
+          lastExport: "2025-08-30",
+          color: "emerald",
+        },
+        {
+          type: "التقارير المالية",
+          count: 18,
+          percentage: 20.2,
+          lastExport: "2025-08-29",
+          color: "violet",
+        },
+        {
+          type: "الإحصائيات",
+          count: 9,
+          percentage: 10.1,
+          lastExport: "2025-08-28",
+          color: "amber",
+        },
+      ],
+    },
+
+    // 5. Trends & Insights
+    trends: {
+      growth: [
+        {
+          metric: "نمو المواعيد",
+          value: "+18.5%",
+          comparison: "الشهر السابق",
+          icon: "TrendingUp",
+          color: "emerald",
+        },
+        {
+          metric: "نمو المرضى",
+          value: "+15.2%",
+          comparison: "الشهر السابق",
+          icon: "TrendingUp",
+          color: "sky",
+        },
+        {
+          metric: "معدل الإلغاء",
+          value: "12.4%",
+          comparison: "-2.1% من الشهر السابق",
+          icon: "TrendingDown",
+          color: "red",
+        },
+      ],
+      insights: [
+        {
+          title: "ذروة الحجوزات",
+          value: "الثلاثاء 10:00 ص",
+          icon: "Clock",
+          color: "sky",
+        },
+        {
+          title: "أكثر الخدمات طلباً",
+          value: "الكشف العام",
+          icon: "Activity",
+          color: "emerald",
+        },
+        {
+          title: "معدل الحضور",
+          value: "87.6%",
+          icon: "UserCheck",
+          color: "violet",
+        },
+      ],
+    },
   },
 
   // Actions
   setTimeRange: (range) => set({ timeRange: range }),
+  setSelectedMetrics: (metrics) => set({ selectedMetrics: metrics }),
+
+  // Get specific statistics section
+  getStatsSection: (section) => {
+    const { stats } = get();
+    return stats[section] || {};
+  },
+
+  // Get all statistics
+  getAllStats: () => {
+    return get().stats;
+  },
 
   // Utility functions
   getColorClasses: (color, type = "bg") => {

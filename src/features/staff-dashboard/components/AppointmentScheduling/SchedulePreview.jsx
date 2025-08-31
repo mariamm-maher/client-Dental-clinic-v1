@@ -14,23 +14,14 @@ export default function SchedulePreview() {
     {
       time: "09:00 ص",
       patient: "سارة أحمد",
-      doctor: "د. أحمد الراشد",
-      treatment: "تنظيف أسنان",
+
       status: "مؤكد",
     },
     {
       time: "09:30 ص",
       patient: "محمد العلي",
-      doctor: "د. سارة ويليامز",
-      treatment: "فحص دوري",
+
       status: "في الانتظار",
-    },
-    {
-      time: "10:00 ص",
-      patient: "فاطمة حسن",
-      doctor: "د. أحمد الراشد",
-      treatment: "حشو أسنان",
-      status: "مؤكد",
     },
   ];
 
@@ -40,7 +31,7 @@ export default function SchedulePreview() {
           time: apt.appointmentTime,
           patient: apt.patientName,
           doctor: apt.doctor,
-          treatment: apt.treatment,
+          service: apt.service,
           status:
             apt.status === "pending"
               ? "في الانتظار"
@@ -87,7 +78,7 @@ export default function SchedulePreview() {
                   <Stethoscope className="w-3 h-3" />
                   {apt.doctor}
                 </p>
-                <p className="text-sm text-slate-600">{apt.treatment}</p>
+                <p className="text-sm text-slate-600">{apt.service}</p>
               </div>
             </CardContent>
           </Card>

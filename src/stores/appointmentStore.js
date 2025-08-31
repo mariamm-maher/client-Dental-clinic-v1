@@ -1,155 +1,69 @@
 import { create } from "zustand";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import {
+  searchPatientsByNameOrPhone,
+  createAppointment,
+  getTodaysAppointments,
+} from "@/features/staff-dashboard/services/staffServices";
+
+// LocalStorage helpers
+const APPOINTMENT_FORM_KEY = "appointment_form_data";
+
+const saveFormDataToStorage = (data) => {
+  try {
+    localStorage.setItem(APPOINTMENT_FORM_KEY, JSON.stringify(data));
+  } catch (error) {
+    console.error("Failed to save form data to localStorage:", error);
+  }
+};
+
+const loadFormDataFromStorage = () => {
+  try {
+    const saved = localStorage.getItem(APPOINTMENT_FORM_KEY);
+    return saved ? JSON.parse(saved) : null;
+  } catch (error) {
+    console.error("Failed to load form data from localStorage:", error);
+    return null;
+  }
+};
+
+const clearFormDataFromStorage = () => {
+  try {
+    localStorage.removeItem(APPOINTMENT_FORM_KEY);
+  } catch (error) {
+    console.error("Failed to clear form data from localStorage:", error);
+  }
+};
+
+// Load initial form data from localStorage
+const initialFormData = loadFormDataFromStorage();
 
 const useAppointmentStore = create((set, get) => ({
   // State
-  appointments: [
-    {
-      id: 1,
-      patientName: "سارة أحمد",
-      phone: "+966501234567",
-      appointmentTime: "09:00 ص",
-      status: "pending",
-      treatment: "تنظيف الأسنان",
-      doctor: "د. أحمد الراشد",
-      notes: "فحص روتيني",
-      checkedInAt: null,
-    },
-    {
-      id: 2,
-      patientName: "أحمد محمد العلي",
-      phone: "+966509876543",
-      appointmentTime: "09:30 ص",
-      status: "checked-in",
-      treatment: "علاج العصب",
-      doctor: "د. سارة وليامز",
-      notes: "موعد متابعة",
-      checkedInAt: "09:25 ص",
-    },
-    {
-      id: 3,
-      patientName: "فاطمة عبدالله",
-      phone: "+966507654321",
-      appointmentTime: "10:00 ص",
-      status: "pending",
-      treatment: "تقويم الأسنان",
-      doctor: "د. أحمد الراشد",
-      notes: "استشارة تقويم",
-      checkedInAt: null,
-    },
-    {
-      id: 4,
-      patientName: "محمد الرشيد",
-      phone: "+966556789012",
-      appointmentTime: "10:30 ص",
-      status: "missed",
-      treatment: "حشو الأسنان",
-      doctor: "د. محمد حسان",
-      notes: "علاج تسوس",
-      checkedInAt: null,
-    },
-    {
-      id: 5,
-      patientName: "عائشة سالم",
-      phone: "+966551234567",
-      appointmentTime: "11:00 ص",
-      status: "checked-in",
-      treatment: "تبييض الأسنان",
-      doctor: "د. سارة وليامز",
-      notes: "جلسة تبييض",
-      checkedInAt: "10:55 ص",
-    },
-    {
-      id: 6,
-      patientName: "علي السعد",
-      phone: "+966557890123",
-      appointmentTime: "11:30 ص",
-      status: "pending",
-      treatment: "استشارة تقويم",
-      doctor: "د. سارة وليامز",
-      notes: "استشارة أولى",
-      checkedInAt: null,
-    },
-  ],
+  appointments: [],
+  isLoadingAppointments: false,
+  appointmentsError: null,
   searchTerm: "",
   filterStatus: "all",
-
-  // Scheduling form state
-  selectedDate: null,
-  selectedTime: "",
-  selectedPatient: "",
-  selectedDoctor: "",
-  treatment: "",
-  notes: "",
-  patientSearch: "",
+  // Scheduling form state - Initialize with localStorage data if available
+  selectedDate: initialFormData?.selectedDate
+    ? new Date(initialFormData.selectedDate)
+    : null,
+  selectedTime: initialFormData?.selectedTime || "",
+  selectedPatient: initialFormData?.selectedPatient || "", // This will store the selected patient ID
+  selectedPatientData: initialFormData?.selectedPatientData || null, // This will store the full patient object
+  selectedService: initialFormData?.selectedService || "",
+  service: initialFormData?.service || "",
+  notes: initialFormData?.notes || "",
+  patientSearch: initialFormData?.patientSearch || "",
   isSubmitting: false,
 
-  // Mock data
-  patients: [
-    {
-      id: 1,
-      name: "سارة جونسون",
-      phone: "+966501234567",
-      lastVisit: "2024-01-15",
-    },
-    {
-      id: 2,
-      name: "أحمد محمد العلي",
-      phone: "+966509876543",
-      lastVisit: "2024-01-20",
-    },
-    {
-      id: 3,
-      name: "إيما ديفيز",
-      phone: "+966555123456",
-      lastVisit: "2024-01-10",
-    },
-    {
-      id: 4,
-      name: "محمد الرشيد",
-      phone: "+966556789012",
-      lastVisit: "2024-01-18",
-    },
-    {
-      id: 5,
-      name: "ليزا أندرسون",
-      phone: "+966551234567",
-      lastVisit: "2024-01-22",
-    },
-  ],
-  doctors: [
-    {
-      id: 1,
-      name: "د. أحمد الراشد",
-      specialization: "طب الأسنان العام",
-      available: true,
-    },
-    {
-      id: 2,
-      name: "د. سارة ويليامز",
-      specialization: "تقويم الأسنان",
-      available: true,
-    },
-    {
-      id: 3,
-      name: "د. محمد حسان",
-      specialization: "جراحة الفم",
-      available: false,
-    },
-  ],
-  treatments: [
-    "تنظيف الأسنان",
-    "علاج العصب",
-    "تبييض الأسنان",
-    "زراعة الأسنان",
-    "حشو الأسنان",
-    "استشارة تقويم",
-    "خلع ضرس العقل",
-    "تركيب تاج",
-    "علاج اللثة",
-    "أشعة الأسنان",
-  ],
+  // Patient search state
+  searchResults: [],
+  isSearching: false,
+  showSearchResults: false,
+
+  services: ["كشف", "استشارة"],
   timeSlots: [
     "09:00 ص",
     "09:30 ص",
@@ -210,22 +124,168 @@ const useAppointmentStore = create((set, get) => ({
       `جاري الاتصال بـ ${appointment.patientName} على ${appointment.phone}`
     );
   },
-
   resetFilters: () => set({ searchTerm: "", filterStatus: "all" }),
+  // Fetch today's appointments from API
+  fetchTodaysAppointments: async () => {
+    set({ isLoadingAppointments: true, appointmentsError: null });
+    try {
+      const result = await getTodaysAppointments();
+      if (result.success) {
+        // Extract appointments from nested response structure
+        const appointmentsData =
+          result.data?.data?.appointments ||
+          result.data?.appointments ||
+          result.data ||
+          [];
+
+        // Map API response structure to component expectations
+        const mappedAppointments = appointmentsData.map((appointment) => ({
+          id: appointment._id,
+          patientName: appointment.patientId?.generalInfo?.name || "غير محدد",
+          phone: appointment.patientId?.generalInfo?.phone || "غير متوفر",
+          service: appointment.service || "كشف",
+          appointmentTime: appointment.appointmentDate
+            ? new Date(appointment.appointmentDate).toLocaleTimeString("ar", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })
+            : "غير محدد",
+          status: appointment.status || "pending",
+          checkedInAt: appointment.checkedInAt
+            ? new Date(appointment.checkedInAt).toLocaleTimeString("ar-SA", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+              })
+            : null,
+          notes: appointment.notes || "",
+          // Keep original fields for reference
+          originalData: appointment,
+        }));
+
+        set({
+          appointments: mappedAppointments,
+          isLoadingAppointments: false,
+        });
+      } else {
+        set({
+          appointments: [],
+          appointmentsError: result.message || "فشل في جلب المواعيد",
+          isLoadingAppointments: false,
+        });
+        toast.error(result.message || "فشل في جلب المواعيد");
+      }
+    } catch (error) {
+      console.error("Error fetching today's appointments:", error);
+      set({
+        appointments: [],
+        appointmentsError: error.message || "حدث خطأ أثناء جلب المواعيد",
+        isLoadingAppointments: false,
+      });
+      toast.error("حدث خطأ أثناء جلب المواعيد");
+    }
+  },
+
   refreshAppointments: () => {
-    // In a real app, this would fetch from an API
-    toast.success("تم تحديث المواعيد");
+    // Fetch from API instead of showing mock message
+    get().fetchTodaysAppointments();
+  },
+  // Helper function to save form data to localStorage
+  saveFormDataToLocalStorage: () => {
+    const state = get();
+    const formData = {
+      selectedDate: state.selectedDate?.toISOString() || null,
+      selectedTime: state.selectedTime,
+      selectedPatient: state.selectedPatient,
+      selectedPatientData: state.selectedPatientData,
+      selectedService: state.selectedService,
+      service: state.service,
+      notes: state.notes,
+      patientSearch: state.patientSearch,
+    };
+    saveFormDataToStorage(formData);
   },
 
   // Scheduling form actions
-  setSelectedDate: (date) => set({ selectedDate: date }),
-  setSelectedTime: (time) => set({ selectedTime: time }),
-  setSelectedPatient: (patient) => set({ selectedPatient: patient }),
-  setSelectedDoctor: (doctor) => set({ selectedDoctor: doctor }),
-  setTreatment: (treatment) => set({ treatment }),
-  setNotes: (notes) => set({ notes }),
-  setPatientSearch: (search) => set({ patientSearch: search }),
+  setSelectedDate: (date) => {
+    set({ selectedDate: date });
+    get().saveFormDataToLocalStorage();
+  },
+  setSelectedTime: (time) => {
+    set({ selectedTime: time });
+    get().saveFormDataToLocalStorage();
+  },
+  setSelectedPatient: (patient) => {
+    set({ selectedPatient: patient });
+    get().saveFormDataToLocalStorage();
+  },
+  setSelectedService: (service) => {
+    set({ selectedService: service });
+    get().saveFormDataToLocalStorage();
+  },
+  setService: (service) => {
+    set({ service });
+    get().saveFormDataToLocalStorage();
+  },
+  setNotes: (notes) => {
+    set({ notes });
+    get().saveFormDataToLocalStorage();
+  },
+  setPatientSearch: (search) => {
+    set({ patientSearch: search });
+    get().saveFormDataToLocalStorage();
+    // Trigger search when user types
+    if (search.length >= 2) {
+      get().searchPatients(search);
+    } else {
+      set({ searchResults: [], showSearchResults: false });
+    }
+  },
   setIsSubmitting: (submitting) => set({ isSubmitting: submitting }),
+
+  // Patient search functionality
+  searchPatients: async (query) => {
+    if (!query || query.trim().length < 2) {
+      set({ searchResults: [], showSearchResults: false });
+      return;
+    }
+
+    set({ isSearching: true });
+    try {
+      const result = await searchPatientsByNameOrPhone(query);
+      if (result.success && result.data && result.data.length > 0) {
+        set({
+          searchResults: result.data,
+          showSearchResults: true,
+          isSearching: false,
+        });
+      } else {
+        set({
+          searchResults: [],
+          showSearchResults: false,
+          isSearching: false,
+        });
+      }
+    } catch (error) {
+      console.error("Patient search failed:", error);
+      set({
+        searchResults: [],
+        showSearchResults: false,
+        isSearching: false,
+      });
+    }
+  },
+  selectPatient: (patient) => {
+    set({
+      selectedPatient: patient._id,
+      selectedPatientData: patient,
+      patientSearch: patient.generalInfo?.name || patient.name || "",
+      showSearchResults: false,
+      searchResults: [],
+    });
+    get().saveFormDataToLocalStorage();
+  },
 
   // Get filtered patients based on search
   getFilteredPatients: () => {
@@ -235,6 +295,26 @@ const useAppointmentStore = create((set, get) => ({
         patient.name.toLowerCase().includes(patientSearch.toLowerCase()) ||
         patient.phone.includes(patientSearch)
     );
+  }, // Helper function to convert Arabic time to 24-hour format and combine with date
+  combineDateTime: (date, timeString) => {
+    if (!date || !timeString) return null;
+
+    // Parse Arabic time format (e.g., "09:30 ص" or "02:30 م")
+    const [time, period] = timeString.split(" ");
+    const [hours, minutes] = time.split(":").map(Number);
+
+    let hour24 = hours;
+    if (period === "م" && hours !== 12) {
+      hour24 = hours + 12;
+    } else if (period === "ص" && hours === 12) {
+      hour24 = 0;
+    }
+
+    // Create new date object with the selected date and time
+    const combinedDateTime = new Date(date);
+    combinedDateTime.setHours(hour24, minutes, 0, 0);
+
+    return combinedDateTime;
   },
 
   // Submit appointment
@@ -243,20 +323,22 @@ const useAppointmentStore = create((set, get) => ({
       selectedDate,
       selectedTime,
       selectedPatient,
-      selectedDoctor,
-      treatment,
-      patients,
-      doctors,
-      appointments,
+      selectedService,
+      service,
+      notes,
+      combineDateTime,
     } = get();
 
-    if (
-      !selectedDate ||
-      !selectedTime ||
-      !selectedPatient ||
-      !selectedDoctor ||
-      !treatment
-    ) {
+    console.log("Submitting appointment with data:", {
+      selectedDate,
+      selectedTime,
+      selectedPatient,
+      selectedService,
+      service,
+      notes,
+    });
+
+    if (!selectedDate || !selectedTime || !selectedPatient) {
       toast.error("يرجى ملء جميع الحقول المطلوبة");
       return false;
     }
@@ -264,58 +346,72 @@ const useAppointmentStore = create((set, get) => ({
     set({ isSubmitting: true });
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      // Combine date and time properly
+      const appointmentDateTime = combineDateTime(selectedDate, selectedTime);
 
-      const patient = patients.find((p) => p.id.toString() === selectedPatient);
-      const doctor = doctors.find((d) => d.id.toString() === selectedDoctor);
+      if (!appointmentDateTime) {
+        toast.error("خطأ في تحديد وقت الموعد");
+        set({ isSubmitting: false });
+        return false;
+      }
 
-      // Create new appointment
-      const newAppointment = {
-        id: appointments.length + 1,
-        patientName: patient?.name,
-        phone: patient?.phone,
-        appointmentTime: selectedTime,
-        status: "pending",
-        treatment,
-        doctor: doctor?.name,
-        notes: get().notes,
-        checkedInAt: null,
-        date: selectedDate,
+      // Create appointment data in the required format with proper ISO date
+      const appointmentData = {
+        patientId: selectedPatient,
+        appointmentDate: appointmentDateTime.toISOString(),
+        service: service,
+        notes: notes || "",
       };
 
-      // Add to appointments
-      set({
-        appointments: [...appointments, newAppointment],
-      });
-
-      toast.success(
-        `تم حجز الموعد بنجاح للمريض ${patient?.name} مع ${
-          doctor?.name
-        } في ${format(selectedDate, "PPP")} الساعة ${selectedTime}`
+      console.log(
+        "Submitting appointment with combined datetime:",
+        appointmentData
       );
 
-      // Reset form
-      get().resetSchedulingForm();
-      return true;
-    } catch {
-      toast.error("حدث خطأ أثناء حجز الموعد. يرجى المحاولة مرة أخرى");
+      const result = await createAppointment(appointmentData);
+
+      if (result.success) {
+        toast.success(result.message || "تم حجز الموعد بنجاح");
+
+        // Reset form
+        get().resetSchedulingForm();
+        return true;
+      } else {
+        toast.error(result.message || "فشل في حجز الموعد");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error creating appointment:", error);
+      toast.error(
+        error?.message || "حدث خطأ أثناء حجز الموعد. يرجى المحاولة مرة أخرى"
+      );
       return false;
     } finally {
       set({ isSubmitting: false });
     }
-  },
-
-  // Reset scheduling form
+  }, // Reset scheduling form
   resetSchedulingForm: () => {
     set({
       selectedDate: null,
       selectedTime: "",
       selectedPatient: "",
-      selectedDoctor: "",
-      treatment: "",
+      selectedPatientData: null,
+      selectedService: "",
+      service: "",
       notes: "",
       patientSearch: "",
+      searchResults: [],
+      showSearchResults: false,
+      isSearching: false,
     });
+    // Clear localStorage when form is reset
+    clearFormDataFromStorage();
+  },
+
+  // Cancel appointment form (same as reset but with different messaging)
+  cancelAppointmentForm: () => {
+    get().resetSchedulingForm();
+    toast.info("تم إلغاء النموذج وحفظ البيانات");
   },
 
   // Get today's appointments for preview

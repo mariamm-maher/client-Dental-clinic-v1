@@ -7,7 +7,7 @@ const usePatientSearchStore = create((set, get) => ({
   searchTerm: "",
   searchType: "all",
   selectedPatient: null,
-
+  
   // API data
   patients: [],
   filteredPatients: [],
@@ -24,13 +24,12 @@ const usePatientSearchStore = create((set, get) => ({
   // Sorting state
   sortBy: "createdAt", // "createdAt", "name", "lastVisit"
   sortOrder: "desc", // "asc", "desc"
-
   // Actions
   setSearchTerm: (term) => {
     set({ searchTerm: term, currentPage: 1 }); // Reset to first page when searching
     get().filterAndPaginatePatients();
   },
-
+  
   setSearchType: (type) => {
     set({ searchType: type, currentPage: 1 });
     get().filterAndPaginatePatients();
@@ -86,13 +85,11 @@ const usePatientSearchStore = create((set, get) => ({
           createdAt: patient.createdAt,
           // Keep original data for reference
           originalData: patient,
-        }));
-
-        set({
-          patients: transformedPatients,
-          isLoading: false,
+        }));        set({ 
+          patients: transformedPatients, 
+          isLoading: false 
         });
-
+        
         // Apply current filters and pagination
         get().filterAndPaginatePatients();
       } else {
@@ -113,18 +110,9 @@ const usePatientSearchStore = create((set, get) => ({
       toast.error(error.message || "حدث خطأ أثناء جلب بيانات المرضى");
     }
   },
-
   // Filter, sort and paginate patients
   filterAndPaginatePatients: () => {
-    const {
-      patients,
-      searchTerm,
-      searchType,
-      sortBy,
-      sortOrder,
-      currentPage,
-      itemsPerPage,
-    } = get();
+    const { patients, searchTerm, searchType, sortBy, sortOrder, currentPage, itemsPerPage } = get();
 
     // Step 1: Filter patients
     let filtered;
@@ -154,21 +142,15 @@ const usePatientSearchStore = create((set, get) => ({
     // Step 2: Sort patients
     filtered.sort((a, b) => {
       let aValue, bValue;
-
+      
       switch (sortBy) {
         case "name":
           aValue = a.name.toLowerCase();
           bValue = b.name.toLowerCase();
           break;
         case "lastVisit":
-          aValue =
-            a.lastVisit === "لا توجد زيارات"
-              ? new Date(0)
-              : new Date(a.createdAt);
-          bValue =
-            b.lastVisit === "لا توجد زيارات"
-              ? new Date(0)
-              : new Date(b.createdAt);
+          aValue = a.lastVisit === "لا توجد زيارات" ? new Date(0) : new Date(a.createdAt);
+          bValue = b.lastVisit === "لا توجد زيارات" ? new Date(0) : new Date(b.createdAt);
           break;
         case "createdAt":
         default:
@@ -191,11 +173,11 @@ const usePatientSearchStore = create((set, get) => ({
     const endIndex = startIndex + itemsPerPage;
     const displayedPatients = filtered.slice(startIndex, endIndex);
 
-    set({
+    set({ 
       filteredPatients: filtered,
       displayedPatients,
       totalItems,
-      totalPages,
+      totalPages
     });
   },
 
@@ -224,19 +206,6 @@ const usePatientSearchStore = create((set, get) => ({
       get().setCurrentPage(currentPage - 1);
     }
   },
-
-  // Refresh patients data
-  refreshPatients: () => {
-    get().fetchAllPatients();
-  },
-
-  // Clear search and filters
-  clearSearch: () => {
-    set({
-      searchTerm: "",
-      currentPage: 1,
-    });
-    get().filterAndPaginatePatients();
   },
 
   // Get statistics
@@ -322,6 +291,20 @@ const usePatientSearchStore = create((set, get) => ({
       },
     };
     return colors[color]?.[type] || colors.sky[type];
+  },
+
+  // Refresh patients data
+  refreshPatients: () => {
+    get().fetchAllPatients();
+  },
+
+  // Clear search and filters
+  clearSearch: () => {
+    set({
+      searchTerm: "",
+      filteredPatients: [],
+      selectedPatient: null,
+    });
   },
 }));
 

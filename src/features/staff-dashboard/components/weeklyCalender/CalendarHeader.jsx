@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   ChevronLeft,
   ChevronRight,
   Calendar,
   Activity,
   Filter,
+  CalendarDays,
+  Grid3X3,
+  Clock,
 } from "lucide-react";
 import { format } from "date-fns";
 import { arSA } from "date-fns/locale";
@@ -16,14 +20,19 @@ import { startOfWeek, addDays } from "date-fns";
 export default function CalendarHeader() {
   const {
     currentWeek,
+    currentDate,
     selectedFilter,
+    viewType,
     doctors,
     setSelectedFilter,
+    setViewType,
     goToPreviousWeek,
     goToNextWeek,
     goToCurrentWeek,
+    goToPreviousDay,
+    goToNextDay,
+    goToToday,
   } = useWeeklyCalendarStore();
-
   const dateLocale = arSA;
 
   const getWeekDays = () => {
@@ -35,6 +44,79 @@ export default function CalendarHeader() {
 
   const weekDays = getWeekDays();
 
+  const getNavigationButtons = () => {
+    if (viewType === "day") {
+      return (
+        <div className="flex items-center gap-2 bg-white rounded-lg p-1 shadow-sm border">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={goToPreviousDay}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={goToToday}
+            className="px-3"
+          >
+            اليوم
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={goToNextDay}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      );
+    } else {
+      return (
+        <div className="flex items-center gap-2 bg-white rounded-lg p-1 shadow-sm border">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={goToPreviousWeek}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={goToCurrentWeek}
+            className="px-3"
+          >
+            اليوم
+          </Button>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={goToNextWeek}
+            className="h-8 w-8 p-0"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </Button>
+        </div>
+      );
+    }
+  };
+
+  const getDateTitle = () => {
+    if (viewType === "day") {
+      return format(currentDate, "EEEE d MMMM yyyy", { locale: dateLocale });
+    } else if (viewType === "week") {
+      return `أسبوع ${format(weekDays[0], "MMM d", {
+        locale: dateLocale,
+      })} - ${format(weekDays[6], "MMM d, yyyy", { locale: dateLocale })}`;
+    } else {
+      return format(currentWeek, "MMMM yyyy", { locale: dateLocale });
+    }
+  };
   return (
     <>
       {/* Header Section */}
@@ -45,49 +127,56 @@ export default function CalendarHeader() {
           </div>
           <div>
             <h1 className="text-2xl lg:text-3xl font-bold text-slate-900">
-              التقويم الأسبوعي
+              التقويم الطبي
             </h1>
             <p className="text-slate-600 mt-1">
-              عرض وإدارة المواعيد الأسبوعية للعيادة
+              عرض وإدارة المواعيد بطريقة ذكية ومتقدمة
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-4">
+          {/* View Type Tabs */}
+          <Tabs
+            value={viewType}
+            onValueChange={setViewType}
+            className="bg-white rounded-lg border shadow-sm"
+          >
+            <TabsList className="grid w-full grid-cols-3 p-1">
+              <TabsTrigger
+                value="day"
+                className="flex items-center gap-2 text-sm"
+              >
+                <Clock className="w-4 h-4" />
+                يومي
+              </TabsTrigger>
+              <TabsTrigger
+                value="week"
+                className="flex items-center gap-2 text-sm"
+              >
+                <CalendarDays className="w-4 h-4" />
+                أسبوعي
+              </TabsTrigger>
+              <TabsTrigger
+                value="month"
+                className="flex items-center gap-2 text-sm"
+              >
+                <Grid3X3 className="w-4 h-4" />
+                شهري
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
+
           <Badge variant="secondary" className="text-sm font-medium px-3 py-2">
             <Activity className="w-4 h-4 mr-2" />
             مباشر
           </Badge>
-          <div className="flex items-center gap-2 bg-white rounded-lg p-1 shadow-sm border">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={goToPreviousWeek}
-              className="h-8 w-8 p-0"
-            >
-              <ChevronLeft className="w-4 h-4" />
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={goToCurrentWeek}
-              className="px-3"
-            >
-              اليوم
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={goToNextWeek}
-              className="h-8 w-8 p-0"
-            >
-              <ChevronRight className="w-4 h-4" />
-            </Button>
-          </div>
+
+          {getNavigationButtons()}
         </div>
       </div>
 
-      {/* Week Range and Filters */}
+      {/* Date Range and Filters */}
       <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
         <CardContent className="p-6">
           <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
@@ -96,9 +185,9 @@ export default function CalendarHeader() {
                 <Filter className="w-5 h-5 text-sky-600" />
               </div>
               <div>
+                {" "}
                 <h3 className="font-semibold text-slate-900">
-                  أسبوع {format(weekDays[0], "MMM d", { locale: dateLocale })} -{" "}
-                  {format(weekDays[6], "MMM d, yyyy", { locale: dateLocale })}
+                  {getDateTitle()}
                 </h3>
                 <p className="text-sm text-slate-600">تصفية حسب الطبيب</p>
               </div>

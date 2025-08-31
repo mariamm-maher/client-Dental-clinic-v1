@@ -80,9 +80,9 @@ export default function Login() {
           }
         );
       } else if (error?.message) {
-        toast.error(error.message);
+        toast.error("البريد الالكتروني او كلمة المرور غير صحيحة");
       } else {
-        toast.error("بيانات اعتماد غير صحيحة");
+        toast.error("البريد الالكتروني او كلمة المرور غير صحيحة");
       }
     } finally {
       setIsLoading(false);
@@ -149,7 +149,9 @@ export default function Login() {
             <div className="relative">
               <Separator className="bg-slate-200" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-white px-3 text-sm text-slate-500">أو المتابعة عبر</span>
+                <span className="bg-white px-3 text-sm text-slate-500">
+                  أو المتابعة عبر
+                </span>
               </div>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">

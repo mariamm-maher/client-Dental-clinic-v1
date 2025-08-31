@@ -21,9 +21,9 @@ export default function AppointmentFilters() {
       <CardContent className="p-6">
         <div className="flex flex-col sm:flex-row gap-4">
           <div className="flex-1 relative">
-            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />
+            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-slate-400" />{" "}
             <Input
-              placeholder="ابحث باسم المريض أو الهاتف أو العلاج..."
+              placeholder="ابحث باسم المريض أو الهاتف أو الخدمة..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pr-10 h-12 bg-slate-50 border-slate-200 focus:bg-white transition-colors"

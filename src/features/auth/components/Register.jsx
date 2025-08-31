@@ -48,15 +48,15 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validate password match
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("كلمات المرور غير متطابقة");
+    // Validate password length
+    if (formData.password.length < 8) {
+      toast.error("كلمة المرور يجب أن تكون 8 أحرف على الأقل");
       return;
     }
 
-    // Validate terms agreement
-    if (!formData.agreeToTerms) {
-      toast.error("يجب الموافقة على الشروط والأحكام");
+    // Validate password match
+    if (formData.password !== formData.confirmPassword) {
+      toast.error("كلمات المرور غير متطابقة");
       return;
     }
 
@@ -67,11 +67,13 @@ export default function Register() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
-        role: "staff", // Default role for registration
+        role: "staff",
       });
 
       if (result?.success) {
-        toast.success("تم إنشاء الحساب بنجاح، سيتم تحويلك إلى صفحة تسجيل الدخول");
+        toast.success(
+          "تم إنشاء الحساب بنجاح، سيتم تحويلك إلى صفحة تسجيل الدخول"
+        );
         setTimeout(() => {
           navigate("/login");
         }, 2000); // Redirect after 2 seconds
@@ -166,7 +168,9 @@ export default function Register() {
             <div className="relative">
               <Separator className="bg-slate-200" />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="bg-white px-3 text-sm text-slate-500">أو قم بالتسجيل عبر البريد</span>
+                <span className="bg-white px-3 text-sm text-slate-500">
+                  أو قم بالتسجيل عبر البريد
+                </span>
               </div>
             </div>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -251,6 +255,21 @@ export default function Register() {
                     )}
                   </button>
                 </div>
+                {/* Password length validation */}
+                {formData.password && (
+                  <div className="text-sm">
+                    {formData.password.length >= 8 ? (
+                      <p className="text-teal-600 font-medium">
+                        ✓ كلمة المرور مقبولة (8 أحرف أو أكثر)
+                      </p>
+                    ) : (
+                      <p className="text-red-500 font-medium">
+                        ✗ كلمة المرور يجب أن تكون 8 أحرف على الأقل (
+                        {formData.password.length}/8)
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
               {/* Confirm Password Field */}
               <div className="space-y-2">
@@ -292,9 +311,13 @@ export default function Register() {
               {formData.password && formData.confirmPassword && (
                 <div className="text-sm">
                   {formData.password === formData.confirmPassword ? (
-                    <p className="text-teal-600 font-medium">✓ كلمات المرور متطابقة</p>
+                    <p className="text-teal-600 font-medium">
+                      ✓ كلمات المرور متطابقة
+                    </p>
                   ) : (
-                    <p className="text-red-500 font-medium">✗ كلمات المرور غير متطابقة</p>
+                    <p className="text-red-500 font-medium">
+                      ✗ كلمات المرور غير متطابقة
+                    </p>
                   )}
                 </div>
               )}
@@ -303,8 +326,8 @@ export default function Register() {
                 type="submit"
                 disabled={
                   isLoading ||
-                  !formData.agreeToTerms ||
-                  formData.password !== formData.confirmPassword
+                  formData.password !== formData.confirmPassword ||
+                  formData.password.length < 8
                 }
                 className="w-full h-11 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white font-medium shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 rounded-xl"
               >
@@ -325,7 +348,9 @@ export default function Register() {
             <div className="space-y-4 pt-4">
               {" "}
               <div className="text-center">
-                <span className="text-sm text-slate-500">لديك حساب بالفعل؟ </span>
+                <span className="text-sm text-slate-500">
+                  لديك حساب بالفعل؟{" "}
+                </span>
                 <Link
                   to="/login"
                   className="text-sm text-teal-600 hover:text-teal-700 font-medium hover:underline"

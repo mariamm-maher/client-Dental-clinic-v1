@@ -51,7 +51,7 @@ export default function PatientDetails() {
             </div>
             <h3 className="text-xl font-bold text-gray-900 mb-1">
               {selectedPatient.name}
-            </h3>
+            </h3>{" "}
             <p className="text-gray-600 mb-2">
               العمر: {calculateAge(selectedPatient.dateOfBirth)} سنة
             </p>
@@ -78,21 +78,23 @@ export default function PatientDetails() {
                   <span className="font-semibold text-gray-900 text-sm">
                     {selectedPatient.email}
                   </span>
-                </div>
-                <div className="p-3 bg-gradient-to-r from-gray-50 to-white rounded-lg">
-                  <div className="flex items-start gap-2">
-                    <MapPin className="w-4 h-4 text-violet-600 mt-1" />
-                    <div>
-                      <span className="text-gray-600 block">العنوان:</span>
-                      <span className="font-semibold text-gray-900">
-                        {selectedPatient.address}
-                      </span>
+                </div>{" "}
+                {selectedPatient.address &&
+                  selectedPatient.address !== "غير متوفر" && (
+                    <div className="p-3 bg-gradient-to-r from-gray-50 to-white rounded-lg">
+                      <div className="flex items-start gap-2">
+                        <MapPin className="w-4 h-4 text-violet-600 mt-1" />
+                        <div>
+                          <span className="text-gray-600 block">العنوان:</span>
+                          <span className="font-semibold text-gray-900">
+                            {selectedPatient.address}
+                          </span>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
+                  )}
               </div>
             </div>
-
             <div>
               <h4 className="flex items-center gap-2 font-semibold text-gray-900 mb-3">
                 <History className="w-5 h-5 text-violet-600" />
@@ -115,56 +117,61 @@ export default function PatientDetails() {
                   </Badge>
                 </div>
               </div>
-            </div>
-
+            </div>{" "}
             <div>
+              {" "}
               <h4 className="font-semibold text-gray-900 mb-3">
-                العلاجات السابقة
+                الخدمات السابقة
               </h4>
               <div className="flex flex-wrap gap-2">
-                {selectedPatient.treatments.map((treatment, i) => (
-                  <Badge
-                    key={i}
-                    variant="secondary"
-                    className="bg-emerald-100 text-emerald-700 border-emerald-200"
-                  >
-                    {treatment}
-                  </Badge>
-                ))}
+                {selectedPatient.services &&
+                selectedPatient.services.length > 0 ? (
+                  selectedPatient.services.map((service, i) => (
+                    <Badge
+                      key={i}
+                      variant="secondary"
+                      className="bg-emerald-100 text-emerald-700 border-emerald-200"
+                    >
+                      {service}
+                    </Badge>
+                  ))
+                ) : (
+                  <p className="text-gray-500 text-sm">لا توجد خدمات مسجلة</p>
+                )}
               </div>
             </div>
-
-            {selectedPatient.upcomingAppointments.length > 0 && (
-              <div>
-                <h4 className="font-semibold text-gray-900 mb-3">
-                  المواعيد القادمة
-                </h4>
-                <div className="space-y-3">
-                  {selectedPatient.upcomingAppointments.map(
-                    (appointment, i) => (
-                      <div
-                        key={i}
-                        className="p-3 bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-200 rounded-lg"
-                      >
-                        <div className="flex justify-between items-center mb-1">
-                          <span className="font-semibold text-blue-900">
-                            {appointment.treatment}
-                          </span>
-                          <span className="text-sm text-blue-700">
-                            {appointment.date}
-                          </span>
+            {selectedPatient.upcomingAppointments &&
+              selectedPatient.upcomingAppointments.length > 0 && (
+                <div>
+                  <h4 className="font-semibold text-gray-900 mb-3">
+                    المواعيد القادمة
+                  </h4>
+                  <div className="space-y-3">
+                    {selectedPatient.upcomingAppointments.map(
+                      (appointment, i) => (
+                        <div
+                          key={i}
+                          className="p-3 bg-gradient-to-r from-blue-50 to-sky-50 border border-blue-200 rounded-lg"
+                        >
+                          {" "}
+                          <div className="flex justify-between items-center mb-1">
+                            <span className="font-semibold text-blue-900">
+                              {appointment.service}
+                            </span>
+                            <span className="text-sm text-blue-700">
+                              {appointment.date}
+                            </span>
+                          </div>
+                          <div className="text-sm text-blue-600">
+                            {appointment.time} - {appointment.doctor}
+                          </div>
                         </div>
-                        <div className="text-sm text-blue-600">
-                          {appointment.time} - {appointment.doctor}
-                        </div>
-                      </div>
-                    )
-                  )}
+                      )
+                    )}
+                  </div>
                 </div>
-              </div>
-            )}
-
-            {selectedPatient.notes && (
+              )}
+            {selectedPatient.notes && selectedPatient.notes.trim() !== "" && (
               <div>
                 <h4 className="font-semibold text-gray-900 mb-3">ملاحظات</h4>
                 <div className="p-3 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-lg">

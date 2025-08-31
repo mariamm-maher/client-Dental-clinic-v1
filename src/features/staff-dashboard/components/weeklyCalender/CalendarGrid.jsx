@@ -118,9 +118,9 @@ export default function CalendarGrid() {
                         <div>
                           <h4 className="font-semibold text-slate-900 mb-1">
                             {appointment.patientName}
-                          </h4>
+                          </h4>{" "}
                           <p className="text-sm text-slate-600 mb-2">
-                            {appointment.treatment}
+                            {appointment.service}
                           </p>
                         </div>
 
@@ -150,8 +150,9 @@ export default function CalendarGrid() {
                             {appointment.patientName}
                           </p>
                           <div className="space-y-1 text-sm">
+                            {" "}
                             <p>
-                              <strong>العلاج:</strong> {appointment.treatment}
+                              <strong>الخدمة:</strong> {appointment.service}
                             </p>
                             <p>
                               <strong>الطبيب:</strong> {appointment.doctorName}

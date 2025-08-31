@@ -24,15 +24,14 @@ export default function CalendarLegend() {
                 </div>
               ))}
             </div>
-          </div>
-
+          </div>{" "}
           {/* Status Legend */}
           <div>
             <h3 className="font-semibold text-slate-900 mb-4 flex items-center gap-2">
               <Activity className="w-5 h-5 text-emerald-600" />
               حالة الموعد
             </h3>
-            <div className="space-y-3">
+            <div className="grid grid-cols-2 gap-3">
               <div className="flex items-center gap-3">
                 <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200">
                   مؤكد
@@ -44,9 +43,51 @@ export default function CalendarLegend() {
                 </Badge>
               </div>
               <div className="flex items-center gap-3">
+                <Badge className="bg-violet-100 text-violet-800 border-violet-200">
+                  جاري الآن
+                </Badge>
+              </div>
+              <div className="flex items-center gap-3">
+                <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+                  مكتمل
+                </Badge>
+              </div>
+              <div className="flex items-center gap-3">
                 <Badge className="bg-red-100 text-red-800 border-red-200">
                   ملغي
                 </Badge>
+              </div>
+              <div className="flex items-center gap-3">
+                <Badge className="bg-gray-100 text-gray-800 border-gray-200">
+                  لم يحضر
+                </Badge>
+              </div>
+            </div>
+
+            {/* Date Status Indicators */}
+            <div className="mt-4 pt-4 border-t border-gray-200">
+              <h4 className="font-medium text-slate-800 mb-3">
+                مؤشرات التاريخ
+              </h4>
+              <div className="space-y-2 text-sm">
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded bg-blue-100 border-2 border-blue-200"></div>
+                  <span className="text-slate-600">
+                    مواعيد اليوم (مميزة بحدود زرقاء)
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded bg-gray-100 opacity-70"></div>
+                  <span className="text-slate-600">
+                    مواعيد سابقة (باهتة ومعطلة)
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-4 h-4 rounded bg-white border border-slate-200"></div>
+                  <span className="text-slate-600">
+                    مواعيد مستقبلية (قابلة للتفاعل)
+                  </span>
+                </div>
               </div>
             </div>
           </div>
