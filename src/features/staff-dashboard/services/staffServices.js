@@ -279,6 +279,109 @@ export const getTodaysAppointments = async () => {
   }
 };
 
+/**
+ * Update appointment status
+ * PATCH /api/booking/:bookingId/status
+ * @param {string} bookingId - The ID of the booking to update
+ * @param {string} status - The new status value (one of: "pending", "confirmed", "canceled", "done", "missed")
+ */
+export const updateAppointmentStatus = async (bookingId, status) => {
+  try {
+    if (!bookingId) throw new Error("Booking ID is required");
+    if (
+      !status ||
+      !["pending", "confirmed", "canceled", "done", "missed"].includes(status)
+    ) {
+      throw new Error("Invalid status value");
+    }
+    const response = await apiClient.patch(`/api/booking/${bookingId}/status`, {
+      status,
+    });
+    return {
+      success: true,
+      data: response.data,
+      message: "تم تحديث حالة الموعد بنجاح",
+    };
+  } catch (error) {
+    console.error("Error updating appointment status:", error);
+    return {
+      success: false,
+      message: error.response?.data?.message || "فشل في تحديث حالة الموعد",
+      details: error.response?.data?.details || [],
+    };
+  }
+};
+
+/**
+ * Get clinic settings
+ * GET /api/clinic-settings
+ */
+export const getClinicSettings = async () => {
+  try {
+    const response = await apiClient.get("/api/clinic-settings");
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error) {
+    console.error("Error fetching clinic settings:", error);
+    throw {
+      success: false,
+      message: error.response?.data?.message || "فشل في جلب إعدادات العيادة",
+      details: error.response?.data?.details || [],
+    };
+  }
+};
+
+/**
+ * Update clinic settings
+ * PUT /api/clinic-settings
+ */
+export const updateClinicSettings = async (settingsData) => {
+  try {
+    if (!settingsData) {
+      throw new Error("Settings data is required");
+    }
+
+    const response = await apiClient.put("/api/clinic-settings", settingsData);
+    return {
+      success: true,
+      data: response.data,
+      message: "تم تحديث إعدادات العيادة بنجاح",
+    };
+  } catch (error) {
+    console.error("Error updating clinic settings:", error);
+    throw {
+      success: false,
+      message: error.response?.data?.message || "فشل في تحديث إعدادات العيادة",
+      details: error.response?.data?.details || [],
+    };
+  }
+};
+
+/**
+ * Delete clinic settings (reset to defaults)
+ * DELETE /api/clinic-settings
+ */
+export const deleteClinicSettings = async () => {
+  try {
+    const response = await apiClient.delete("/api/clinic-settings");
+    return {
+      success: true,
+      data: response.data,
+      message: "تم إعادة تعيين إعدادات العيادة إلى الافتراضية",
+    };
+  } catch (error) {
+    console.error("Error deleting clinic settings:", error);
+    throw {
+      success: false,
+      message:
+        error.response?.data?.message || "فشل في إعادة تعيين إعدادات العيادة",
+      details: error.response?.data?.details || [],
+    };
+  }
+};
+
 // Export all services as default
 export default {
   getAllPatients,
@@ -291,4 +394,8 @@ export default {
   deletePatient,
   getLatestPatients,
   getTodaysAppointments,
+  updateAppointmentStatus,
+  getClinicSettings,
+  updateClinicSettings,
+  deleteClinicSettings,
 };

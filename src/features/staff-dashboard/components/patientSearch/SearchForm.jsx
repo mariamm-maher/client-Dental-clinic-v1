@@ -189,7 +189,7 @@ export default function SearchForm() {
           </div>
         )}
         {/* Error State */}
-        {error && !isLoading && (
+        {error && !isLoading && totalItems > 0 && (
           <div className="text-center py-12 text-red-500">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <AlertCircle className="w-8 h-8" />

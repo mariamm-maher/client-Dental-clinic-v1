@@ -4,6 +4,7 @@ import {
   searchPatientsByNameOrPhone,
   createAppointment,
   getTodaysAppointments,
+  updateAppointmentStatus as updateAppointmentStatusAPI,
 } from "@/features/staff-dashboard/services/staffServices";
 
 // LocalStorage helpers
@@ -85,11 +86,16 @@ const useAppointmentStore = create((set, get) => ({
   setSearchTerm: (term) => set({ searchTerm: term }),
 
   setFilterStatus: (status) => set({ filterStatus: status }),
-
-  updateAppointmentStatus: (appointmentId, newStatus) => {
+  updateAppointmentStatus: async (appointmentId, newStatus) => {
     const { appointments } = get();
     const appointment = appointments.find((apt) => apt.id === appointmentId);
 
+    if (!appointment) {
+      toast.error("الموعد غير موجود");
+      return;
+    }
+
+    // Optimistic update
     set({
       appointments: appointments.map((apt) => {
         if (apt.id === appointmentId) {
@@ -97,7 +103,7 @@ const useAppointmentStore = create((set, get) => ({
             ...apt,
             status: newStatus,
             checkedInAt:
-              newStatus === "checked-in"
+              newStatus === "confirmed"
                 ? new Date().toLocaleTimeString("ar-SA", {
                     hour: "2-digit",
                     minute: "2-digit",
@@ -110,13 +116,48 @@ const useAppointmentStore = create((set, get) => ({
       }),
     });
 
-    const statusMessages = {
-      "checked-in": `تم تسجيل وصول ${appointment?.patientName} بنجاح`,
-      missed: `تم وضع علامة فات على موعد ${appointment?.patientName}`,
-      completed: `تم إنهاء موعد ${appointment?.patientName} بنجاح`,
-    };
+    try {
+      // Call API to update status
+      const result = await updateAppointmentStatusAPI(appointmentId, newStatus);
 
-    toast.success(statusMessages[newStatus] || "تم تحديث الحالة");
+      if (result.success) {
+        const statusMessages = {
+          confirmed: `تم تأكيد موعد ${appointment?.patientName} بنجاح`,
+          pending: `تم تحديث حالة موعد ${appointment?.patientName} إلى قيد الانتظار`,
+          canceled: `تم إلغاء موعد ${appointment?.patientName}`,
+          done: `تم إنهاء موعد ${appointment?.patientName} بنجاح`,
+          missed: `تم وضع علامة فات على موعد ${appointment?.patientName}`,
+        };
+
+        toast.success(statusMessages[newStatus] || "تم تحديث الحالة");
+
+        // Refresh appointments to get latest data
+        get().fetchTodaysAppointments();
+      } else {
+        // Revert optimistic update on API failure
+        set({
+          appointments: appointments.map((apt) => {
+            if (apt.id === appointmentId) {
+              return appointment; // Restore original state
+            }
+            return apt;
+          }),
+        });
+        toast.error(result.message || "فشل في تحديث حالة الموعد");
+      }
+    } catch (error) {
+      console.error("Error updating appointment status:", error);
+      // Revert optimistic update on error
+      set({
+        appointments: appointments.map((apt) => {
+          if (apt.id === appointmentId) {
+            return appointment; // Restore original state
+          }
+          return apt;
+        }),
+      });
+      toast.error("حدث خطأ أثناء تحديث حالة الموعد");
+    }
   },
 
   callPatient: (appointment) => {

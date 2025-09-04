@@ -1,3 +1,4 @@
+import { Link, useLocation } from "react-router-dom";
 import {
   CalendarDays,
   CalendarPlus,
@@ -9,10 +10,13 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
-export default function NavigationTabs({ activeTab, onTabChange }) {
+export default function NavigationTabs() {
+  const location = useLocation();
+
   const tabs = [
     {
       id: "today",
+      path: "/dashboard",
       label: "مواعيد اليوم",
       icon: CalendarDays,
       count: 8,
@@ -21,6 +25,7 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
     },
     {
       id: "schedule",
+      path: "/dashboard/schedule",
       label: "جدولة موعد",
       icon: CalendarPlus,
       count: 0,
@@ -29,6 +34,7 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
     },
     {
       id: "register",
+      path: "/dashboard/register",
       label: "تسجيل مريض",
       icon: UserPlus,
       count: 5,
@@ -37,6 +43,7 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
     },
     {
       id: "calendar",
+      path: "/dashboard/calendar",
       label: "التقويم الأسبوعي",
       icon: Calendar,
       count: 45,
@@ -45,6 +52,7 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
     },
     {
       id: "statistics",
+      path: "/dashboard/statistics",
       label: "الإحصائيات",
       icon: BarChart3,
       count: 12,
@@ -53,6 +61,7 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
     },
     {
       id: "search",
+      path: "/dashboard/search",
       label: "البحث عن مريض",
       icon: Search,
       count: 1247,
@@ -60,6 +69,7 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
       description: "البحث في قاعدة المرضى",
     },
   ];
+
   const getColorClasses = (color) => {
     const colors = {
       sky: {
@@ -113,50 +123,55 @@ export default function NavigationTabs({ activeTab, onTabChange }) {
     };
     return colors[color] || colors.sky;
   };
+
   return (
     <nav className="bg-gradient-to-l from-white via-sky-50 to-blue-50 border-b border-sky-200/50 shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center gap-3 overflow-x-auto scrollbar-hide">
           {tabs.map((tab) => {
             const Icon = tab.icon;
-            const isActive = activeTab === tab.id;
+            const isActive =
+              location.pathname === tab.path ||
+              (tab.path === "/dashboard" && location.pathname === "/dashboard");
             const colorClasses = getColorClasses(tab.color);
 
             return (
-              <Button
-                key={tab.id}
-                onClick={() => onTabChange(tab.id)}
-                variant="ghost"
-                className={`flex-shrink-0 h-auto p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-md ${
-                  isActive ? colorClasses.active : colorClasses.inactive
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-2">
-                    <Icon className="w-5 h-5" />
-                    <div className="text-right">
-                      <div className="font-semibold text-sm">{tab.label}</div>
-                      <div
-                        className={`text-xs opacity-80 ${
-                          isActive ? "text-white/80" : "text-gray-500"
-                        }`}
-                      >
-                        {tab.description}
+              <Link key={tab.id} to={tab.path}>
+                <Button
+                  variant="ghost"
+                  className={`flex-shrink-0 h-auto p-4 rounded-xl border-2 transition-all duration-300 hover:shadow-md ${
+                    isActive ? colorClasses.active : colorClasses.inactive
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
+                      <Icon className="w-5 h-5" />
+                      <div className="text-right">
+                        <div className="font-semibold text-sm">{tab.label}</div>
+                        <div
+                          className={`text-xs opacity-80 ${
+                            isActive ? "text-white/80" : "text-gray-500"
+                          }`}
+                        >
+                          {tab.description}
+                        </div>
                       </div>
                     </div>
+                    {tab.count > 0 && (
+                      <Badge
+                        variant="secondary"
+                        className={`text-xs font-bold px-2 py-1 ${
+                          isActive
+                            ? colorClasses.activeBadge
+                            : colorClasses.badge
+                        }`}
+                      >
+                        {tab.count > 999 ? "999+" : tab.count}
+                      </Badge>
+                    )}
                   </div>
-                  {tab.count > 0 && (
-                    <Badge
-                      variant="secondary"
-                      className={`text-xs font-bold px-2 py-1 ${
-                        isActive ? colorClasses.activeBadge : colorClasses.badge
-                      }`}
-                    >
-                      {tab.count > 999 ? "999+" : tab.count}
-                    </Badge>
-                  )}
-                </div>
-              </Button>
+                </Button>
+              </Link>
             );
           })}
         </div>

@@ -9,6 +9,19 @@ import { useAuthStore } from "@/stores";
 import NotFound from "./components/common/NotFound.jsx";
 import ReceptionistDashboard from "./features/staff-dashboard/index.jsx";
 import { Toaster } from "@/components/ui/sonner";
+import {
+  SettingsContainer,
+  ScheduleSettings,
+  ProfileSettings,
+} from "@/features/staff-dashboard/components/settings";
+
+// Import dashboard components
+import TodaysAppointments from "./features/staff-dashboard/components/todaysAppointment/TodaysAppointments";
+import AppointmentScheduling from "./features/staff-dashboard/components/AppointmentScheduling/AppointmentScheduling";
+import PatientRegistration from "./features/staff-dashboard/components/patientRegistration/PatientRegistration";
+import WeeklyCalendar from "./features/staff-dashboard/components/weeklyCalender/WeeklyCalendar";
+import PatientSearch from "./features/staff-dashboard/components/patientSearch/PatientSearch";
+import Statistics from "./features/staff-dashboard/components/statistics/Statistics";
 
 // Import auth components from index file
 import {
@@ -21,7 +34,6 @@ import {
 } from "./features/auth";
 
 function App() {
-
   // Initialize authentication state from localStorage
   const initializeAuth = useAuthStore((state) => state.initializeAuth);
 
@@ -33,9 +45,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* Root redirect to receptionist dashboard */}
-        <Route path="/" element={<Navigate to="/receptionist-dashboard" replace />} />
-        
+        {/* Root redirect to dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" replace />} />
+
         {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/login/callback" element={<LoginCallback />} />
@@ -43,18 +55,40 @@ function App() {
         <Route path="/forget-password" element={<ForgetPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
 
-        {/* Receptionist Dashboard - Protected Receptionist Route */}
+        {/* Dashboard Routes - Protected */}
         <Route
-          path="/receptionist-dashboard"
+          path="/dashboard"
           element={
             <ProtectedRoute roles={["receptionist", "staff"]}>
               <ReceptionistDashboard />
             </ProtectedRoute>
           }
+        >
+          <Route index element={<TodaysAppointments />} />
+          <Route path="schedule" element={<AppointmentScheduling />} />
+          <Route path="register" element={<PatientRegistration />} />
+          <Route path="calendar" element={<WeeklyCalendar />} />
+          <Route path="statistics" element={<Statistics />} />
+          <Route path="search" element={<PatientSearch />} />
+        </Route>
+
+        {/* Legacy redirects */}
+        <Route
+          path="/receptionist-dashboard"
+          element={<Navigate to="/dashboard" replace />}
         />
-        
-        {/* Redirect old staff-dashboard to receptionist-dashboard */}
-        <Route path="/staff-dashboard" element={<Navigate to="/receptionist-dashboard" replace />} />
+        <Route
+          path="/staff-dashboard"
+          element={<Navigate to="/dashboard" replace />}
+        />
+
+        {/* Settings Routes */}
+        <Route path="/settings" element={<SettingsContainer />} />
+        <Route path="/settings/schedule" element={<SettingsContainer />} />
+        <Route path="/settings/profile" element={<SettingsContainer />} />
+        <Route path="/settings/notifications" element={<SettingsContainer />} />
+        <Route path="/settings/appearance" element={<SettingsContainer />} />
+        <Route path="/settings/system" element={<SettingsContainer />} />
 
         {/* 404 Not Found page */}
         <Route path="*" element={<NotFound />} />

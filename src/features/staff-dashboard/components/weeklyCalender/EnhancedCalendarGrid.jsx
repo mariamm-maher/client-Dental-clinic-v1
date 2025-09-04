@@ -42,15 +42,13 @@ export default function EnhancedCalendarGrid() {
   };
 
   const weekDays = getWeekDays();
-
   const getStatusBadgeText = (status) => {
     const statusMap = {
       confirmed: "مؤكد",
       pending: "في الانتظار",
-      cancelled: "ملغي",
-      completed: "مكتمل",
-      "in-progress": "جاري الآن",
-      "no-show": "لم يحضر",
+      canceled: "ملغي",
+      done: "مكتمل",
+      missed: "فائت",
     };
     return statusMap[status] || "غير محدد";
   };

@@ -9,22 +9,6 @@ export default function SchedulePreview() {
 
   const todaysAppointments = getTodaysAppointments();
 
-  // Fallback mock data for demonstration
-  const mockAppointments = [
-    {
-      time: "09:00 ص",
-      patient: "سارة أحمد",
-
-      status: "مؤكد",
-    },
-    {
-      time: "09:30 ص",
-      patient: "محمد العلي",
-
-      status: "في الانتظار",
-    },
-  ];
-
   const appointmentsToShow =
     todaysAppointments.length > 0
       ? todaysAppointments.slice(0, 3).map((apt) => ({
@@ -41,7 +25,7 @@ export default function SchedulePreview() {
               ? "فات"
               : "مؤكد",
         }))
-      : mockAppointments;
+      : [];
 
   return (
     <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
@@ -55,34 +39,40 @@ export default function SchedulePreview() {
         <p className="text-slate-600 text-sm">المواعيد المجدولة لهذا اليوم</p>
       </CardHeader>
       <CardContent className="space-y-4">
-        {appointmentsToShow.map((apt, index) => (
-          <Card
-            key={index}
-            className="border border-slate-200 hover:shadow-md transition-shadow"
-          >
-            <CardContent className="p-4">
-              <div className="flex items-start justify-between mb-3">
-                <Badge
-                  variant={apt.status === "مؤكد" ? "default" : "secondary"}
-                  className="text-xs"
-                >
-                  {apt.status}
-                </Badge>
-                <span className="text-sm font-medium text-sky-600 bg-sky-50 px-2 py-1 rounded">
-                  {apt.time}
-                </span>
-              </div>
-              <div className="space-y-2">
-                <p className="font-medium text-slate-900">{apt.patient}</p>
-                <p className="text-sm text-slate-600 flex items-center gap-1">
-                  <Stethoscope className="w-3 h-3" />
-                  {apt.doctor}
-                </p>
-                <p className="text-sm text-slate-600">{apt.service}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+        {appointmentsToShow.length === 0 ? (
+          <div className="text-center py-8 text-slate-500 text-lg">
+            لا يوجد مواعيد اليوم
+          </div>
+        ) : (
+          appointmentsToShow.map((apt, index) => (
+            <Card
+              key={index}
+              className="border border-slate-200 hover:shadow-md transition-shadow"
+            >
+              <CardContent className="p-4">
+                <div className="flex items-start justify-between mb-3">
+                  <Badge
+                    variant={apt.status === "مؤكد" ? "default" : "secondary"}
+                    className="text-xs"
+                  >
+                    {apt.status}
+                  </Badge>
+                  <span className="text-sm font-medium text-sky-600 bg-sky-50 px-2 py-1 rounded">
+                    {apt.time}
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  <p className="font-medium text-slate-900">{apt.patient}</p>
+                  <p className="text-sm text-slate-600 flex items-center gap-1">
+                    <Stethoscope className="w-3 h-3" />
+                    {apt.doctor}
+                  </p>
+                  <p className="text-sm text-slate-600">{apt.service}</p>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
 
         <div className="pt-4 border-t border-slate-200">
           <Button variant="outline" className="w-full">

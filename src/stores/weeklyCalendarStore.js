@@ -25,7 +25,7 @@ const useWeeklyCalendarStore = create((set, get) => ({
       service: "كشف",
       time: "09:00",
       duration: 30,
-      status: "completed",
+      status: "done",
       date: addDays(new Date(), -3), // 3 days ago
       notes: "تم إجراء الفحص بنجاح",
     },
@@ -36,7 +36,7 @@ const useWeeklyCalendarStore = create((set, get) => ({
       service: "استشارة",
       time: "10:30",
       duration: 60,
-      status: "completed",
+      status: "done",
       date: addDays(new Date(), -2), // 2 days ago
       notes: "استشارة متابعة",
     },
@@ -47,7 +47,7 @@ const useWeeklyCalendarStore = create((set, get) => ({
       service: "كشف",
       time: "11:00",
       duration: 45,
-      status: "no-show",
+      status: "missed",
       date: addDays(new Date(), -1), // yesterday
       notes: "لم يحضر المريض",
     },
@@ -71,7 +71,7 @@ const useWeeklyCalendarStore = create((set, get) => ({
       service: "استشارة",
       time: "11:30",
       duration: 60,
-      status: "in-progress",
+      status: "confirmed",
       date: new Date(), // today
       notes: "جاري الآن",
     },
@@ -208,9 +208,7 @@ const useWeeklyCalendarStore = create((set, get) => ({
   getAppointmentStatusStyles: (appointment) => {
     const appointmentDate = new Date(appointment.date);
     const isPastDate = isPast(appointmentDate) && !isToday(appointmentDate);
-    const isTodayDate = isToday(appointmentDate);
-
-    // Base styles for different statuses
+    const isTodayDate = isToday(appointmentDate); // Base styles for different statuses
     const statusStyles = {
       confirmed: {
         border: "border-l-emerald-500",
@@ -224,25 +222,19 @@ const useWeeklyCalendarStore = create((set, get) => ({
         text: "text-amber-700",
         badge: "bg-amber-100 text-amber-700",
       },
-      cancelled: {
+      canceled: {
         border: "border-l-red-500",
         bg: "bg-red-50/80",
         text: "text-red-700",
         badge: "bg-red-100 text-red-700",
       },
-      completed: {
+      done: {
         border: "border-l-blue-500",
         bg: "bg-blue-50/80",
         text: "text-blue-700",
         badge: "bg-blue-100 text-blue-700",
       },
-      "in-progress": {
-        border: "border-l-violet-500",
-        bg: "bg-violet-50/80",
-        text: "text-violet-700",
-        badge: "bg-violet-100 text-violet-700",
-      },
-      "no-show": {
+      missed: {
         border: "border-l-gray-500",
         bg: "bg-gray-50/80",
         text: "text-gray-700",

@@ -1,5 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
-import { Calendar, CheckCircle, Timer, XCircle } from "lucide-react";
+import { Calendar, CheckCircle, Timer, XCircle, Check, X } from "lucide-react";
 import { useAppointmentStore } from "@/stores";
 
 const iconMap = {
@@ -7,11 +7,12 @@ const iconMap = {
   CheckCircle,
   Timer,
   XCircle,
+  Check,
+  X,
 };
 
 export default function AppointmentStatistics() {
   const appointments = useAppointmentStore((state) => state.appointments);
-
   const stats = [
     {
       label: "إجمالي المواعيد",
@@ -22,12 +23,12 @@ export default function AppointmentStatistics() {
       trend: "اليوم",
     },
     {
-      label: "تم تسجيل الوصول",
-      value: appointments.filter((a) => a.status === "checked-in").length,
+      label: "مؤكدة",
+      value: appointments.filter((a) => a.status === "confirmed").length,
       icon: "CheckCircle",
       color: "text-emerald-600",
       bgColor: "bg-emerald-50 border-emerald-200",
-      trend: "حضور",
+      trend: "مؤكدة",
     },
     {
       label: "في الانتظار",
@@ -35,20 +36,35 @@ export default function AppointmentStatistics() {
       icon: "Timer",
       color: "text-amber-600",
       bgColor: "bg-amber-50 border-amber-200",
-      trend: "قادمة",
+      trend: "معلقة",
     },
     {
-      label: "فاتت",
-      value: appointments.filter((a) => a.status === "missed").length,
-      icon: "XCircle",
+      label: "تمت",
+      value: appointments.filter((a) => a.status === "done").length,
+      icon: "Check",
+      color: "text-blue-600",
+      bgColor: "bg-blue-50 border-blue-200",
+      trend: "مكتملة",
+    },
+    {
+      label: "ملغاة",
+      value: appointments.filter((a) => a.status === "canceled").length,
+      icon: "X",
       color: "text-red-600",
       bgColor: "bg-red-50 border-red-200",
+      trend: "ملغاة",
+    },
+    {
+      label: "فائتة",
+      value: appointments.filter((a) => a.status === "missed").length,
+      icon: "XCircle",
+      color: "text-gray-600",
+      bgColor: "bg-gray-50 border-gray-200",
       trend: "غياب",
     },
   ];
-
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+    <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 lg:gap-6">
       {stats.map((stat, index) => {
         const IconComponent = iconMap[stat.icon];
 

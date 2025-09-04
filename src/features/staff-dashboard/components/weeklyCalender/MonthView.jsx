@@ -44,15 +44,13 @@ export default function MonthView() {
   for (let i = 0; i < monthDays.length; i += 7) {
     weeks.push(monthDays.slice(i, i + 7));
   }
-
   const getStatusColor = (status) => {
     const colors = {
       confirmed: "bg-emerald-500",
       pending: "bg-amber-500",
-      cancelled: "bg-red-500",
-      completed: "bg-blue-500",
-      "in-progress": "bg-violet-500",
-      "no-show": "bg-gray-500",
+      canceled: "bg-red-500",
+      done: "bg-blue-500",
+      missed: "bg-gray-500",
     };
     return colors[status] || "bg-gray-400";
   };
@@ -87,7 +85,6 @@ export default function MonthView() {
             </div>
           ))}
         </div>
-
         {/* Calendar Grid */}
         <div className="space-y-2">
           {weeks.map((week, weekIndex) => (
@@ -194,8 +191,7 @@ export default function MonthView() {
               })}
             </div>
           ))}
-        </div>
-
+        </div>{" "}
         {/* Legend */}
         <div className="mt-6 pt-6 border-t border-gray-200">
           <h4 className="text-sm font-semibold text-gray-800 mb-3">
@@ -211,10 +207,6 @@ export default function MonthView() {
               <span>في الانتظار</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-violet-500"></div>
-              <span>جاري الآن</span>
-            </div>
-            <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-blue-500"></div>
               <span>مكتمل</span>
             </div>
@@ -224,7 +216,7 @@ export default function MonthView() {
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-gray-500"></div>
-              <span>لم يحضر</span>
+              <span>فائت</span>
             </div>
           </div>
         </div>

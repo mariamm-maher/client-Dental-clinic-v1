@@ -33,13 +33,14 @@ export default function AppointmentFilters() {
           <Select value={filterStatus} onValueChange={setFilterStatus}>
             <SelectTrigger className="w-full sm:w-48 h-12 bg-slate-50 border-slate-200">
               <SelectValue placeholder="تصفية المواعيد" />
-            </SelectTrigger>
+            </SelectTrigger>{" "}
             <SelectContent>
               <SelectItem value="all">جميع المواعيد</SelectItem>
               <SelectItem value="pending">في الانتظار</SelectItem>
-              <SelectItem value="checked-in">تم تسجيل الوصول</SelectItem>
-              <SelectItem value="missed">فاتت</SelectItem>
-              <SelectItem value="completed">مكتملة</SelectItem>
+              <SelectItem value="confirmed">مؤكدة</SelectItem>
+              <SelectItem value="done">تمت</SelectItem>
+              <SelectItem value="canceled">ملغاة</SelectItem>
+              <SelectItem value="missed">فائتة</SelectItem>
             </SelectContent>
           </Select>
         </div>
