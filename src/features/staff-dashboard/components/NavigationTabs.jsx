@@ -42,14 +42,24 @@ export default function NavigationTabs() {
       description: "تسجيل مريض جديد",
     },
     {
+      id: "search",
+      path: "/dashboard/search",
+      label: "البحث عن مريض",
+      icon: Search,
+      count: 1247,
+      color: "rose",
+      description: "البحث في قاعدة المرضى",
+    },
+    {
       id: "calendar",
-      path: "/dashboard/calendar",
+      path: "/dashboard/calendar/week",
       label: "التقويم",
       icon: Calendar,
       count: 45,
       color: "blue",
       description: "عرض المواعيد ",
     },
+
     {
       id: "statistics",
       path: "/dashboard/statistics",
@@ -58,15 +68,6 @@ export default function NavigationTabs() {
       count: 12,
       color: "amber",
       description: "تقارير وإحصائيات",
-    },
-    {
-      id: "search",
-      path: "/dashboard/search",
-      label: "البحث عن مريض",
-      icon: Search,
-      count: 1247,
-      color: "rose",
-      description: "البحث في قاعدة المرضى",
     },
   ];
 
@@ -132,7 +133,10 @@ export default function NavigationTabs() {
             const Icon = tab.icon;
             const isActive =
               location.pathname === tab.path ||
-              (tab.path === "/dashboard" && location.pathname === "/dashboard");
+              (tab.path === "/dashboard" &&
+                location.pathname === "/dashboard") ||
+              (tab.id === "calendar" &&
+                location.pathname.startsWith("/dashboard/calendar"));
             const colorClasses = getColorClasses(tab.color);
 
             return (

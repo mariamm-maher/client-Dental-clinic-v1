@@ -575,10 +575,10 @@ export default function AppointmentForm() {
                             setSelectedTime(`${hour}:${min}`);
                           }}
                         >
-                          <SelectTrigger className="w-20 h-10 text-sm">
+                          <SelectTrigger className="min-w-[90px] w-24 h-10 text-sm">
                             <SelectValue placeholder="الساعة" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="min-w-[90px]">
                             {[...Array(12)].map((_, i) => (
                               <SelectItem
                                 key={i + 1}
@@ -610,10 +610,10 @@ export default function AppointmentForm() {
                             setSelectedTime(`${hour}:${minute} ${period}`);
                           }}
                         >
-                          <SelectTrigger className="w-16 h-10 text-sm">
+                          <SelectTrigger className="min-w-[70px] w-20 h-10 text-sm">
                             <SelectValue placeholder="الدقيقة" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="min-w-[70px]">
                             {["00", "15", "30", "45"].map((min) => (
                               <SelectItem key={min} value={min}>
                                 {min}
@@ -638,10 +638,10 @@ export default function AppointmentForm() {
                             setSelectedTime(`${hour}:${min} ${period}`);
                           }}
                         >
-                          <SelectTrigger className="w-28 h-10 text-sm">
+                          <SelectTrigger className="min-w-[120px] w-32 h-10 text-sm">
                             <SelectValue placeholder="الفترة" />
                           </SelectTrigger>
-                          <SelectContent>
+                          <SelectContent className="min-w-[120px]">
                             <SelectItem value="ص">صباحاً</SelectItem>
                             <SelectItem value="م">مساءً</SelectItem>
                           </SelectContent>
