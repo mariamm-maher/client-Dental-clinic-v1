@@ -11,26 +11,25 @@ import {
   MapPin,
   Phone,
 } from "lucide-react";
-import {
-  format,
-  startOfWeek,
-  addDays,
-  isToday,
-  isPast,
-  isFuture,
-} from "date-fns";
+import { format, startOfWeek, addDays, isToday, isPast } from "date-fns";
 import { arSA } from "date-fns/locale";
-import useWeeklyCalendarStore from "@/stores/weeklyCalendarStore";
+import useCalendarStore from "@/stores/weeklyCalendarStore";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import AppointmentBookingModal from "./AppointmentBookingModal";
 
 export default function EnhancedCalendarGrid() {
+  const location = useLocation();
+  const viewType = location.pathname.split("/").pop() || "week";
+
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     currentWeek,
     currentDate,
-    viewType,
     getAppointmentsForDay,
-    getDoctorColor,
     getAppointmentStatusStyles,
-  } = useWeeklyCalendarStore();
+  } = useCalendarStore();
 
   const dateLocale = arSA;
 
@@ -51,6 +50,17 @@ export default function EnhancedCalendarGrid() {
       missed: "فائت",
     };
     return statusMap[status] || "غير محدد";
+  };
+
+  const handleAddAppointment = (date) => {
+    setSelectedDate(date);
+    setIsModalOpen(true);
+  };
+
+  const handleModalSubmit = async (appointmentData) => {
+    // Handle appointment submission
+    console.log("New appointment:", appointmentData);
+    // Add your appointment creation logic here
   };
 
   const AppointmentCard = ({ appointment, compact = false }) => {
@@ -79,13 +89,13 @@ export default function EnhancedCalendarGrid() {
                   className={`w-4 h-4 ${
                     isPastDate ? "text-gray-400" : "text-slate-500"
                   }`}
-                />
+                />{" "}
                 <span
                   className={`font-semibold ${
                     isPastDate ? "text-gray-400" : "text-slate-900"
                   }`}
                 >
-                  {appointment.time}
+                  {format(new Date(appointment.appointmentDate), "HH:mm")}
                 </span>
                 {isTodayDate && (
                   <Badge
@@ -99,8 +109,7 @@ export default function EnhancedCalendarGrid() {
               <Badge className={`text-xs ${styles.badge}`}>
                 {getStatusBadgeText(appointment.status)}
               </Badge>
-            </div>
-
+            </div>{" "}
             {/* Patient Info */}
             <div>
               <div className="flex items-center gap-2 mb-1">
@@ -114,7 +123,7 @@ export default function EnhancedCalendarGrid() {
                     isPastDate ? "text-gray-400" : "text-slate-900"
                   }`}
                 >
-                  {appointment.patientName}
+                  {appointment.patientId?.generalInfo?.name || "غير محدد"}
                 </h4>
               </div>
               <div className="flex items-center gap-2 mb-2">
@@ -131,38 +140,23 @@ export default function EnhancedCalendarGrid() {
                   {appointment.service}
                 </p>
               </div>
+              {appointment.patientId?.generalInfo?.phone && (
+                <div className="flex items-center gap-2">
+                  <Phone
+                    className={`w-3 h-3 ${
+                      isPastDate ? "text-gray-400" : "text-slate-500"
+                    }`}
+                  />
+                  <p
+                    className={`text-xs ${
+                      isPastDate ? "text-gray-400" : "text-slate-500"
+                    }`}
+                  >
+                    {appointment.patientId.generalInfo.phone}
+                  </p>
+                </div>
+              )}
             </div>
-
-            {/* Doctor and Duration */}
-            <div className="flex items-center justify-between text-sm">
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-3 h-3 rounded-full ${
-                    isPastDate
-                      ? "bg-gray-400"
-                      : `bg-${getDoctorColor(appointment.doctorName)}-500`
-                  }`}
-                ></div>
-                <span
-                  className={isPastDate ? "text-gray-400" : "text-slate-600"}
-                >
-                  {appointment.doctorName.replace("د. ", "")}
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Timer
-                  className={`w-3 h-3 ${
-                    isPastDate ? "text-gray-400" : "text-slate-500"
-                  }`}
-                />
-                <span
-                  className={isPastDate ? "text-gray-400" : "text-slate-600"}
-                >
-                  {appointment.duration} د
-                </span>
-              </div>
-            </div>
-
             {/* Notes for completed/past appointments */}
             {appointment.notes &&
               (isPastDate || appointment.status === "completed") && (
@@ -186,10 +180,6 @@ export default function EnhancedCalendarGrid() {
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 text-sm">
-                  <div>
-                    <p className="text-slate-400">الطبيب</p>
-                    <p className="text-white">{appointment.doctorName}</p>
-                  </div>
                   <div>
                     <p className="text-slate-400">المدة</p>
                     <p className="text-white">{appointment.duration} دقيقة</p>
@@ -256,28 +246,30 @@ export default function EnhancedCalendarGrid() {
             {getAppointmentsForDay(currentDate).map((appointment) => (
               <AppointmentCard key={appointment.id} appointment={appointment} />
             ))}
-
             {getAppointmentsForDay(currentDate).length === 0 && (
               <div className="text-center py-12">
                 <CalendarDays className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-medium text-gray-900 mb-2">
                   لا توجد مواعيد
-                </h3>
+                </h3>{" "}
                 <p className="text-gray-500 mb-6">
                   لا توجد مواعيد مجدولة لهذا اليوم
                 </p>
-                <Button className="bg-emerald-600 hover:bg-emerald-700">
+                <Button
+                  className="bg-emerald-600 hover:bg-emerald-700"
+                  onClick={() => handleAddAppointment(currentDate)}
+                >
                   <Plus className="w-4 h-4 ml-2" />
                   إضافة موعد جديد
                 </Button>
               </div>
             )}
-
-            {/* Add Appointment Button */}
+            {/* Add Appointment Button */}{" "}
             {getAppointmentsForDay(currentDate).length > 0 && (
               <Button
                 variant="outline"
                 className="w-full h-16 border-2 border-dashed border-slate-300 hover:border-emerald-400 hover:bg-emerald-50 transition-all duration-200"
+                onClick={() => handleAddAppointment(currentDate)}
               >
                 <Plus className="w-4 h-4 ml-2" />
                 إضافة موعد جديد
@@ -353,7 +345,7 @@ export default function EnhancedCalendarGrid() {
               <div className="space-y-3 min-h-[400px]">
                 {getAppointmentsForDay(day).map((appointment) => (
                   <AppointmentCard
-                    key={appointment.id}
+                    key={appointment._id}
                     appointment={appointment}
                     compact={true}
                   />
@@ -364,6 +356,7 @@ export default function EnhancedCalendarGrid() {
                   variant="outline"
                   className="w-full h-16 border-2 border-dashed border-slate-300 hover:border-sky-400 hover:bg-sky-50 transition-all duration-200"
                   disabled={isPast(day) && !isToday(day)}
+                  onClick={() => handleAddAppointment(day)}
                 >
                   <Plus className="w-4 h-4 ml-2" />
                   إضافة موعد
@@ -373,6 +366,12 @@ export default function EnhancedCalendarGrid() {
           ))}
         </div>
       </CardContent>
+      <AppointmentBookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleModalSubmit}
+        selectedDate={selectedDate}
+      />
     </Card>
   );
 }

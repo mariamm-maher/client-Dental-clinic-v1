@@ -3,212 +3,181 @@ import {
   addDays,
   addWeeks,
   subWeeks,
-  isSameDay,
   isPast,
   isToday,
   isFuture,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  format,
+  startOfWeek,
+  endOfWeek,
 } from "date-fns";
+import { getCalendarAppointments } from "@/features/staff-dashboard/services/staffServices";
 
-const useWeeklyCalendarStore = create((set, get) => ({
+const useCalendarStore = create((set, get) => ({
   // State
   currentWeek: new Date(),
   currentDate: new Date(),
   selectedFilter: "all",
-  viewType: "week", // 'day', 'week', 'month'
-  // Mock data with enhanced status tracking
-  appointments: [
-    // Past appointments
-    {
-      id: 1,
-      patientName: "سارة أحمد",
-      doctorName: "د. أحمد الراشد",
-      service: "كشف",
-      time: "09:00",
-      duration: 30,
-      status: "done",
-      date: addDays(new Date(), -3), // 3 days ago
-      notes: "تم إجراء الفحص بنجاح",
-    },
-    {
-      id: 2,
-      patientName: "أحمد محمد العلي",
-      doctorName: "د. سارة أحمد",
-      service: "استشارة",
-      time: "10:30",
-      duration: 60,
-      status: "done",
-      date: addDays(new Date(), -2), // 2 days ago
-      notes: "استشارة متابعة",
-    },
-    {
-      id: 3,
-      patientName: "منى الزهراني",
-      doctorName: "د. محمد حسن",
-      service: "كشف",
-      time: "11:00",
-      duration: 45,
-      status: "missed",
-      date: addDays(new Date(), -1), // yesterday
-      notes: "لم يحضر المريض",
-    },
+  appointments: [],
+  appointmentsByDate: {},
+  loading: false,
+  error: null,
 
-    // Today's appointments
-    {
-      id: 4,
-      patientName: "فاطمة عبدالله",
-      doctorName: "د. أحمد الراشد",
-      service: "كشف",
-      time: "09:00",
-      duration: 45,
-      status: "confirmed",
-      date: new Date(), // today
-      notes: "موعد صباحي",
-    },
-    {
-      id: 5,
-      patientName: "خالد السعود",
-      doctorName: "د. سارة أحمد",
-      service: "استشارة",
-      time: "11:30",
-      duration: 60,
-      status: "confirmed",
-      date: new Date(), // today
-      notes: "جاري الآن",
-    },
-    {
-      id: 6,
-      patientName: "نورا أحمد",
-      doctorName: "د. محمد حسن",
-      service: "كشف",
-      time: "14:00",
-      duration: 30,
-      status: "confirmed",
-      date: new Date(), // today
-      notes: "موعد بعد الظهر",
-    },
-
-    // Future appointments
-    {
-      id: 7,
-      patientName: "محمد الرشيد",
-      doctorName: "د. أحمد الراشد",
-      service: "استشارة",
-      time: "10:30",
-      duration: 30,
-      status: "confirmed",
-      date: addDays(new Date(), 1), // tomorrow
-      notes: "موعد متابعة",
-    },
-    {
-      id: 8,
-      patientName: "ليلى أحمد",
-      doctorName: "د. سارة أحمد",
-      service: "كشف",
-      time: "09:00",
-      duration: 45,
-      status: "pending",
-      date: addDays(new Date(), 2),
-      notes: "في انتظار التأكيد",
-    },
-    {
-      id: 9,
-      patientName: "علياء منصور",
-      doctorName: "د. محمد حسن",
-      service: "استشارة",
-      time: "15:00",
-      duration: 75,
-      status: "confirmed",
-      date: addDays(new Date(), 4),
-      notes: "استشارة تخصصية",
-    },
-  ],
-
-  doctors: [
-    { id: 1, name: "د. أحمد الراشد", color: "bg-sky-500", colorClass: "sky" },
-    {
-      id: 2,
-      name: "د. سارة أحمد",
-      color: "bg-emerald-500",
-      colorClass: "emerald",
-    },
-    {
-      id: 3,
-      name: "د. محمد حسن",
-      color: "bg-violet-500",
-      colorClass: "violet",
-    },
-  ],
   // Actions
   setCurrentWeek: (week) => set({ currentWeek: week }),
   setCurrentDate: (date) => set({ currentDate: date }),
   setSelectedFilter: (filter) => set({ selectedFilter: filter }),
-  setViewType: (viewType) => set({ viewType }),
-
   // Navigate weeks
-  goToPreviousWeek: () => {
+  goToPreviousWeek: async () => {
     set((state) => ({
       currentWeek: subWeeks(state.currentWeek, 1),
     }));
+    await get().fetchAppointments("week");
   },
 
-  goToNextWeek: () => {
+  goToNextWeek: async () => {
     set((state) => ({ currentWeek: addWeeks(state.currentWeek, 1) }));
+    await get().fetchAppointments("week");
   },
 
-  goToCurrentWeek: () => {
+  goToCurrentWeek: async () => {
     set({ currentWeek: new Date() });
+    await get().fetchAppointments("week");
   },
 
   // Navigate days
-  goToPreviousDay: () => {
+  goToPreviousDay: async () => {
     set((state) => ({
       currentDate: addDays(state.currentDate, -1),
     }));
+    await get().fetchAppointments("day");
   },
 
-  goToNextDay: () => {
+  goToNextDay: async () => {
     set((state) => ({
       currentDate: addDays(state.currentDate, 1),
     }));
+    await get().fetchAppointments("day");
   },
 
-  goToToday: () => {
+  goToToday: async () => {
     set({ currentDate: new Date() });
+    await get().fetchAppointments("day");
   },
 
+  // Month navigation
+  goToPreviousMonth: async () => {
+    set((state) => ({
+      currentWeek: subMonths(startOfMonth(state.currentWeek), 1),
+    }));
+    await get().fetchAppointments("month");
+  },
+  goToNextMonth: async () => {
+    set((state) => ({
+      currentWeek: addMonths(startOfMonth(state.currentWeek), 1),
+    }));
+    await get().fetchAppointments("month");
+  },
+  goToCurrentMonth: async () => {
+    set({ currentWeek: startOfMonth(new Date()) });
+    await get().fetchAppointments("month");
+  },
   // Filter appointments
   getAppointmentsForDay: (date) => {
-    const { appointments, selectedFilter } = get();
-    return appointments
-      .filter((appointment) => {
-        const appointmentDate = new Date(appointment.date);
-        const targetDate = new Date(date);
+    const { appointmentsByDate, selectedFilter } = get();
+    const dateKey = format(new Date(date), "yyyy-MM-dd");
+    const dayAppointments = appointmentsByDate[dateKey] || [];
 
-        const sameDay = isSameDay(appointmentDate, targetDate);
+    return dayAppointments
+      .filter((appointment) => {
         const matchesFilter =
           selectedFilter === "all" || appointment.doctorName === selectedFilter;
-
-        return sameDay && matchesFilter;
+        return matchesFilter;
       })
-      .sort((a, b) => a.time.localeCompare(b.time));
+      .sort(
+        (a, b) =>
+          new Date(a.appointmentDate).getTime() -
+          new Date(b.appointmentDate).getTime()
+      );
   },
 
+  // Fetch appointments from API
+  fetchAppointments: async (viewType = "week") => {
+    set({ loading: true, error: null });
+
+    try {
+      const { currentWeek, currentDate } = get();
+      let startDate, endDate;
+
+      if (viewType === "day") {
+        startDate = format(currentDate, "yyyy-MM-dd");
+        endDate = format(currentDate, "yyyy-MM-dd");
+      } else if (viewType === "week") {
+        startDate = format(
+          startOfWeek(currentWeek, { weekStartsOn: 6 }),
+          "yyyy-MM-dd"
+        ); // Saturday start
+        endDate = format(
+          endOfWeek(currentWeek, { weekStartsOn: 6 }),
+          "yyyy-MM-dd"
+        );
+      } else if (viewType === "month") {
+        startDate = format(startOfMonth(currentWeek), "yyyy-MM-dd");
+        endDate = format(
+          endOfWeek(addMonths(startOfMonth(currentWeek), 1), {
+            weekStartsOn: 6,
+          }),
+          "yyyy-MM-dd"
+        );
+      }
+
+      const response = await getCalendarAppointments({
+        startDate,
+        endDate,
+        viewType,
+      });
+
+      if (response.success) {
+        set({
+          appointments: response.data.data.appointments || [],
+          appointmentsByDate: response.data.data.appointmentsByDate || {},
+          loading: false,
+          error: null,
+        });
+      } else {
+        set({
+          loading: false,
+          error: response.message || "فشل في جلب المواعيد",
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching appointments:", error);
+      set({
+        loading: false,
+        error: "فشل في جلب المواعيد",
+      });
+    }
+  },
   // Get appointments with status information
   getAppointmentsWithStatus: (date) => {
     const appointments = get().getAppointmentsForDay(date);
     return appointments.map((appointment) => ({
       ...appointment,
-      isPast: isPast(new Date(appointment.date)),
-      isToday: isToday(new Date(appointment.date)),
-      isFuture: isFuture(new Date(appointment.date)),
+      isPast: isPast(new Date(appointment.appointmentDate)),
+      isToday: isToday(new Date(appointment.appointmentDate)),
+      isFuture: isFuture(new Date(appointment.appointmentDate)),
     }));
   },
 
   // Get appointment status styles
   getAppointmentStatusStyles: (appointment) => {
-    const appointmentDate = new Date(appointment.date);
+    const appointmentDate = new Date(appointment.appointmentDate);
     const isPastDate = isPast(appointmentDate) && !isToday(appointmentDate);
-    const isTodayDate = isToday(appointmentDate); // Base styles for different statuses
+    const isTodayDate = isToday(appointmentDate);
+
+    // Base styles for different statuses
     const statusStyles = {
       confirmed: {
         border: "border-l-emerald-500",
@@ -242,7 +211,7 @@ const useWeeklyCalendarStore = create((set, get) => ({
       },
     };
 
-    let styles = statusStyles[appointment.status] || statusStyles.confirmed;
+    let styles = statusStyles[appointment.status] || statusStyles.pending;
 
     // Modify styles based on date
     if (isPastDate) {
@@ -262,33 +231,6 @@ const useWeeklyCalendarStore = create((set, get) => ({
     }
 
     return styles;
-  },
-
-  // Get doctor color
-  getDoctorColor: (doctorName) => {
-    const { doctors } = get();
-    const doctor = doctors.find((d) => d.name === doctorName);
-    return doctor?.colorClass || "gray";
-  },
-
-  // Get week statistics
-  getWeekStatistics: (weekDays) => {
-    const { appointments } = get();
-    const start = weekDays[0];
-    const end = weekDays[6];
-
-    const weekAppointments = appointments.filter((apt) => {
-      const aptDate = new Date(apt.date);
-      return aptDate >= start && aptDate <= end;
-    });
-
-    const todayAppointments = get().getAppointmentsForDay(new Date());
-
-    return {
-      weekTotal: weekAppointments.length,
-      todayTotal: todayAppointments.length,
-      doctorsCount: get().doctors.length,
-    };
   },
 
   // Add new appointment
@@ -316,4 +258,4 @@ const useWeeklyCalendarStore = create((set, get) => ({
   },
 }));
 
-export default useWeeklyCalendarStore;
+export default useCalendarStore;

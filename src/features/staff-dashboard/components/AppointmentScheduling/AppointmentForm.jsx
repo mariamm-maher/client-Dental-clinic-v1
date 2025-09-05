@@ -34,8 +34,22 @@ import {
 import { format, addDays, isToday, isTomorrow, isWeekend } from "date-fns";
 import { ar } from "date-fns/locale";
 import useAppointmentStore from "@/stores/appointmentStore";
+import useSettingsStore from "@/stores/settingsStore";
+import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function AppointmentForm() {
+  const navigate = useNavigate();
+
+  // Schedule store for getting clinic working hours
+  const { weeklySchedule, hasWeeklySchedule, loadSchedule } =
+    useSettingsStore();
+
+  // Load schedule on component mount
+  useEffect(() => {
+    loadSchedule();
+  }, [loadSchedule]);
+
   const {
     selectedDate,
     selectedTime,
@@ -45,7 +59,6 @@ export default function AppointmentForm() {
     patientSearch,
     isSubmitting,
     services,
-    timeSlots,
     searchResults,
     isSearching,
     showSearchResults,
@@ -59,6 +72,93 @@ export default function AppointmentForm() {
     cancelAppointmentForm,
   } = useAppointmentStore();
   const filteredPatients = searchResults;
+
+  // Helper function to get working days text
+  const getWorkingDaysText = () => {
+    if (!hasWeeklySchedule || !Array.isArray(weeklySchedule)) return "";
+
+    const workingDays = weeklySchedule
+      .filter(
+        (dayObj) =>
+          Array.isArray(dayObj.shifts) &&
+          dayObj.shifts.length > 0 &&
+          dayObj.shifts.some((shift) => shift.enabled)
+      )
+      .map((dayObj) => {
+        const dayNames = {
+          sunday: "الأحد",
+          monday: "الإثنين",
+          tuesday: "الثلاثاء",
+          wednesday: "الأربعاء",
+          thursday: "الخميس",
+          friday: "الجمعة",
+          saturday: "السبت",
+        };
+        return dayNames[dayObj.day];
+      });
+
+    return workingDays.join(", ");
+  };
+
+  // Helper function to check if clinic is open on a specific date
+  const isClinicOpenOnDate = (date) => {
+    if (!hasWeeklySchedule || !Array.isArray(weeklySchedule)) return false;
+
+    const dayNames = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    const dayName = dayNames[date.getDay()];
+
+    const daySchedule = weeklySchedule.find((dayObj) => dayObj.day === dayName);
+    return (
+      daySchedule &&
+      Array.isArray(daySchedule.shifts) &&
+      daySchedule.shifts.length > 0 &&
+      daySchedule.shifts.some((shift) => shift.enabled)
+    );
+  };
+
+  // Helper: Check if selected time is within working hours for the selected day
+  function isTimeWithinWorkingHours(
+    selectedDate,
+    selectedTime,
+    weeklySchedule
+  ) {
+    if (!selectedDate || !selectedTime || !weeklySchedule) return true;
+    const dayNames = [
+      "sunday",
+      "monday",
+      "tuesday",
+      "wednesday",
+      "thursday",
+      "friday",
+      "saturday",
+    ];
+    const dayName = dayNames[selectedDate.getDay()];
+    const daySchedule = weeklySchedule.find((d) => d.day === dayName);
+    if (!daySchedule || !Array.isArray(daySchedule.shifts)) return false;
+    // Parse selected time
+    let [hour, minPeriod] = selectedTime.split(":");
+    let [minute, period] = minPeriod.split(" ");
+    hour = parseInt(hour, 10);
+    minute = parseInt(minute, 10);
+    if (period === "م" && hour !== 12) hour += 12;
+    if (period === "ص" && hour === 12) hour = 0;
+    // Check if within any enabled shift
+    return daySchedule.shifts.some((shift) => {
+      if (!shift.enabled) return false;
+      const start = shift.startHour * 60 + shift.startMinute;
+      const end = shift.endHour * 60 + shift.endMinute;
+      const selected = hour * 60 + minute;
+      return selected >= start && selected < end;
+    });
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -89,7 +189,7 @@ export default function AppointmentForm() {
             <Label className="flex items-center gap-2 text-sm font-medium text-slate-700">
               <User className="w-4 h-4 text-sky-600" />
               المريض *
-            </Label>{" "}
+            </Label>
             <div className="relative">
               {isSearching ? (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin" />
@@ -102,7 +202,7 @@ export default function AppointmentForm() {
                 onChange={(e) => setPatientSearch(e.target.value)}
                 className="pr-10 h-12 bg-slate-50 border-slate-200 focus:bg-white transition-colors"
               />
-            </div>{" "}
+            </div>
             {patientSearch && showSearchResults && (
               <Card className="max-h-60 overflow-y-auto border border-slate-200 shadow-lg">
                 <CardContent className="p-0">
@@ -167,16 +267,30 @@ export default function AppointmentForm() {
                 </CardContent>
               </Card>
             )}
-          </div>{" "}
+          </div>
+
           {/* Date and Time Selection */}
           <div className="space-y-6">
             <div className="border-b border-slate-200 pb-4">
               <h3 className="text-lg font-semibold text-slate-900 mb-2">
                 تحديد الموعد
-              </h3>
+              </h3>{" "}
               <p className="text-sm text-slate-600">
                 اختر التاريخ والوقت المناسب للمريض
               </p>
+              {hasWeeklySchedule && getWorkingDaysText() && (
+                <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <div className="flex items-center gap-2 text-sm">
+                    <CalendarIcon className="w-4 h-4 text-blue-600" />
+                    <span className="font-medium text-blue-800">
+                      أيام العمل:
+                    </span>
+                    <span className="text-blue-700">
+                      {getWorkingDaysText()}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -185,38 +299,108 @@ export default function AppointmentForm() {
                 <Label className="flex items-center gap-2 text-sm font-medium text-slate-700">
                   <CalendarIcon className="w-4 h-4 text-sky-600" />
                   التاريخ *
-                </Label>
+                </Label>{" "}
+                {/* Quick Date Options - Working Days */}
+                {hasWeeklySchedule ? (
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 mb-4">
+                    {weeklySchedule
+                      .filter(
+                        (dayObj) =>
+                          Array.isArray(dayObj.shifts) &&
+                          dayObj.shifts.length > 0 &&
+                          dayObj.shifts.some((shift) => shift.enabled)
+                      )
+                      .map((dayObj) => {
+                        const dayNames = {
+                          sunday: "الأحد",
+                          monday: "الإثنين",
+                          tuesday: "الثلاثاء",
+                          wednesday: "الأربعاء",
+                          thursday: "الخميس",
+                          friday: "الجمعة",
+                          saturday: "السبت",
+                        };
 
-                {/* Quick Date Options */}
-                <div className="grid grid-cols-2 gap-2 mb-4">
-                  <Button
-                    type="button"
-                    variant={
-                      selectedDate && isToday(selectedDate)
-                        ? "default"
-                        : "outline"
-                    }
-                    size="sm"
-                    onClick={() => setSelectedDate(new Date())}
-                    className="h-10 text-sm"
-                  >
-                    اليوم
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={
-                      selectedDate && isTomorrow(selectedDate)
-                        ? "default"
-                        : "outline"
-                    }
-                    size="sm"
-                    onClick={() => setSelectedDate(addDays(new Date(), 1))}
-                    className="h-10 text-sm"
-                  >
-                    غداً
-                  </Button>
-                </div>
+                        // Find the next occurrence of this day
+                        const today = new Date();
+                        const targetDayIndex = [
+                          "sunday",
+                          "monday",
+                          "tuesday",
+                          "wednesday",
+                          "thursday",
+                          "friday",
+                          "saturday",
+                        ].indexOf(dayObj.day);
+                        const currentDayIndex = today.getDay();
 
+                        let daysToAdd = targetDayIndex - currentDayIndex;
+                        if (daysToAdd < 0) daysToAdd += 7; // Next week if day has passed
+                        if (daysToAdd === 0 && today.getHours() >= 18)
+                          daysToAdd = 7; // Next week if it's late today
+
+                        const targetDate = addDays(today, daysToAdd);
+
+                        return (
+                          <Button
+                            key={dayObj.day}
+                            type="button"
+                            variant={
+                              selectedDate &&
+                              selectedDate.toDateString() ===
+                                targetDate.toDateString()
+                                ? "default"
+                                : "outline"
+                            }
+                            size="sm"
+                            onClick={() => setSelectedDate(targetDate)}
+                            className="h-10 text-sm flex flex-col items-center py-1"
+                          >
+                            <span>{dayNames[dayObj.day]}</span>
+                            {daysToAdd === 0 && (
+                              <span className="text-xs text-blue-600">
+                                (اليوم)
+                              </span>
+                            )}
+                            {daysToAdd === 1 && (
+                              <span className="text-xs text-green-600">
+                                (غداً)
+                              </span>
+                            )}
+                          </Button>
+                        );
+                      })}
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2 mb-4">
+                    <Button
+                      type="button"
+                      variant={
+                        selectedDate && isToday(selectedDate)
+                          ? "default"
+                          : "outline"
+                      }
+                      size="sm"
+                      onClick={() => setSelectedDate(new Date())}
+                      className="h-10 text-sm"
+                    >
+                      اليوم
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={
+                        selectedDate && isTomorrow(selectedDate)
+                          ? "default"
+                          : "outline"
+                      }
+                      size="sm"
+                      onClick={() => setSelectedDate(addDays(new Date(), 1))}
+                      className="h-10 text-sm"
+                    >
+                      غداً
+                    </Button>
+                  </div>
+                )}
                 <Popover>
                   <PopoverTrigger asChild>
                     <Button
@@ -250,14 +434,24 @@ export default function AppointmentForm() {
                       disabled={(date) => {
                         const today = new Date();
                         today.setHours(0, 0, 0, 0);
-                        return date < today || isWeekend(date);
+
+                        // Disable past dates
+                        if (date < today) return true;
+
+                        // Disable dates when clinic is closed (based on weekly schedule)
+                        if (hasWeeklySchedule && !isClinicOpenOnDate(date))
+                          return true;
+
+                        // If no schedule is set, fall back to disabling weekends
+                        if (!hasWeeklySchedule && isWeekend(date)) return true;
+
+                        return false;
                       }}
                       initialFocus
                       locale={ar}
                     />
                   </PopoverContent>
-                </Popover>
-
+                </Popover>{" "}
                 {selectedDate && (
                   <div className="p-3 bg-sky-50 rounded-lg border border-sky-200">
                     <div className="flex items-center gap-2 text-sm text-sky-700">
@@ -269,7 +463,62 @@ export default function AppointmentForm() {
                           locale: ar,
                         })}
                       </span>
-                    </div>
+                    </div>{" "}
+                    {hasWeeklySchedule && isClinicOpenOnDate(selectedDate) && (
+                      <div className="text-xs text-green-600 mt-1">
+                        ✓ العيادة مفتوحة في هذا اليوم
+                        {(() => {
+                          const dayNames = [
+                            "sunday",
+                            "monday",
+                            "tuesday",
+                            "wednesday",
+                            "thursday",
+                            "friday",
+                            "saturday",
+                          ];
+                          const dayName = dayNames[selectedDate.getDay()];
+                          const daySchedule = weeklySchedule.find(
+                            (dayObj) => dayObj.day === dayName
+                          );
+                          if (daySchedule && daySchedule.shifts.length > 0) {
+                            const shifts = daySchedule.shifts.filter(
+                              (shift) => shift.enabled
+                            );
+                            if (shifts.length > 0) {
+                              const shiftTimes = shifts.map((shift) => {
+                                const startHour12 =
+                                  shift.startHour === 0
+                                    ? 12
+                                    : shift.startHour > 12
+                                    ? shift.startHour - 12
+                                    : shift.startHour;
+                                const endHour12 =
+                                  shift.endHour === 0
+                                    ? 12
+                                    : shift.endHour > 12
+                                    ? shift.endHour - 12
+                                    : shift.endHour;
+                                const startPeriod =
+                                  shift.startHour < 12 ? "ص" : "م";
+                                const endPeriod =
+                                  shift.endHour < 12 ? "ص" : "م";
+                                return `${startHour12}:${shift.startMinute
+                                  .toString()
+                                  .padStart(
+                                    2,
+                                    "0"
+                                  )} ${startPeriod} - ${endHour12}:${shift.endMinute
+                                  .toString()
+                                  .padStart(2, "0")} ${endPeriod}`;
+                              });
+                              return ` (${shiftTimes.join(", ")})`;
+                            }
+                          }
+                          return "";
+                        })()}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
@@ -281,59 +530,143 @@ export default function AppointmentForm() {
                   الوقت *
                 </Label>
 
-                {/* Time Slots Grid */}
-                <div className="space-y-4">
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-700 mb-3">
-                      الفترة الصباحية
-                    </h4>
-                    <div className="grid grid-cols-3 gap-2">
-                      {timeSlots
-                        .filter((time) => time.includes("ص"))
-                        .map((time) => (
-                          <Button
-                            key={time}
-                            type="button"
-                            variant={
-                              selectedTime === time ? "default" : "outline"
-                            }
-                            size="sm"
-                            onClick={() => setSelectedTime(time)}
-                            className="h-10 text-sm"
-                          >
-                            {time}
-                          </Button>
-                        ))}
+                {!hasWeeklySchedule ? (
+                  /* No Schedule Message */
+                  <div className="p-6 bg-amber-50 border border-amber-200 rounded-lg text-center">
+                    <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                      <Clock className="w-8 h-8 text-amber-600" />
+                    </div>
+                    <h3 className="text-lg font-semibold text-amber-800 mb-2">
+                      يجب تعيين جدول للعيادة قبل استقبال الحجوزات
+                    </h3>
+                    <p className="text-sm text-amber-700 mb-4">
+                      لا يمكن تحديد أوقات المواعيد بدون إعداد جدول العمل
+                      الأسبوعي للعيادة
+                    </p>
+                    <Button
+                      type="button"
+                      onClick={() => navigate("/settings/schedule")}
+                      className="bg-amber-600 hover:bg-amber-700 text-white"
+                    >
+                      إعداد جدول العمل
+                    </Button>
+                  </div>
+                ) : !selectedDate ? (
+                  <div className="p-4 text-center text-slate-500 bg-slate-50 border border-slate-200 rounded-lg">
+                    يرجى اختيار يوم أولاً لعرض أوقات العمل المتاحة
+                  </div>
+                ) : !isClinicOpenOnDate(selectedDate) ? (
+                  <div className="p-4 text-center text-slate-500 bg-slate-50 border border-slate-200 rounded-lg">
+                    العيادة مغلقة في هذا اليوم
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 items-end">
+                      <div className="flex flex-col items-center">
+                        <span className="text-xs text-slate-500 mb-1">
+                          الساعة
+                        </span>
+                        <Select
+                          value={selectedTime ? selectedTime.split(":")[0] : ""}
+                          onValueChange={(hour) => {
+                            let min = selectedTime
+                              ? selectedTime.split(":")[1]
+                              : "00 ص";
+                            setSelectedTime(`${hour}:${min}`);
+                          }}
+                        >
+                          <SelectTrigger className="w-20 h-10 text-sm">
+                            <SelectValue placeholder="الساعة" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {[...Array(12)].map((_, i) => (
+                              <SelectItem
+                                key={i + 1}
+                                value={String(i + 1).padStart(2, "0")}
+                              >
+                                {String(i + 1).padStart(2, "0")}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-xs text-slate-500 mb-1">
+                          الدقيقة
+                        </span>
+                        <Select
+                          value={
+                            selectedTime
+                              ? selectedTime.split(":")[1]?.split(" ")[0]
+                              : ""
+                          }
+                          onValueChange={(minute) => {
+                            let hour = selectedTime
+                              ? selectedTime.split(":")[0]
+                              : "08";
+                            let period = selectedTime
+                              ? selectedTime.split(" ")[1]
+                              : "ص";
+                            setSelectedTime(`${hour}:${minute} ${period}`);
+                          }}
+                        >
+                          <SelectTrigger className="w-16 h-10 text-sm">
+                            <SelectValue placeholder="الدقيقة" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {["00", "15", "30", "45"].map((min) => (
+                              <SelectItem key={min} value={min}>
+                                {min}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex flex-col items-center">
+                        <span className="text-xs text-slate-500 mb-1">
+                          الفترة
+                        </span>
+                        <Select
+                          value={
+                            selectedTime ? selectedTime.split(" ")[1] : "ص"
+                          }
+                          onValueChange={(period) => {
+                            let [hour, min] = selectedTime
+                              ? selectedTime.split(":")
+                              : ["08", "00 ص"];
+                            min = min.split(" ")[0];
+                            setSelectedTime(`${hour}:${min} ${period}`);
+                          }}
+                        >
+                          <SelectTrigger className="w-28 h-10 text-sm">
+                            <SelectValue placeholder="الفترة" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="ص">صباحاً</SelectItem>
+                            <SelectItem value="م">مساءً</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    {/* Validation error if time is out of working hours */}
+                    {selectedTime &&
+                      !isTimeWithinWorkingHours(
+                        selectedDate,
+                        selectedTime,
+                        weeklySchedule
+                      ) && (
+                        <div className="text-xs text-red-600 mt-1 font-semibold">
+                          اختر الوقت ضمن أوقات عمل العيادة لهذا اليوم.
+                        </div>
+                      )}
+                    <div className="text-xs text-slate-500 mt-1">
+                      اختر الوقت يدوياً ضمن أوقات عمل العيادة لهذا اليوم.
                     </div>
                   </div>
+                )}
 
-                  <div>
-                    <h4 className="text-sm font-medium text-slate-700 mb-3">
-                      الفترة المسائية
-                    </h4>
-                    <div className="grid grid-cols-3 gap-2">
-                      {timeSlots
-                        .filter((time) => time.includes("م"))
-                        .map((time) => (
-                          <Button
-                            key={time}
-                            type="button"
-                            variant={
-                              selectedTime === time ? "default" : "outline"
-                            }
-                            size="sm"
-                            onClick={() => setSelectedTime(time)}
-                            className="h-10 text-sm"
-                          >
-                            {time}
-                          </Button>
-                        ))}
-                    </div>
-                  </div>
-                </div>
-
-                {selectedTime && (
-                  <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200">
+                {selectedTime && hasWeeklySchedule && (
+                  <div className="p-3 bg-emerald-50 rounded-lg border border-emerald-200 mt-2">
                     <div className="flex items-center gap-2 text-sm text-emerald-700">
                       <Clock className="w-4 h-4" />
                       <span>الموعد المحدد: {selectedTime}</span>
@@ -342,10 +675,10 @@ export default function AppointmentForm() {
                 )}
               </div>
             </div>
-          </div>{" "}
+          </div>
+
           {/* Service Selection */}
           <div className="space-y-6">
-            {" "}
             <div className="border-b border-slate-200 pb-4">
               <h3 className="text-lg font-semibold text-slate-900 mb-2">
                 تفاصيل الخدمة
@@ -353,7 +686,6 @@ export default function AppointmentForm() {
               <p className="text-sm text-slate-600">اختر نوع الخدمة المطلوبة</p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              {" "}
               {/* Service Selection */}
               <div className="space-y-4">
                 <Label className="flex items-center gap-2 text-sm font-medium text-slate-700">
@@ -386,7 +718,8 @@ export default function AppointmentForm() {
                 )}
               </div>
             </div>
-          </div>{" "}
+          </div>
+
           {/* Notes */}
           <div className="space-y-4">
             <Label className="flex items-center gap-2 text-sm font-medium text-slate-700">
@@ -399,7 +732,8 @@ export default function AppointmentForm() {
               onChange={(e) => setNotes(e.target.value)}
               className="min-h-[100px] bg-slate-50 border-slate-200 focus:bg-white resize-none"
             />
-          </div>{" "}
+          </div>
+
           {/* Appointment Summary */}
           {(selectedPatient || selectedDate || selectedTime || service) && (
             <div className="space-y-4">
@@ -455,7 +789,7 @@ export default function AppointmentForm() {
                           </div>
                         </div>
                       )}
-                    </div>{" "}
+                    </div>
                     <div className="space-y-4">
                       {service && (
                         <div className="flex items-center gap-3">
@@ -486,6 +820,7 @@ export default function AppointmentForm() {
               </Card>
             </div>
           )}
+
           {/* Submit & Cancel Buttons */}
           <div className="flex gap-4">
             <Button
@@ -514,7 +849,7 @@ export default function AppointmentForm() {
               إلغاء النموذج
             </Button>
           </div>
-        </form>{" "}
+        </form>
       </CardContent>
     </Card>
   );

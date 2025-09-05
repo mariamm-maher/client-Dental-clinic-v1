@@ -2,8 +2,25 @@ import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Calendar, Settings, RefreshCw } from "lucide-react";
+import useSettingsStore from "@/stores/settingsStore";
+import { toast } from "sonner";
+const EmptySchedule = () => {
+  const { isLoading, initializeWeeklySchedule } = useSettingsStore();
+  // Handle initialization
+  const handleInitializeSchedule = async () => {
+    try {
+      const result = await initializeWeeklySchedule();
+      console.log(result);
+      if (result.success) {
+        toast.success(result.message || "تم إنشاء جدول العمل بنجاح");
+      } else {
+        toast.error(result.message || "فشل في إنشاء جدول العمل");
+      }
+    } catch {
+      toast.error("حدث خطأ أثناء إنشاء جدول العمل");
+    }
+  };
 
-const EmptySchedule = ({ onInitialize, isLoading }) => {
   return (
     <Card className="border-dashed border-2 border-slate-200 bg-slate-50/30">
       <CardContent className="text-center py-12">
@@ -17,7 +34,7 @@ const EmptySchedule = ({ onInitialize, isLoading }) => {
           يرجى تكوين أوقات عمل العيادة لتتمكن من إدارة المواعيد بشكل صحيح
         </p>
         <Button
-          onClick={onInitialize}
+          onClick={handleInitializeSchedule}
           className="gap-2 bg-blue-600 hover:bg-blue-700"
           disabled={isLoading}
         >

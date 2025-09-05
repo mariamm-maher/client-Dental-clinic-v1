@@ -1,16 +1,31 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CalendarDays, Clock, Plus, Timer } from "lucide-react";
+import { CalendarDays, Clock, Plus } from "lucide-react";
 import { format, startOfWeek, addDays, isToday } from "date-fns";
 import { arSA } from "date-fns/locale";
-import useWeeklyCalendarStore from "@/stores/weeklyCalendarStore";
+import useCalendarStore from "@/stores/weeklyCalendarStore";
+import { useState, useEffect } from "react";
+import AppointmentBookingModal from "./AppointmentBookingModal";
 
 export default function CalendarGrid() {
-  const { currentWeek, getAppointmentsForDay, getDoctorColor } =
-    useWeeklyCalendarStore();
+  const {
+    currentWeek,
+    getAppointmentsForDay,
+    getAppointmentStatusStyles,
+    fetchAppointments,
+    loading,
+  } = useCalendarStore();
+
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dateLocale = arSA;
+
+  // Fetch appointments when component mounts or currentWeek changes
+  useEffect(() => {
+    fetchAppointments("week");
+  }, [currentWeek, fetchAppointments]);
 
   const getWeekDays = () => {
     const startDate = startOfWeek(currentWeek, {
@@ -20,6 +35,20 @@ export default function CalendarGrid() {
   };
 
   const weekDays = getWeekDays();
+
+  const handleAddAppointment = (date) => {
+    setSelectedDate(date);
+    setIsModalOpen(true);
+  };
+
+  const handleModalSubmit = async (appointmentData) => {
+    // Handle appointment submission
+    console.log("New appointment:", appointmentData);
+    console.log(appointmentData.patientId?.generalInfo?.name);
+    setIsModalOpen(false);
+    // Refresh appointments after adding new one
+    await fetchAppointments("week");
+  };
 
   return (
     <Card className="shadow-lg border-0 bg-white/80 backdrop-blur-sm">
@@ -71,115 +100,73 @@ export default function CalendarGrid() {
               </div>
 
               <div className="space-y-3 min-h-[400px]">
-                {getAppointmentsForDay(day).map((appointment) => (
-                  <Card
-                    key={appointment.id}
-                    className={`border-l-4 hover:shadow-md transition-all duration-200 cursor-pointer group ${
-                      appointment.status === "confirmed"
-                        ? `border-l-${getDoctorColor(
-                            appointment.doctorName
-                          )}-500 bg-${getDoctorColor(
-                            appointment.doctorName
-                          )}-50/50`
-                        : appointment.status === "pending"
-                        ? "border-l-amber-500 bg-amber-50/50"
-                        : "border-l-red-500 bg-red-50/50"
-                    }`}
-                  >
-                    <CardContent className="p-4">
-                      <div className="space-y-3">
-                        {/* Time and Status */}
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-slate-500" />
-                            <span className="font-semibold text-slate-900">
-                              {appointment.time}
-                            </span>
-                          </div>
-                          <Badge
-                            variant={
-                              appointment.status === "confirmed"
-                                ? "default"
-                                : appointment.status === "pending"
-                                ? "secondary"
-                                : "destructive"
-                            }
-                            className="text-xs"
-                          >
-                            {appointment.status === "confirmed"
-                              ? "مؤكد"
-                              : appointment.status === "pending"
-                              ? "في الانتظار"
-                              : "ملغي"}
-                          </Badge>
-                        </div>
+                {loading && (
+                  <div className="text-center text-gray-500 py-4">
+                    جاري تحميل المواعيد...
+                  </div>
+                )}
 
-                        {/* Patient Info */}
-                        <div>
-                          <h4 className="font-semibold text-slate-900 mb-1">
-                            {appointment.patientName}
-                          </h4>{" "}
-                          <p className="text-sm text-slate-600 mb-2">
-                            {appointment.service}
-                          </p>
-                        </div>
+                {!loading &&
+                  getAppointmentsForDay(day).map((appointment) => {
+                    const styles = getAppointmentStatusStyles(appointment);
+                    return (
+                      <Card
+                        key={appointment._id}
+                        className={`border-l-4 hover:shadow-md transition-all duration-200 cursor-pointer group ${
+                          styles.border
+                        } ${styles.bg} ${styles.glow || ""}`}
+                      >
+                        <CardContent className="p-4">
+                          <div className="space-y-3">
+                            {/* Time and Status */}
+                            <div className="flex items-center justify-between">
+                              <div className="flex items-center gap-2">
+                                <Clock className="w-4 h-4 text-slate-500" />
+                                <span className="font-semibold text-slate-900">
+                                  {format(
+                                    new Date(appointment.appointmentDate),
+                                    "HH:mm"
+                                  )}
+                                </span>
+                              </div>
+                              <Badge className={`text-xs ${styles.badge}`}>
+                                {appointment.status === "confirmed"
+                                  ? "مؤكد"
+                                  : appointment.status === "pending"
+                                  ? "في الانتظار"
+                                  : appointment.status === "canceled"
+                                  ? "ملغي"
+                                  : appointment.status === "done"
+                                  ? "مكتمل"
+                                  : "فائت"}
+                              </Badge>
+                            </div>
 
-                        {/* Doctor and Duration */}
-                        <div className="flex items-center justify-between text-sm text-slate-500">
-                          <div className="flex items-center gap-2">
-                            <div
-                              className={`w-3 h-3 rounded-full bg-${getDoctorColor(
-                                appointment.doctorName
-                              )}-500`}
-                            ></div>
-                            <span>
-                              {appointment.doctorName.replace("د. ", "")}
-                            </span>
+                            {/* Patient Info */}
+                            <div>
+                              <h4 className="font-semibold text-slate-900 mb-1">
+                                {appointment.patientId?.generalInfo?.name ||
+                                  "غير محدد"}
+                              </h4>
+                              <p className="text-sm text-slate-600 mb-2">
+                                {appointment.service}
+                              </p>
+                              <p className="text-xs text-slate-500">
+                                {appointment.patientId?.generalInfo?.phone ||
+                                  ""}
+                              </p>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-1">
-                            <Timer className="w-3 h-3" />
-                            <span>{appointment.duration} د</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Hover Tooltip */}
-                      <div className="absolute z-10 bg-slate-900 text-white p-3 rounded-lg shadow-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none transform -translate-y-2 left-full ml-2 top-0 w-64 hidden lg:block">
-                        <div className="space-y-2">
-                          <p className="font-semibold">
-                            {appointment.patientName}
-                          </p>
-                          <div className="space-y-1 text-sm">
-                            {" "}
-                            <p>
-                              <strong>الخدمة:</strong> {appointment.service}
-                            </p>
-                            <p>
-                              <strong>الطبيب:</strong> {appointment.doctorName}
-                            </p>
-                            <p>
-                              <strong>الوقت:</strong> {appointment.time} (
-                              {appointment.duration} دقيقة)
-                            </p>
-                            <p>
-                              <strong>الحالة:</strong>{" "}
-                              {appointment.status === "confirmed"
-                                ? "مؤكد"
-                                : appointment.status === "pending"
-                                ? "في الانتظار"
-                                : "ملغي"}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                        </CardContent>
+                      </Card>
+                    );
+                  })}
 
                 {/* Add Appointment Button */}
                 <Button
                   variant="outline"
                   className="w-full h-16 border-2 border-dashed border-slate-300 hover:border-sky-400 hover:bg-sky-50 transition-all duration-200"
+                  onClick={() => handleAddAppointment(day)}
                 >
                   <Plus className="w-4 h-4 ml-2" />
                   إضافة موعد
@@ -189,6 +176,14 @@ export default function CalendarGrid() {
           ))}
         </div>
       </CardContent>
+
+      {/* Appointment Booking Modal */}
+      <AppointmentBookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        selectedDate={selectedDate}
+        onSubmit={handleModalSubmit}
+      />
     </Card>
   );
 }

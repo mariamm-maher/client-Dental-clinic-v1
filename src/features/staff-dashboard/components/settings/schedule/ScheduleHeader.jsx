@@ -8,15 +8,27 @@ import {
   AlertCircle,
   RefreshCw,
 } from "lucide-react";
+import useSettingsStore from "@/stores/settingsStore";
+import { toast } from "sonner";
 
-const ScheduleHeader = ({
-  hasSchedule,
-  schedule,
-  scheduleHasChanges,
-  isLoading,
-  onReset,
-  onSave,
-}) => {
+const ScheduleHeader = () => {
+  const { weeklySchedule, scheduleHasChanges, isLoading, saveSchedule } =
+    useSettingsStore();
+
+  // Handle save with store action
+  const handleSaveSchedule = async () => {
+    try {
+      const result = await saveSchedule();
+      if (result.success) {
+        toast.success(result.message || "تم حفظ جدول العمل بنجاح");
+      } else {
+        toast.error(result.message || "فشل في حفظ جدول العمل");
+      }
+    } catch {
+      toast.error("حدث خطأ أثناء حفظ جدول العمل");
+    }
+  };
+
   return (
     <Card className="border-slate-200">
       <CardContent className="p-6">
@@ -28,12 +40,15 @@ const ScheduleHeader = ({
             <div>
               <h2 className="font-semibold text-slate-900">
                 جدول العمل الأسبوعي
-              </h2>
+              </h2>{" "}
               <p className="text-sm text-slate-600">
-                {hasSchedule
+                {weeklySchedule && Array.isArray(weeklySchedule)
                   ? `تم تكوين ${
-                      Object.values(schedule).filter((day) => day.enabled)
-                        .length
+                      weeklySchedule.filter(
+                        (dayObject) =>
+                          Array.isArray(dayObject.shifts) &&
+                          dayObject.shifts.length > 0
+                      ).length
                     } أيام عمل`
                   : "لم يتم تكوين أي يوم عمل"}
               </p>
@@ -42,18 +57,8 @@ const ScheduleHeader = ({
 
           <div className="flex items-center gap-2">
             <Button
-              variant="outline"
               size="sm"
-              onClick={onReset}
-              className="gap-1"
-              disabled={isLoading}
-            >
-              <RotateCcw className="w-3 h-3" />
-              إعادة تعيين
-            </Button>
-            <Button
-              size="sm"
-              onClick={onSave}
+              onClick={handleSaveSchedule}
               disabled={!scheduleHasChanges || isLoading}
               className="gap-1"
             >

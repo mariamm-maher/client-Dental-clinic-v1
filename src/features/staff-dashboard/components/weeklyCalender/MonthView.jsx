@@ -14,11 +14,11 @@ import {
   isPast,
 } from "date-fns";
 import { arSA } from "date-fns/locale";
-import useWeeklyCalendarStore from "@/stores/weeklyCalendarStore";
+import useCalendarStore from "@/stores/weeklyCalendarStore";
 
 export default function MonthView() {
   const { currentWeek, getAppointmentsForDay, getAppointmentStatusStyles } =
-    useWeeklyCalendarStore();
+    useCalendarStore();
 
   const dateLocale = arSA;
 

@@ -280,6 +280,41 @@ export const getTodaysAppointments = async () => {
 };
 
 /**
+ * Get appointments for calendar view
+ * GET /api/appointments/calendar?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD&viewType=week|day|month
+ * @param {Object} params - { startDate, endDate, viewType }
+ */
+export const getCalendarAppointments = async ({
+  startDate,
+  endDate,
+  viewType,
+}) => {
+  try {
+    if (!startDate || !endDate) {
+      throw new Error("startDat and endDate are required");
+    }
+    const url = `/api/appointments/calendar?startDate=${encodeURIComponent(
+      startDate
+    )}&endDate=${encodeURIComponent(endDate)}&viewType=${encodeURIComponent(
+      viewType
+    )}`;
+    const response = await apiClient.get(url);
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error) {
+    console.error("Error fetching calendar appointments:", error);
+    return {
+      success: false,
+      data: [],
+      message: error.response?.data?.message || "فشل في جلب مواعيد التقويم",
+      details: error.response?.data?.details || [],
+    };
+  }
+};
+
+/**
  * Update appointment status
  * PATCH /api/booking/:bookingId/status
  * @param {string} bookingId - The ID of the booking to update
@@ -319,14 +354,34 @@ export const updateAppointmentStatus = async (bookingId, status) => {
 export const getClinicSettings = async () => {
   try {
     const response = await apiClient.get("/api/clinic-settings");
+    // Dive deep to extract weeklySchedule from the nested response
+    let weeklySchedule = null;
+    let timezone = null;
+    if (
+      response.data &&
+      response.data.data &&
+      response.data.data.settings &&
+      Array.isArray(response.data.data.settings.weeklySchedule)
+    ) {
+      weeklySchedule = response.data.data.settings.weeklySchedule;
+      timezone = response.data.data.settings.timezone;
+    }
     return {
       success: true,
-      data: response.data,
+      data: weeklySchedule ? { weeklySchedule, timezone } : response.data,
     };
   } catch (error) {
-    console.error("Error fetching clinic settings:", error);
+    if (error.response?.status === 404) {
+      throw {
+        success: false,
+        status: 404,
+        message: "لا يوجد جدول للعيادة في الوقت الحالي",
+        details: [],
+      };
+    }
     throw {
       success: false,
+      status: error.response?.status || 500,
       message: error.response?.data?.message || "فشل في جلب إعدادات العيادة",
       details: error.response?.data?.details || [],
     };
@@ -344,6 +399,7 @@ export const updateClinicSettings = async (settingsData) => {
     }
 
     const response = await apiClient.put("/api/clinic-settings", settingsData);
+    console.log(response, "response from updating clinic settings");
     return {
       success: true,
       data: response.data,
@@ -382,6 +438,30 @@ export const deleteClinicSettings = async () => {
   }
 };
 
+/**
+ * Reset clinic settings to default
+ * PUT /api/clinic-settings/default
+ */
+export const resetClinicSettingsToDefault = async () => {
+  try {
+    const response = await apiClient.put("/api/clinic-settings/default");
+    return {
+      success: true,
+      data: response.data,
+      message: "تمت إعادة تعيين إعدادات العيادة إلى الافتراضية بنجاح",
+    };
+  } catch (error) {
+    console.error("Error resetting clinic settings to default:", error);
+    throw {
+      success: false,
+      message:
+        error.response?.data?.message ||
+        "فشل في إعادة تعيين إعدادات العيادة إلى الافتراضية",
+      details: error.response?.data?.details || [],
+    };
+  }
+};
+
 // Export all services as default
 export default {
   getAllPatients,
@@ -394,8 +474,10 @@ export default {
   deletePatient,
   getLatestPatients,
   getTodaysAppointments,
+  getCalendarAppointments,
   updateAppointmentStatus,
   getClinicSettings,
   updateClinicSettings,
   deleteClinicSettings,
+  resetClinicSettingsToDefault,
 };

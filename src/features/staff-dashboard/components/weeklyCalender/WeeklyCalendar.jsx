@@ -1,10 +1,10 @@
-import { CalendarHeader, CalendarStats, CalendarLegend } from ".";
+import { CalendarHeader, CalendarLegend } from ".";
 import EnhancedCalendarGrid from "./EnhancedCalendarGrid";
 import MonthView from "./MonthView";
-import useWeeklyCalendarStore from "@/stores/weeklyCalendarStore";
+import useCalendarStore from "@/stores/weeklyCalendarStore";
 
 export default function WeeklyCalendar() {
-  const { viewType } = useWeeklyCalendarStore();
+  const { viewType } = useCalendarStore();
 
   const renderCalendarView = () => {
     switch (viewType) {
@@ -24,10 +24,6 @@ export default function WeeklyCalendar() {
       <div className="max-w-7xl mx-auto space-y-6">
         <CalendarHeader />
 
-        {/* Statistics Cards */}
-        <CalendarStats />
-
-        {/* Calendar View */}
         {renderCalendarView()}
 
         {/* Legend */}

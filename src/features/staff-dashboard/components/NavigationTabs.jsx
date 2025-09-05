@@ -26,7 +26,7 @@ export default function NavigationTabs() {
     {
       id: "schedule",
       path: "/dashboard/schedule",
-      label: "جدولة موعد",
+      label: "حجز موعد",
       icon: CalendarPlus,
       count: 0,
       color: "emerald",
@@ -44,11 +44,11 @@ export default function NavigationTabs() {
     {
       id: "calendar",
       path: "/dashboard/calendar",
-      label: "التقويم الأسبوعي",
+      label: "التقويم",
       icon: Calendar,
       count: 45,
       color: "blue",
-      description: "عرض المواعيد الأسبوعية",
+      description: "عرض المواعيد ",
     },
     {
       id: "statistics",

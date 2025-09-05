@@ -19,7 +19,7 @@ import {
 import TodaysAppointments from "./features/staff-dashboard/components/todaysAppointment/TodaysAppointments";
 import AppointmentScheduling from "./features/staff-dashboard/components/AppointmentScheduling/AppointmentScheduling";
 import PatientRegistration from "./features/staff-dashboard/components/patientRegistration/PatientRegistration";
-import WeeklyCalendar from "./features/staff-dashboard/components/weeklyCalender/WeeklyCalendar";
+import Calendar from "./features/staff-dashboard/components/weeklyCalender/Calendar.jsx";
 import PatientSearch from "./features/staff-dashboard/components/patientSearch/PatientSearch";
 import Statistics from "./features/staff-dashboard/components/statistics/Statistics";
 
@@ -67,7 +67,7 @@ function App() {
           <Route index element={<TodaysAppointments />} />
           <Route path="schedule" element={<AppointmentScheduling />} />
           <Route path="register" element={<PatientRegistration />} />
-          <Route path="calendar" element={<WeeklyCalendar />} />
+          <Route path="calendar/*" element={<Calendar />} />
           <Route path="statistics" element={<Statistics />} />
           <Route path="search" element={<PatientSearch />} />
         </Route>
