@@ -1,11 +1,15 @@
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { User, Phone, MapPin, History } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { User, Phone, MapPin, History, ExternalLink } from "lucide-react";
 import usePatientSearchStore from "@/stores/patientSearchStore";
+import PatientDetailsModal from "./PatientDetailsModal";
 
 export default function PatientDetails() {
   const { selectedPatient, getStatusBadge, calculateAge } =
     usePatientSearchStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!selectedPatient) {
     return (
@@ -30,7 +34,7 @@ export default function PatientDetails() {
 
   const statusConfig = getStatusBadge(selectedPatient.status);
 
-  return (
+  const patientDetailsCard = (
     <Card className="bg-white/80 backdrop-blur-sm border-0 shadow-lg">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-xl text-gray-900">
@@ -49,9 +53,14 @@ export default function PatientDetails() {
                 .substring(0, 2)
                 .toUpperCase()}
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-1">
+            <Button
+              variant="ghost"
+              className="text-xl font-bold text-gray-900 mb-1 p-0 h-auto hover:text-emerald-600 transition-colors duration-200 flex items-center gap-2"
+              onClick={() => setIsModalOpen(true)}
+            >
               {selectedPatient.name}
-            </h3>{" "}
+              <ExternalLink className="w-4 h-4 opacity-60" />
+            </Button>
             <p className="text-gray-600 mb-2">
               العمر: {calculateAge(selectedPatient.dateOfBirth)} سنة
             </p>
@@ -185,5 +194,18 @@ export default function PatientDetails() {
         </div>
       </CardContent>
     </Card>
+  );
+
+  return (
+    <>
+      {patientDetailsCard}
+      <PatientDetailsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        patient={selectedPatient}
+        getStatusBadge={getStatusBadge}
+        calculateAge={calculateAge}
+      />
+    </>
   );
 }
